@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zennou — Beyond Limits</title>
+<meta name="description" content="Zennou is where creators share, showcase, and document mods, fan projects, and indie creations.">
+<link rel="icon" href="assets/Zennou_Logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #000000;
+    --void: #0a0a0a;
+    --zinc-950: #0c0c0d;
+    --zinc-900: #141415;
+    --zinc-800: #1f1f21;
+    --zinc-700: #2e2e31;
+    --zinc-600: #46464a;
+    --zinc-500: #6b6b70;
+    --zinc-400: #9a9aa0;
+    --zinc-300: #c2c2c7;
+    --zinc-200: #e0e0e3;
+    --white: #ffffff;
+    --line: rgba(255,255,255,0.08);
+    --line-strong: rgba(255,255,255,0.14);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--zinc-200);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  .mono { font-family: 'JetBrains Mono', monospace; letter-spacing: 0.02em; }
+
+  a { color: inherit; text-decoration: none; }
+
+  ::selection { background: var(--white); color: var(--black); }
+
+  /* subtle noise + grid backdrop */
+  .grain {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 60% 50% at 50% 0%, black 20%, transparent 75%);
+    opacity: 0.5;
+  }
+
+  /* ============ NAV ============ */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 40px;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .nav-brand img {
+    height: 30px;
+    width: 30px;
+    object-fit: contain;
+  }
+
+  .nav-brand span {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 0.02em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    align-items: center;
+  }
+
+  .nav-links a {
+    font-size: 14px;
+    color: var(--zinc-400);
+    transition: color 0.2s ease;
+    position: relative;
+  }
+
+  .nav-links a:hover { color: var(--white); }
+
+  .nav-cta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+    border: 1px solid transparent;
+  }
+
+  .btn-ghost {
+    color: var(--zinc-300);
+    border-color: var(--line-strong);
+  }
+  .btn-ghost:hover {
+    color: var(--white);
+    border-color: var(--zinc-500);
+    background: rgba(255,255,255,0.03);
+  }
+
+  .btn-solid {
+    background: var(--white);
+    color: var(--black);
+    font-weight: 600;
+  }
+  .btn-solid:hover {
+    background: var(--zinc-200);
+    transform: translateY(-1px);
+  }
+
+  .btn-sm { padding: 8px 16px; font-size: 13px; }
+
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    nav { padding: 16px 20px; }
+  }
+
+  /* ============ HERO ============ */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 140px 24px 100px;
+    text-align: center;
+  }
+
+  .hero-banner-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 920px;
+    margin: 0 auto 8px;
+    opacity: 0;
+    animation: fadeUp 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+  }
+
+  .hero-banner-wrap img {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 30px 80px rgba(0,0,0,0.9));
+  }
+
+  .hero-banner-glow {
+    position: absolute;
+    inset: -20%;
+    background: radial-gradient(ellipse 50% 45% at 50% 50%, rgba(255,255,255,0.08), transparent 70%);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 16px;
+    border: 1px solid var(--line-strong);
+    border-radius: 100px;
+    font-size: 12px;
+    color: var(--zinc-400);
+    background: rgba(255,255,255,0.02);
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .eyebrow .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--white);
+    box-shadow: 0 0 12px rgba(255,255,255,0.8);
+  }
+
+  .hero p.lead {
+    max-width: 620px;
+    margin: 28px auto 44px;
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--zinc-400);
+    opacity: 0;
+    animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards;
+  }
+
+  .hero-ctas .btn { padding: 13px 26px; font-size: 15px; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 56px;
+    margin-top: 88px;
+    flex-wrap: wrap;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+  }
+
+  .stat { text-align: left; }
+  .stat .num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1;
+  }
+  .stat .label {
+    font-size: 12.5px;
+    color: var(--zinc-500);
+    margin-top: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.03em;
+  }
+
+  /* ============ DIFF SIGNATURE STRIP ============ */
+  .diff-strip {
+    position: relative;
+    max-width: 780px;
+    margin: 64px auto 0;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.015);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    text-align: left;
+    opacity: 0;
+    animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.75s forwards;
+  }
+
+  .diff-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--line);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--zinc-500);
+  }
+
+  .diff-header .dots { display: flex; gap: 6px; margin-right: 6px; }
+  .diff-header .dots span {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--zinc-700);
+  }
+
+  .diff-body {
+    padding: 18px 22px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 2;
+  }
+
+  .diff-line { display: flex; gap: 14px; }
+  .diff-line .sign { width: 14px; flex-shrink: 0; opacity: 0.8; }
+  .diff-line.minus { color: var(--zinc-600); }
+  .diff-line.minus .sign { color: var(--zinc-600); }
+  .diff-line.plus { color: var(--zinc-200); }
+  .diff-line.plus .sign { color: var(--white); }
+  .diff-line.plus .highlight {
+    background: rgba(255,255,255,0.08);
+    padding: 0 4px;
+    border-radius: 3px;
+  }
+
+  /* ============ SECTION SHARED ============ */
+  section { position: relative; z-index: 2; }
+
+  .section-inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 120px 32px;
+  }
+
+  .section-head {
+    max-width: 560px;
+    margin-bottom: 64px;
+  }
+
+  .section-head .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: var(--zinc-500);
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 18px;
+  }
+
+  .section-head h2 {
+    font-size: 36px;
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--white);
+  }
+
+  .section-head p {
+    margin-top: 16px;
+    color: var(--zinc-500);
+    font-size: 15.5px;
+    line-height: 1.7;
+  }
+
+  /* ============ FEATURES ============ */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .feature-card {
+    background: var(--void);
+    padding: 40px 32px;
+    transition: background 0.3s ease;
+    position: relative;
+  }
+
+  .feature-card:hover { background: var(--zinc-950); }
+
+  .feature-icon {
+    width: 44px; height: 44px;
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    background: rgba(255,255,255,0.02);
+  }
+
+  .feature-card h3 {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 10px;
+  }
+
+  .feature-card p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--zinc-500);
+  }
+
+  @media (max-width: 900px) {
+    .features-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ============ SHOWCASE (before/after motif) ============ */
+  .showcase {
+    border-top: 1px solid var(--line);
+    background: var(--void);
+  }
+
+  .showcase-card {
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--zinc-950);
+  }
+
+  .showcase-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .showcase-panel {
+    padding: 48px 40px;
+    position: relative;
+  }
+
+  .showcase-panel.base {
+    border-right: 1px solid var(--line);
+  }
+
+  .showcase-panel .panel-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    color: var(--zinc-600);
+    letter-spacing: 0.08em;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .showcase-panel.modded .panel-label { color: var(--zinc-300); }
+
+  .showcase-block {
+    height: 180px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+  }
+
+  .showcase-panel.base .showcase-block {
+    background: var(--zinc-900);
+    border: 1px dashed var(--zinc-700);
+    color: var(--zinc-600);
+  }
+
+  .showcase-panel.modded .showcase-block {
+    background: linear-gradient(135deg, var(--zinc-800), var(--zinc-900));
+    border: 1px solid var(--line-strong);
+    color: var(--zinc-200);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+  }
+
+  .showcase-bottom {
+    padding: 24px 40px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .showcase-meta {
+    display: flex;
+    gap: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: var(--zinc-500);
+  }
+
+  .showcase-meta strong { color: var(--zinc-300); font-weight: 500; }
+
+  @media (max-width: 720px) {
+    .showcase-top { grid-template-columns: 1fr; }
+    .showcase-panel.base { border-right: none; border-bottom: 1px solid var(--line); }
+  }
+
+  /* ============ CTA ============ */
+  .cta-section {
+    border-top: 1px solid var(--line);
+    text-align: center;
+  }
+
+  .cta-box {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 80px 40px;
+  }
+
+  .cta-box h2 {
+    font-size: 34px;
+    color: var(--white);
+    font-weight: 600;
+    margin-bottom: 18px;
+  }
+
+  .cta-box p {
+    color: var(--zinc-500);
+    font-size: 15.5px;
+    margin-bottom: 36px;
+  }
+
+  .cta-actions {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* ============ FOOTER ============ */
+  footer {
+    border-top: 1px solid var(--line);
+    background: var(--void);
+  }
+
+  .footer-inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 64px 32px 40px;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1.6fr repeat(3, 1fr);
+    gap: 40px;
+    padding-bottom: 48px;
+  }
+
+  .footer-brand img { height: 28px; margin-bottom: 16px; }
+
+  .footer-brand p {
+    font-size: 13.5px;
+    color: var(--zinc-600);
+    max-width: 260px;
+    line-height: 1.7;
+  }
+
+  .footer-col h4 {
+    font-size: 12px;
+    color: var(--zinc-500);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.06em;
+    margin-bottom: 18px;
+  }
+
+  .footer-col a {
+    display: block;
+    font-size: 14px;
+    color: var(--zinc-400);
+    margin-bottom: 12px;
+    transition: color 0.2s ease;
+    width: fit-content;
+  }
+  .footer-col a:hover { color: var(--white); }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 32px;
+    border-top: 1px solid var(--line);
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .footer-bottom p { font-size: 13px; color: var(--zinc-600); }
+
+  .footer-legal { display: flex; gap: 24px; }
+  .footer-legal a { font-size: 13px; color: var(--zinc-600); }
+  .footer-legal a:hover { color: var(--zinc-300); }
+
+  @media (max-width: 800px) {
+    .footer-top { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ============ Reveal on scroll ============ */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* focus visibility for a11y */
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--white);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+
+<nav>
+  <div class="nav-brand">
+    <img src="assets/Zennou_Logo.webp" alt="Zennou">
+  </div>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#showcase">Showcase</a>
+    <a href="#community">Community</a>
+    <a href="#faq">FAQ</a>
+  </div>
+  <div class="nav-cta">
+    <a href="#" class="btn btn-ghost btn-sm">Log In</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="bg-grid"></div>
+
+  <span class="eyebrow"><span class="dot"></span> A home for creators — now in open beta</span>
+
+  <div class="hero-banner-wrap">
+    <div class="hero-banner-glow"></div>
+    <img src="assets/Zennou_Long.webp" alt="Zennou — Beyond Limits">
+  </div>
+
+  <p class="lead">
+    A place to share, showcase, and document what you build — mods, fan projects,
+    patches, or that weekend passion project you can't stop tinkering with.
+    Ship versions, track changelogs, and build a name for yourself.
+  </p>
+
+  <div class="hero-ctas">
+    <a href="#" class="btn btn-solid">Register Free</a>
+    <a href="#showcase" class="btn btn-ghost">Explore Showcase</a>
+  </div>
+
+  <div class="diff-strip">
+    <div class="diff-header">
+      <div class="dots"><span></span><span></span><span></span></div>
+      mod_manifest.diff
+    </div>
+    <div class="diff-body">
+      <div class="diff-line minus"><span class="sign">−</span> project.status = "just_an_idea"</div>
+      <div class="diff-line minus"><span class="sign">−</span> visibility = "local_folder_only"</div>
+      <div class="diff-line plus"><span class="sign">+</span> <span class="highlight">project.version = "2.4.1"</span></div>
+      <div class="diff-line plus"><span class="sign">+</span> <span class="highlight">visibility = "public"</span></div>
+      <div class="diff-line plus"><span class="sign">+</span> <span class="highlight">published_by = "zennou.org/creator"</span></div>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="num">12.4K+</div>
+      <div class="label">PROJECTS PUBLISHED</div>
+    </div>
+    <div class="stat">
+      <div class="num">3.1K+</div>
+      <div class="label">ACTIVE CREATORS</div>
+    </div>
+    <div class="stat">
+      <div class="num">890K+</div>
+      <div class="label">TOTAL DOWNLOADS</div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="section-inner">
+    <div class="section-head reveal">
+      <span class="tag">// 01 — WHY ZENNOU</span>
+      <h2>Built around how creators actually work, not repurposed from a forum template.</h2>
+      <p>Every part follows a real workflow: tinker, ship a version, and talk it through with people who get it.</p>
+    </div>
+
+    <div class="features-grid reveal">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <h3>Version Releases</h3>
+        <p>Ship every release like a Git tag — complete with changelogs, file hashes, and per-version download history.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </div>
+        <h3>Structured Showcases</h3>
+        <p>Screenshot galleries, demo videos, and markdown write-ups to present your work the way it deserves.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M6 21v-2a6 6 0 0112 0v2"/></svg>
+        </div>
+        <h3>Creator Profiles</h3>
+        <p>Build a reputation through your contribution history, followers, and community-verified badges.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        </div>
+        <h3>Threaded Discussions</h3>
+        <p>Comment threads on every project — report bugs, request features, or just show appreciation.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>License Control</h3>
+        <p>Set your own distribution terms — from fully open-source to all-rights-reserved, your call.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/></svg>
+        </div>
+        <h3>Flexible Visibility</h3>
+        <p>Publish as a draft, unlisted, or fully public — full control over who sees your work, and when.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="showcase" class="showcase">
+  <div class="section-inner">
+    <div class="section-head reveal">
+      <span class="tag">// 02 — THE TRANSFORMATION</span>
+      <h2>Every creation is a visible difference — before and after.</h2>
+      <p>From a blank starting point to something finished — Zennou helps you document every step of the change.</p>
+    </div>
+
+    <div class="showcase-card reveal">
+      <div class="showcase-top">
+        <div class="showcase-panel base">
+          <span class="panel-label">BEFORE</span>
+          <div class="showcase-block">original.default</div>
+        </div>
+        <div class="showcase-panel modded">
+          <span class="panel-label">AFTER</span>
+          <div class="showcase-block">project.enhanced_v2.4</div>
+        </div>
+      </div>
+      <div class="showcase-bottom">
+        <div class="showcase-meta">
+          <span><strong>247</strong> releases</span>
+          <span><strong>18.2K</strong> downloads</span>
+          <span><strong>4.9</strong> rating</span>
+        </div>
+        <a href="#" class="btn btn-ghost btn-sm">View project details →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section" id="community">
+  <div class="cta-box reveal">
+    <h2>Your work deserves more than a folder called "final_v3".</h2>
+    <p>Join creators — modders, fan developers, and weekend tinkerers alike — who've already brought their work to Zennou.</p>
+    <div class="cta-actions">
+      <a href="#" class="btn btn-solid">Create Your Account</a>
+      <a href="#" class="btn btn-ghost">Read the Docs</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="assets/Zennou_Logo.webp" alt="Zennou">
+        <p>A community platform for sharing, showcasing, and documenting creative work. Beyond limits.</p>
+      </div>
+      <div class="footer-col">
+        <h4>PRODUCT</h4>
+        <a href="#features">Features</a>
+        <a href="#showcase">Showcase</a>
+        <a href="#">Changelog</a>
+        <a href="#">Roadmap</a>
+      </div>
+      <div class="footer-col">
+        <h4>COMMUNITY</h4>
+        <a href="#">Discord</a>
+        <a href="#">Forum</a>
+        <a href="#">Creator Guide</a>
+        <a href="#">Blog</a>
+      </div>
+      <div class="footer-col">
+        <h4>COMPANY</h4>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+        <a href="terms.html">Terms of Service</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="dmca.html">DMCA Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Zennou. All rights reserved.</p>
+      <div class="footer-legal">
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="dmca.html">DMCA</a>
+        <a href="#">zennou.org</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
