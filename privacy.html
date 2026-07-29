@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — Zennou</title>
+<meta name="description" content="Zennou Privacy Policy — how we collect, use, and protect your data.">
+<link rel="icon" href="assets/Zennou_Logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #000000;
+    --void: #0a0a0a;
+    --zinc-950: #0c0c0d;
+    --zinc-900: #141415;
+    --zinc-800: #1f1f21;
+    --zinc-700: #38383c;
+    --zinc-600: #5a5a60;
+    --zinc-500: #86868c;
+    --zinc-400: #adadb3;
+    --zinc-300: #cfcfd3;
+    --zinc-200: #e6e6e8;
+    --white: #ffffff;
+    --line: rgba(255,255,255,0.10);
+    --line-strong: rgba(255,255,255,0.18);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  body {
+    background: var(--black);
+    color: var(--zinc-300);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  .mono { font-family: 'JetBrains Mono', monospace; letter-spacing: 0.02em; }
+
+  a { color: inherit; text-decoration: none; }
+
+  ::selection { background: var(--white); color: var(--black); }
+
+  /* ============ DOC LAYOUT ============ */
+  .doc-header {
+    padding: 80px 24px 60px;
+    text-align: center;
+    border-bottom: 1px solid var(--line);
+    background: var(--void);
+  }
+
+  .doc-header .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: var(--zinc-500);
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 18px;
+  }
+
+  .doc-header h1 {
+    font-size: 40px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+
+  .doc-header p {
+    color: var(--zinc-500);
+    font-size: 15px;
+  }
+
+  .doc-body {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 72px 28px 120px;
+  }
+
+  .toc {
+    position: static;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 64px;
+    background: rgba(255,255,255,0.015);
+  }
+
+  .toc h2 {
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--zinc-500);
+    letter-spacing: 0.06em;
+    margin-bottom: 18px;
+  }
+
+  .toc ol {
+    list-style: none;
+    counter-reset: toc;
+    display: grid;
+    gap: 10px;
+  }
+
+  .toc li {
+    counter-increment: toc;
+    font-size: 14px;
+  }
+
+  .toc li a {
+    color: var(--zinc-300);
+    transition: color 0.2s ease;
+  }
+  .toc li a:hover { color: var(--white); }
+
+  .toc li a::before {
+    content: counter(toc, decimal-leading-zero);
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--zinc-600);
+    margin-right: 12px;
+    font-size: 13px;
+  }
+
+  section.clause {
+    margin-bottom: 52px;
+    scroll-margin-top: 40px;
+  }
+
+  section.clause h2 {
+    font-size: 21px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  section.clause h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--zinc-200);
+    margin: 24px 0 10px;
+  }
+
+  section.clause p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--zinc-400);
+    margin-bottom: 16px;
+  }
+
+  section.clause ul, section.clause ol.plain {
+    margin: 0 0 16px 0;
+    padding-left: 22px;
+  }
+
+  section.clause li {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--zinc-400);
+    margin-bottom: 8px;
+  }
+
+  section.clause strong { color: var(--zinc-200); font-weight: 600; }
+
+  .callout {
+    border-left: 2px solid var(--line-strong);
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 0 8px 8px 0;
+    margin: 20px 0;
+  }
+
+  .callout p { margin: 0; color: var(--zinc-300); font-size: 14.5px; }
+  .callout p strong { color: var(--white); }
+
+  /* data table */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .data-table th {
+    text-align: left;
+    padding: 12px 16px;
+    background: var(--zinc-900);
+    color: var(--zinc-300);
+    font-weight: 600;
+    font-size: 12.5px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.03em;
+    border-bottom: 1px solid var(--line);
+  }
+  .data-table td {
+    padding: 12px 16px;
+    color: var(--zinc-400);
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+
+  .back-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--zinc-500);
+    margin-top: 8px;
+  }
+  .back-top:hover { color: var(--zinc-300); }
+
+  /* ============ FOOTER ============ */
+  footer {
+    border-top: 1px solid var(--line);
+    background: var(--void);
+  }
+  .footer-inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 48px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .footer-inner img { height: 28px; }
+  .footer-legal { display: flex; gap: 24px; }
+  .footer-legal a { font-size: 13px; color: var(--zinc-500); }
+  .footer-legal a:hover { color: var(--zinc-300); }
+  .footer-inner p { font-size: 13px; color: var(--zinc-600); }
+
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--white);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+
+  @media (max-width: 600px) {
+    .data-table { font-size: 13px; }
+    .data-table th, .data-table td { padding: 10px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="doc-header">
+  <span class="tag">// LEGAL</span>
+  <h1>Privacy Policy</h1>
+  <p>Last updated: July 29, 2026</p>
+</header>
+
+<main class="doc-body">
+
+  <nav class="toc" aria-label="Table of contents">
+    <h2>ON THIS PAGE</h2>
+    <ol>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#data-we-collect">Data We Collect</a></li>
+      <li><a href="#how-we-use">How We Use Your Data</a></li>
+      <li><a href="#legal-basis">Legal Basis for Processing</a></li>
+      <li><a href="#sharing">How We Share Data</a></li>
+      <li><a href="#cookies">Cookies & Tracking</a></li>
+      <li><a href="#retention">Data Retention</a></li>
+      <li><a href="#your-rights">Your Rights & Choices</a></li>
+      <li><a href="#account-deletion">Account Deletion</a></li>
+      <li><a href="#security">Security</a></li>
+      <li><a href="#children">Children's Privacy</a></li>
+      <li><a href="#international">International Users</a></li>
+      <li><a href="#changes">Changes to This Policy</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ol>
+  </nav>
+
+  <section class="clause" id="overview">
+    <h2>1. Overview</h2>
+    <p>This Privacy Policy explains how Zennou ("we," "us," or "the platform") collects, uses, shares, and protects information when you use our website, community forums, and file hosting services.</p>
+    <p>Zennou is a platform where creators share, showcase, and document their work — mods, fan projects, patches, and other creative uploads. This policy applies to anyone who visits Zennou, whether or not you create an account.</p>
+    <p>By using Zennou, you agree to the collection and use of information as described here. If you don't agree, please don't use the platform.</p>
+  </section>
+
+  <section class="clause" id="data-we-collect">
+    <h2>2. Data We Collect</h2>
+    <p>We collect information in three ways: what you give us directly, what's generated automatically as you use the platform, and what comes from third parties you choose to connect.</p>
+
+    <table class="data-table">
+      <tr>
+        <th>Category</th>
+        <th>Examples</th>
+      </tr>
+      <tr>
+        <td><strong>Account information</strong></td>
+        <td>Username, email address, password (hashed), profile picture, bio, links you add to your profile</td>
+      </tr>
+      <tr>
+        <td><strong>Content you upload</strong></td>
+        <td>Mods, projects, screenshots, videos, changelogs, comments, descriptions</td>
+      </tr>
+      <tr>
+        <td><strong>Usage data</strong></td>
+        <td>Pages visited, features used, download activity, timestamps, referring pages</td>
+      </tr>
+      <tr>
+        <td><strong>Device & technical data</strong></td>
+        <td>IP address, browser type, operating system, device identifiers</td>
+      </tr>
+      <tr>
+        <td><strong>Communications</strong></td>
+        <td>Messages you send us for support, bug reports, or DMCA/legal requests</td>
+      </tr>
+      <tr>
+        <td><strong>Third-party login data</strong></td>
+        <td>If you sign in via a connected service (e.g., Discord, Google), we receive basic profile info such as your username and email, as permitted by that service</td>
+      </tr>
+    </table>
+  </section>
+
+  <section class="clause" id="how-we-use">
+    <h2>3. How We Use Your Data</h2>
+    <p>We use the information we collect to:</p>
+    <ul>
+      <li>Operate and maintain your account and the platform itself</li>
+      <li>Host, display, and distribute the content you choose to publish</li>
+      <li>Show relevant information, such as download counts, follower activity, or comment threads</li>
+      <li>Detect, prevent, and respond to abuse, fraud, malware, or security threats</li>
+      <li>Respond to support requests, bug reports, and legal notices (including DMCA takedowns)</li>
+      <li>Improve platform performance, features, and reliability</li>
+      <li>Send you service-related notifications (e.g., account activity, security alerts) — never unsolicited marketing unless you opt in</li>
+    </ul>
+  </section>
+
+  <section class="clause" id="legal-basis">
+    <h2>4. Legal Basis for Processing</h2>
+    <p>Where applicable law requires a legal basis for processing personal data, we rely on one or more of the following:</p>
+    <ul>
+      <li><strong>Contractual necessity</strong> — processing needed to provide the account and services you signed up for</li>
+      <li><strong>Legitimate interest</strong> — such as securing the platform, preventing fraud, and improving our services</li>
+      <li><strong>Consent</strong> — for optional features like marketing communications, which you can withdraw at any time</li>
+      <li><strong>Legal obligation</strong> — where we're required to retain or disclose data by law</li>
+    </ul>
+  </section>
+
+  <section class="clause" id="sharing">
+    <h2>5. How We Share Data</h2>
+    <p>We do not sell your personal data. We may share information in the following circumstances:</p>
+    <ul>
+      <li><strong>Publicly, by your own choice</strong> — your username, profile, and published content (mods, comments, showcases) are visible to other users and the public by design, since Zennou is a public creator platform.</li>
+      <li><strong>Service providers</strong> — we work with third parties for hosting, storage, analytics, and infrastructure (e.g., cloud storage, CDN providers). These providers only access data necessary to perform their function.</li>
+      <li><strong>Legal compliance</strong> — if required by law, court order, or to respond to valid legal requests (including DMCA notices).</li>
+      <li><strong>Safety & enforcement</strong> — to investigate violations of our Terms of Service, protect the rights and safety of Zennou or its users.</li>
+      <li><strong>Business transfers</strong> — if Zennou is involved in a merger, acquisition, or asset sale, user data may be transferred as part of that transaction, subject to this policy.</li>
+    </ul>
+  </section>
+
+  <section class="clause" id="cookies">
+    <h2>6. Cookies & Tracking</h2>
+    <p>We use cookies and similar technologies to keep you logged in, remember your preferences, and understand how the platform is used.</p>
+    <ul>
+      <li><strong>Essential cookies</strong> — required for login sessions and core functionality. These cannot be disabled without affecting the service.</li>
+      <li><strong>Analytics cookies</strong> — help us understand usage patterns so we can improve the platform. Where required by law, we'll ask for your consent before enabling these.</li>
+    </ul>
+    <p>You can control cookies through your browser settings, though disabling essential cookies may prevent you from logging in or using certain features.</p>
+  </section>
+
+  <section class="clause" id="retention">
+    <h2>7. Data Retention</h2>
+    <p>We retain your data for as long as your account is active, or as needed to provide the platform's services. After you delete your account, we remove personal data within a reasonable period, except where retention is required for legal, security, or fraud-prevention purposes (see Section 9 for details specific to account deletion).</p>
+  </section>
+
+  <section class="clause" id="your-rights">
+    <h2>8. Your Rights & Choices</h2>
+    <p>Depending on where you live, you may have rights regarding your personal data, including the right to:</p>
+    <ul>
+      <li><strong>Access</strong> — request a copy of the personal data we hold about you</li>
+      <li><strong>Correction</strong> — update inaccurate or incomplete information (most of this is editable directly from your account dashboard)</li>
+      <li><strong>Deletion</strong> — request that we delete your personal data (see Section 9)</li>
+      <li><strong>Portability</strong> — request your data in a portable format, where technically feasible</li>
+      <li><strong>Objection / restriction</strong> — object to or request we limit certain processing of your data</li>
+    </ul>
+    <p>Most of these actions are available directly from your account dashboard without needing to contact us. For anything not yet available in the dashboard, you can reach out through our support channels.</p>
+  </section>
+
+  <section class="clause" id="account-deletion">
+    <h2>9. Account Deletion</h2>
+    <p>You are in control of your account. You can delete your account at any time directly from your dashboard settings — no need to submit a manual request or wait for staff approval.</p>
+    <p>When you delete your account:</p>
+    <ul>
+      <li>Your profile, personal information, and account credentials are removed from active systems.</li>
+      <li>You'll be able to choose what happens to content you've published (e.g., mods, comments) — such as removing it entirely, or leaving it visible under an anonymized/deleted-user label, depending on the options available in your dashboard at the time.</li>
+      <li>Some data may be retained for a limited period in backups, or longer where required for legal, security, tax, or dispute-resolution purposes (for example, records related to a DMCA claim or Terms violation).</li>
+    </ul>
+    <div class="callout">
+      <p><strong>Our approach:</strong> We aim to make account and data deletion as self-serve and transparent as possible. As the dashboard evolves, more granular controls (like deleting individual uploads, download history, or comments) will be made directly available to you, rather than requiring a support request.</p>
+    </div>
+  </section>
+
+  <section class="clause" id="security">
+    <h2>10. Security</h2>
+    <p>We use reasonable technical and organizational measures to protect your data, including encryption in transit, access controls, and secure password storage (hashed, never stored in plain text).</p>
+    <p>No system is perfectly secure. If we become aware of a data breach affecting your personal information, we will notify affected users and relevant authorities as required by applicable law.</p>
+  </section>
+
+  <section class="clause" id="children">
+    <h2>11. Children's Privacy</h2>
+    <p>Zennou is not directed at children under the age of 13 (or the applicable minimum age in your jurisdiction). We do not knowingly collect personal data from children below this age. If we become aware that we've collected such data, we will delete it promptly.</p>
+  </section>
+
+  <section class="clause" id="international">
+    <h2>12. International Users</h2>
+    <p>Zennou is accessible globally. If you access the platform from outside Indonesia, your data may be transferred to, stored, and processed in Indonesia or other countries where our service providers operate. By using Zennou, you consent to this transfer, consistent with this Privacy Policy.</p>
+  </section>
+
+  <section class="clause" id="changes">
+    <h2>13. Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time. If we make material changes, we'll provide reasonable notice (such as a platform banner or email) before the changes take effect. Continued use of Zennou after changes take effect means you accept the updated policy.</p>
+  </section>
+
+  <section class="clause" id="contact">
+    <h2>14. Contact</h2>
+    <p>Questions about this Privacy Policy, or requests regarding your personal data, can be directed to our support channels, linked in the footer of this site.</p>
+    <a href="#" class="back-top">↑ Back to top</a>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <a href="index.html"><img src="assets/Zennou_Logo.webp" alt="Zennou"></a>
+    <p>© 2026 Zennou. All rights reserved.</p>
+    <div class="footer-legal">
+      <a href="terms.html">Terms</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="dmca.html">DMCA</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
