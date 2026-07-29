@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DMCA Policy — Zennou</title>
+<meta name="description" content="Zennou DMCA Policy — how to submit a copyright takedown notice or counter-notice.">
+<link rel="icon" href="assets/Zennou_Logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #000000;
+    --void: #0a0a0a;
+    --zinc-950: #0c0c0d;
+    --zinc-900: #141415;
+    --zinc-800: #1f1f21;
+    --zinc-700: #38383c;
+    --zinc-600: #5a5a60;
+    --zinc-500: #86868c;
+    --zinc-400: #adadb3;
+    --zinc-300: #cfcfd3;
+    --zinc-200: #e6e6e8;
+    --white: #ffffff;
+    --line: rgba(255,255,255,0.10);
+    --line-strong: rgba(255,255,255,0.18);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  body {
+    background: var(--black);
+    color: var(--zinc-300);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  .mono { font-family: 'JetBrains Mono', monospace; letter-spacing: 0.02em; }
+
+  a { color: inherit; text-decoration: none; }
+
+  ::selection { background: var(--white); color: var(--black); }
+
+  /* ============ DOC LAYOUT ============ */
+  .doc-header {
+    padding: 80px 24px 60px;
+    text-align: center;
+    border-bottom: 1px solid var(--line);
+    background: var(--void);
+  }
+
+  .doc-header .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: var(--zinc-500);
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 18px;
+  }
+
+  .doc-header h1 {
+    font-size: 40px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+
+  .doc-header p {
+    color: var(--zinc-500);
+    font-size: 15px;
+  }
+
+  .doc-body {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 72px 28px 120px;
+  }
+
+  .toc {
+    position: static;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 64px;
+    background: rgba(255,255,255,0.015);
+  }
+
+  .toc h2 {
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--zinc-500);
+    letter-spacing: 0.06em;
+    margin-bottom: 18px;
+  }
+
+  .toc ol {
+    list-style: none;
+    counter-reset: toc;
+    display: grid;
+    gap: 10px;
+  }
+
+  .toc li {
+    counter-increment: toc;
+    font-size: 14px;
+  }
+
+  .toc li a {
+    color: var(--zinc-300);
+    transition: color 0.2s ease;
+  }
+  .toc li a:hover { color: var(--white); }
+
+  .toc li a::before {
+    content: counter(toc, decimal-leading-zero);
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--zinc-600);
+    margin-right: 12px;
+    font-size: 13px;
+  }
+
+  section.clause {
+    margin-bottom: 52px;
+    scroll-margin-top: 40px;
+  }
+
+  section.clause h2 {
+    font-size: 21px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  section.clause h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--zinc-200);
+    margin: 24px 0 10px;
+  }
+
+  section.clause p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--zinc-400);
+    margin-bottom: 16px;
+  }
+
+  section.clause ul, section.clause ol.plain {
+    margin: 0 0 16px 0;
+    padding-left: 22px;
+  }
+
+  section.clause ol.plain { list-style: none; counter-reset: step; padding-left: 0; }
+  section.clause ol.plain li {
+    counter-increment: step;
+    position: relative;
+    padding-left: 38px;
+  }
+  section.clause ol.plain li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 24px;
+    height: 24px;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--zinc-300);
+  }
+
+  section.clause li {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--zinc-400);
+    margin-bottom: 8px;
+  }
+
+  section.clause strong { color: var(--zinc-200); font-weight: 600; }
+
+  .callout {
+    border-left: 2px solid var(--line-strong);
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 0 8px 8px 0;
+    margin: 20px 0;
+  }
+
+  .callout p { margin: 0; color: var(--zinc-300); font-size: 14.5px; }
+  .callout p strong { color: var(--white); }
+
+  .contact-card {
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    padding: 28px 32px;
+    background: rgba(255,255,255,0.02);
+    margin: 20px 0;
+  }
+
+  .contact-card .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .contact-card .row:last-child { border-bottom: none; }
+  .contact-card .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--zinc-500);
+    letter-spacing: 0.03em;
+  }
+  .contact-card .value {
+    font-size: 14.5px;
+    color: var(--zinc-200);
+  }
+
+  .back-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--zinc-500);
+    margin-top: 8px;
+  }
+  .back-top:hover { color: var(--zinc-300); }
+
+  /* ============ FOOTER ============ */
+  footer {
+    border-top: 1px solid var(--line);
+    background: var(--void);
+  }
+  .footer-inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 48px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .footer-inner img { height: 28px; }
+  .footer-legal { display: flex; gap: 24px; }
+  .footer-legal a { font-size: 13px; color: var(--zinc-500); }
+  .footer-legal a:hover { color: var(--zinc-300); }
+  .footer-inner p { font-size: 13px; color: var(--zinc-600); }
+
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--white);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<header class="doc-header">
+  <span class="tag">// LEGAL</span>
+  <h1>DMCA Policy</h1>
+  <p>Last updated: July 29, 2026</p>
+</header>
+
+<main class="doc-body">
+
+  <nav class="toc" aria-label="Table of contents">
+    <h2>ON THIS PAGE</h2>
+    <ol>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#filing-notice">Filing a Takedown Notice</a></li>
+      <li><a href="#what-happens">What Happens After a Notice Is Filed</a></li>
+      <li><a href="#counter-notice">Filing a Counter-Notice</a></li>
+      <li><a href="#repeat-infringers">Repeat Infringer Policy</a></li>
+      <li><a href="#false-claims">False Claims & Misrepresentation</a></li>
+      <li><a href="#modding-note">A Note on Mods & Fan Projects</a></li>
+      <li><a href="#agent">Designated Agent</a></li>
+    </ol>
+  </nav>
+
+  <section class="clause" id="overview">
+    <h2>1. Overview</h2>
+    <p>Zennou respects the intellectual property rights of others and expects users of our platform to do the same. This policy explains how copyright owners can request the removal of content they believe infringes their rights, and how users can respond if they believe their content was removed in error.</p>
+    <p>This process is based on the notice-and-takedown framework established by the Digital Millennium Copyright Act (DMCA) and similar copyright frameworks recognized internationally.</p>
+  </section>
+
+  <section class="clause" id="filing-notice">
+    <h2>2. Filing a Takedown Notice</h2>
+    <p>If you believe content hosted on Zennou infringes your copyright, you (or your authorized representative) may submit a takedown notice. To be considered valid, your notice must include all of the following:</p>
+    <ol class="plain">
+      <li>A physical or electronic signature of the copyright owner or a person authorized to act on their behalf.</li>
+      <li>Identification of the copyrighted work you claim has been infringed (or a representative list, if multiple works are involved).</li>
+      <li>Identification of the specific material you claim is infringing, with enough detail for us to locate it — such as a direct URL to the project or file on Zennou.</li>
+      <li>Your contact information, including name, address, telephone number, and email address.</li>
+      <li>A statement that you have a good-faith belief that the use of the material is not authorized by the copyright owner, its agent, or the law.</li>
+      <li>A statement, made under penalty of perjury, that the information in your notice is accurate and that you are the copyright owner or authorized to act on their behalf.</li>
+    </ol>
+    <div class="callout">
+      <p><strong>Incomplete notices:</strong> Notices missing any of the elements above may not be actionable. We may reach out for clarification, but this can delay processing of your request.</p>
+    </div>
+  </section>
+
+  <section class="clause" id="what-happens">
+    <h2>3. What Happens After a Notice Is Filed</h2>
+    <p>Once we receive a valid takedown notice, we will:</p>
+    <ul>
+      <li>Remove or disable access to the reported content, typically without prior notice to the uploader, as required to comply with the law.</li>
+      <li>Notify the user who uploaded the content, providing a copy of the notice (excluding sensitive personal contact details where appropriate) and information on how to file a counter-notice.</li>
+      <li>Record the claim for our internal repeat-infringer tracking (see Section 5).</li>
+    </ul>
+    <p>We aim to process valid, complete notices promptly. Response times may vary depending on notice volume and complexity.</p>
+  </section>
+
+  <section class="clause" id="counter-notice">
+    <h2>4. Filing a Counter-Notice</h2>
+    <p>If your content was removed and you believe this was a mistake or misidentification, you may submit a counter-notice. To be valid, it must include:</p>
+    <ol class="plain">
+      <li>Your physical or electronic signature.</li>
+      <li>Identification of the material that was removed, and its location on Zennou before removal.</li>
+      <li>A statement, under penalty of perjury, that you have a good-faith belief the material was removed as a result of mistake or misidentification.</li>
+      <li>Your name, address, and telephone number, and a statement that you consent to the jurisdiction of the courts in your judicial district (or the applicable jurisdiction under Zennou's Terms of Service), and that you will accept service of process from the person who filed the original notice.</li>
+    </ol>
+    <p>Upon receiving a valid counter-notice, we may forward it to the original complaining party. If that party does not notify us that they've filed a legal action seeking a court order within a reasonable period (typically 10–14 business days), we may restore the removed content.</p>
+  </section>
+
+  <section class="clause" id="repeat-infringers">
+    <h2>5. Repeat Infringer Policy</h2>
+    <p>Zennou will, in appropriate circumstances, disable or terminate the accounts of users who are found to be repeat infringers of copyright. What counts as "repeat" is evaluated case-by-case, but generally involves multiple valid, unrebutted takedown notices against the same user over time.</p>
+    <p>This policy exists to protect original creators and rights holders, and to preserve safe harbor protections that keep Zennou operating as a platform for legitimate creative work.</p>
+  </section>
+
+  <section class="clause" id="false-claims">
+    <h2>6. False Claims & Misrepresentation</h2>
+    <p>Submitting a false or bad-faith takedown notice or counter-notice can expose you to legal liability, including damages and legal fees, under applicable copyright law. Please only submit a notice if you genuinely and reasonably believe your rights have been infringed.</p>
+  </section>
+
+  <section class="clause" id="modding-note">
+    <h2>7. A Note on Mods & Fan Projects</h2>
+    <p>Zennou hosts a wide range of derivative and fan-made work — mods, patches, and fan projects built on top of existing games, software, or media. This creates a unique gray area: many creations reference, modify, or build upon copyrighted material owned by someone other than the uploader.</p>
+    <p>We generally expect creators to:</p>
+    <ul>
+      <li>Avoid redistributing original copyrighted assets (art, models, audio, source code) they do not own or have rights to.</li>
+      <li>Clearly distinguish original third-party IP from their own original contributions.</li>
+      <li>Respect any publicly stated modding policy from the original rights holder, where one exists.</li>
+    </ul>
+    <p>Rights holders who wish to have derivative content removed can use the standard takedown process in Section 2. We evaluate each claim on its own facts, in line with applicable copyright law and fair use / fair dealing principles where relevant.</p>
+  </section>
+
+  <section class="clause" id="agent">
+    <h2>8. Designated Agent</h2>
+    <p>DMCA notices and counter-notices should be submitted to our designated agent using the contact details below.</p>
+    <div class="contact-card">
+      <div class="row">
+        <span class="label">ROLE</span>
+        <span class="value">DMCA / Copyright Agent</span>
+      </div>
+      <div class="row">
+        <span class="label">EMAIL</span>
+        <span class="value">dmca@zennou.org</span>
+      </div>
+      <div class="row">
+        <span class="label">SUBJECT LINE</span>
+        <span class="value">DMCA Takedown Notice — [Project Name]</span>
+      </div>
+    </div>
+    <p>Notices sent through other channels (support tickets, social media, general inquiries) may not be processed as quickly, or may not qualify as a valid legal notice. Please use the contact above for all formal copyright claims.</p>
+    <a href="#" class="back-top">↑ Back to top</a>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <a href="index.html"><img src="assets/Zennou_Logo.webp" alt="Zennou"></a>
+    <p>© 2026 Zennou. All rights reserved.</p>
+    <div class="footer-legal">
+      <a href="terms.html">Terms</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="dmca.html">DMCA</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
