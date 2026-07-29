@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms of Service — Zennou</title>
+<meta name="description" content="Zennou Terms of Service — rules for using our creator community and file hosting platform.">
+<link rel="icon" href="assets/Zennou_Logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #000000;
+    --void: #0a0a0a;
+    --zinc-950: #0c0c0d;
+    --zinc-900: #141415;
+    --zinc-800: #1f1f21;
+    --zinc-700: #38383c;
+    --zinc-600: #5a5a60;
+    --zinc-500: #86868c;
+    --zinc-400: #adadb3;
+    --zinc-300: #cfcfd3;
+    --zinc-200: #e6e6e8;
+    --white: #ffffff;
+    --line: rgba(255,255,255,0.10);
+    --line-strong: rgba(255,255,255,0.18);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  body {
+    background: var(--black);
+    color: var(--zinc-300);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  .mono { font-family: 'JetBrains Mono', monospace; letter-spacing: 0.02em; }
+
+  a { color: inherit; text-decoration: none; }
+
+  ::selection { background: var(--white); color: var(--black); }
+
+  /* ============ DOC LAYOUT ============ */
+  .doc-header {
+    padding: 80px 24px 60px;
+    text-align: center;
+    border-bottom: 1px solid var(--line);
+    background: var(--void);
+  }
+
+  .doc-header .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: var(--zinc-500);
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 18px;
+  }
+
+  .doc-header h1 {
+    font-size: 40px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+
+  .doc-header p {
+    color: var(--zinc-500);
+    font-size: 15px;
+  }
+
+  .doc-body {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 72px 28px 120px;
+  }
+
+  .toc {
+    position: static;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 64px;
+    background: rgba(255,255,255,0.015);
+  }
+
+  .toc h2 {
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--zinc-500);
+    letter-spacing: 0.06em;
+    margin-bottom: 18px;
+  }
+
+  .toc ol {
+    list-style: none;
+    counter-reset: toc;
+    display: grid;
+    gap: 10px;
+  }
+
+  .toc li {
+    counter-increment: toc;
+    font-size: 14px;
+  }
+
+  .toc li a {
+    color: var(--zinc-300);
+    transition: color 0.2s ease;
+  }
+  .toc li a:hover { color: var(--white); }
+
+  .toc li a::before {
+    content: counter(toc, decimal-leading-zero);
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--zinc-600);
+    margin-right: 12px;
+    font-size: 13px;
+  }
+
+  section.clause {
+    margin-bottom: 52px;
+    scroll-margin-top: 100px;
+  }
+
+  section.clause h2 {
+    font-size: 21px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  section.clause h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--zinc-200);
+    margin: 24px 0 10px;
+  }
+
+  section.clause p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--zinc-400);
+    margin-bottom: 16px;
+  }
+
+  section.clause ul, section.clause ol.plain {
+    margin: 0 0 16px 0;
+    padding-left: 22px;
+  }
+
+  section.clause li {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--zinc-400);
+    margin-bottom: 8px;
+  }
+
+  section.clause strong { color: var(--zinc-200); font-weight: 600; }
+
+  .callout {
+    border-left: 2px solid var(--line-strong);
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 0 8px 8px 0;
+    margin: 20px 0;
+  }
+
+  .callout p { margin: 0; color: var(--zinc-300); font-size: 14.5px; }
+  .callout p strong { color: var(--white); }
+
+  .back-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--zinc-500);
+    margin-top: 8px;
+  }
+  .back-top:hover { color: var(--zinc-300); }
+
+  /* ============ FOOTER ============ */
+  footer {
+    border-top: 1px solid var(--line);
+    background: var(--void);
+  }
+  .footer-inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 48px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .footer-inner img { height: 28px; }
+  .footer-legal { display: flex; gap: 24px; }
+  .footer-legal a { font-size: 13px; color: var(--zinc-500); }
+  .footer-legal a:hover { color: var(--zinc-300); }
+  .footer-inner p { font-size: 13px; color: var(--zinc-600); }
+
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--white);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<header class="doc-header">
+  <span class="tag">// LEGAL</span>
+  <h1>Terms of Service</h1>
+  <p>Last updated: July 29, 2026</p>
+</header>
+
+<main class="doc-body">
+
+  <nav class="toc" aria-label="Table of contents">
+    <h2>ON THIS PAGE</h2>
+    <ol>
+      <li><a href="#acceptance">Acceptance of Terms</a></li>
+      <li><a href="#eligibility">Eligibility</a></li>
+      <li><a href="#accounts">Accounts</a></li>
+      <li><a href="#user-content">User Content & Uploads</a></li>
+      <li><a href="#conduct">Community Conduct</a></li>
+      <li><a href="#ip">Intellectual Property</a></li>
+      <li><a href="#license">License You Grant Us</a></li>
+      <li><a href="#moderation">Moderation & Enforcement</a></li>
+      <li><a href="#disclaimers">Disclaimers</a></li>
+      <li><a href="#liability">Limitation of Liability</a></li>
+      <li><a href="#termination">Termination</a></li>
+      <li><a href="#changes">Changes to These Terms</a></li>
+      <li><a href="#force-majeure">Force Majeure</a></li>
+      <li><a href="#governing-law">Governing Law</a></li>
+      <li><a href="#severability">Severability</a></li>
+      <li><a href="#entire-agreement">Entire Agreement</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ol>
+  </nav>
+
+  <section class="clause" id="acceptance">
+    <h2>1. Acceptance of Terms</h2>
+    <p>These Terms of Service ("Terms") govern your access to and use of Zennou ("Zennou," "we," "us," or "the platform"), including our website, community forums, and file hosting services. By creating an account or using Zennou in any way, you agree to be bound by these Terms. If you do not agree, please do not use the platform.</p>
+    <p>Zennou is a community platform where creators — modders, fan project developers, and independent tinkerers — share, showcase, and document their work. These Terms apply to everyone who uses the platform, whether you upload content, comment, or simply browse.</p>
+  </section>
+
+  <section class="clause" id="eligibility">
+    <h2>2. Eligibility</h2>
+    <p>You must be at least 13 years old (or the minimum age of digital consent in your country) to create an account. If you are under the age of majority in your jurisdiction, you confirm that a parent or legal guardian has reviewed and agreed to these Terms on your behalf.</p>
+    <p>By using Zennou, you represent that you have the legal capacity to enter into a binding agreement and that your use of the platform does not violate any applicable law.</p>
+  </section>
+
+  <section class="clause" id="accounts">
+    <h2>3. Accounts</h2>
+    <p>You are responsible for maintaining the security of your account credentials and for all activity that occurs under your account. Notify us immediately if you suspect unauthorized access.</p>
+    <ul>
+      <li>One person or entity may not maintain more than one account for abusive or evasive purposes (e.g., circumventing a ban).</li>
+      <li>Usernames may not impersonate others, infringe on trademarks, or be intentionally misleading.</li>
+      <li>We reserve the right to suspend or remove accounts that provide false information during registration.</li>
+    </ul>
+  </section>
+
+  <section class="clause" id="user-content">
+    <h2>4. User Content & Uploads</h2>
+    <p>Zennou allows you to upload and host files — including mods, patches, fan projects, screenshots, videos, and related documentation ("User Content"). You retain ownership of your User Content, subject to the license described in Section 7.</p>
+
+    <h3>4.1 Your Responsibilities</h3>
+    <p>By uploading content, you confirm that:</p>
+    <ul>
+      <li>You own the content, or have the necessary rights, licenses, and permissions to share it.</li>
+      <li>Your content does not infringe on the copyright, trademark, or other intellectual property rights of any third party — including the original creators of any base game, software, or media your project modifies.</li>
+      <li>Your content does not contain malware, ransomware, cryptominers, or any code designed to harm users, their devices, or their data.</li>
+      <li>Your content does not include pirated software, ROMs, game files, or any copyrighted material you are not authorized to distribute.</li>
+      <li>Your content complies with any applicable license terms set by the original IP holder (where such terms exist and are publicly available).</li>
+    </ul>
+
+    <div class="callout">
+      <p><strong>Note:</strong> Many creations on Zennou build on top of existing games, software, or media. We expect creators to respect the rights of original IP holders. Distributing another party's copyrighted assets without authorization — even as part of a "mod" — is not permitted and may result in removal and account action.</p>
+    </div>
+
+    <h3>4.2 File Hosting</h3>
+    <p>We provide storage and bandwidth to help you distribute your work, but Zennou is not an unlimited or permanent archive. We reserve the right to enforce reasonable storage limits, file size limits, and to remove content that violates these Terms or applicable law.</p>
+  </section>
+
+  <section class="clause" id="conduct">
+    <h2>5. Community Conduct</h2>
+    <p>Zennou hosts discussions, comments, and community interaction around creative work. To keep this a place people want to be part of, you agree not to:</p>
+    <ul>
+      <li>Harass, threaten, or demean other users based on identity, background, or any other personal characteristic.</li>
+      <li>Post spam, unsolicited advertising, or engage in vote/download manipulation.</li>
+      <li>Impersonate Zennou staff, other users, or organizations.</li>
+      <li>Share sexually explicit content involving minors, real-world violence intended to incite harm, or content that facilitates illegal activity.</li>
+      <li>Deliberately mislead users about what a download contains (e.g., disguising unrelated or harmful files as a mod).</li>
+      <li>Attempt to exploit, disrupt, or gain unauthorized access to Zennou's systems.</li>
+    </ul>
+    <p>We reserve the right to remove content or restrict accounts that violate this section, at our discretion, in order to protect the community.</p>
+  </section>
+
+  <section class="clause" id="ip">
+    <h2>6. Intellectual Property</h2>
+    <p>Zennou respects intellectual property rights and expects the same from our users. If you believe content on Zennou infringes your copyright, please refer to our <a href="dmca.html" style="color: var(--zinc-200); text-decoration: underline;">DMCA Policy</a> for how to submit a takedown request.</p>
+    <p>The Zennou name, logo, and platform design are the property of Zennou and may not be used without written permission, except as necessary to refer to the platform itself (e.g., "available on Zennou").</p>
+  </section>
+
+  <section class="clause" id="license">
+    <h2>7. License You Grant Us</h2>
+    <p>You retain full ownership of the content you upload. However, to operate the platform — display your project, serve your files for download, generate previews, and so on — you grant Zennou a limited, non-exclusive, worldwide, royalty-free license to host, store, reproduce, and display your User Content solely for the purpose of operating and promoting the platform.</p>
+    <p>This license ends when you delete your content or account, except where copies are reasonably retained for backup, legal, or archival purposes for a limited period.</p>
+  </section>
+
+  <section class="clause" id="moderation">
+    <h2>8. Moderation & Enforcement</h2>
+    <p>We may, at our discretion and without prior notice:</p>
+    <ul>
+      <li>Remove or restrict access to content that violates these Terms.</li>
+      <li>Suspend or terminate accounts for repeated or severe violations.</li>
+      <li>Cooperate with law enforcement where required by law.</li>
+    </ul>
+    <p>Moderation decisions aim to be fair and consistent, but Zennou is not obligated to host any specific piece of content and may remove content that creates legal or safety risk for the platform, even if it does not explicitly violate a listed rule.</p>
+  </section>
+
+  <section class="clause" id="disclaimers">
+    <h2>9. Disclaimers</h2>
+    <p>Zennou is provided "as is" and "as available," without warranties of any kind, express or implied. We do not guarantee that the platform will be uninterrupted, error-free, or free of harmful components.</p>
+    <p><strong>User-generated content is not vetted by Zennou before publication.</strong> Downloading and running third-party files — including mods, patches, and fan projects — carries inherent risk. Use your own judgment, scan files where appropriate, and only run software from creators you trust.</p>
+  </section>
+
+  <section class="clause" id="liability">
+    <h2>10. Limitation of Liability</h2>
+    <p>To the maximum extent permitted by law, Zennou and its team shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the platform, including but not limited to damage from downloaded files, loss of data, or disputes between users.</p>
+    <p>Your use of any third-party creation hosted on Zennou is at your own risk.</p>
+
+    <h3>10.1 Liability Cap</h3>
+    <p>To the extent any liability on our part is established despite the above, our total aggregate liability to you for any and all claims arising from or related to your use of Zennou will not exceed the greater of: (a) the total amount you have paid us, if any, in the twelve (12) months preceding the claim, or (b) <strong>USD $50</strong>.</p>
+    <div class="callout">
+      <p><strong>Note for future review:</strong> The $50 figure is a common industry-standard placeholder for free platforms with no paid transactions. Revisit this number once Zennou introduces paid features (subscriptions, storage tiers, etc.) — the cap is often tied to amounts actually paid by the user in such cases.</p>
+    </div>
+  </section>
+
+  <section class="clause" id="termination">
+    <h2>11. Termination</h2>
+    <p>You may delete your account at any time. We may suspend or terminate your access to Zennou if you violate these Terms, engage in behavior that harms the platform or its users, or as required by law.</p>
+    <p>Sections that by their nature should survive termination (including Intellectual Property, License You Grant Us, Disclaimers, and Limitation of Liability) will continue to apply.</p>
+  </section>
+
+  <section class="clause" id="changes">
+    <h2>12. Changes to These Terms</h2>
+    <p>We may update these Terms from time to time. If we make material changes, we will provide reasonable notice (such as a banner on the platform or an email) before the changes take effect. Continued use of Zennou after changes take effect constitutes acceptance of the updated Terms.</p>
+  </section>
+
+  <section class="clause" id="force-majeure">
+    <h2>13. Force Majeure</h2>
+    <p>We will not be held responsible for any failure or delay in performance caused by circumstances beyond our reasonable control, including but not limited to: natural disasters, acts of government, war, terrorism, civil unrest, labor disputes, internet or infrastructure failures, cyberattacks, or outages of third-party services we rely on (such as hosting or payment providers).</p>
+  </section>
+
+  <section class="clause" id="governing-law">
+    <h2>14. Governing Law</h2>
+    <p>These Terms are governed by and construed in accordance with the laws of the Republic of Indonesia, without regard to conflict-of-law principles. Any disputes arising from these Terms or your use of Zennou will first be resolved through good-faith negotiation, and if unresolved, through the courts of competent jurisdiction in Indonesia.</p>
+  </section>
+
+  <section class="clause" id="severability">
+    <h2>15. Severability</h2>
+    <p>If any provision of these Terms is found to be unenforceable or invalid under applicable law, that provision will be limited or eliminated to the minimum extent necessary, and the remaining provisions will continue in full force and effect.</p>
+  </section>
+
+  <section class="clause" id="entire-agreement">
+    <h2>16. Entire Agreement</h2>
+    <p>These Terms, together with our Privacy Policy and DMCA Policy, constitute the entire agreement between you and Zennou regarding your use of the platform, and supersede any prior agreements or understandings, whether written or oral.</p>
+  </section>
+
+  <section class="clause" id="contact">
+    <h2>17. Contact</h2>
+    <p>Questions about these Terms can be directed to our support channels, linked in the footer of this site.</p>
+    <a href="#" class="back-top">↑ Back to top</a>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <a href="index.html"><img src="assets/Zennou_Logo.webp" alt="Zennou"></a>
+    <p>© 2026 Zennou. All rights reserved.</p>
+    <div class="footer-legal">
+      <a href="terms.html">Terms</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="dmca.html">DMCA</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
