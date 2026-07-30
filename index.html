@@ -210,6 +210,51 @@
     pointer-events: none;
   }
 
+  /* ============ HERO CHROME CUBE ============ */
+  .hero-cube-wrap {
+    position: absolute;
+    top: 8%;
+    right: 6%;
+    z-index: 5;
+    opacity: 0;
+    animation: fadeUp 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+    pointer-events: none;
+  }
+
+  .hero-cube-stage { perspective: 800px; }
+
+  .hero-cube {
+    width: 90px;
+    height: 90px;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: cubeSpin 14s linear infinite;
+  }
+
+  .hero-cube .face {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    border: 1px solid rgba(255,255,255,0.22);
+    background: linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.01));
+  }
+
+  .hero-cube .face.front  { transform: translateZ(45px); }
+  .hero-cube .face.back   { transform: rotateY(180deg) translateZ(45px); }
+  .hero-cube .face.right  { transform: rotateY(90deg) translateZ(45px); }
+  .hero-cube .face.left   { transform: rotateY(-90deg) translateZ(45px); }
+  .hero-cube .face.top    { transform: rotateX(90deg) translateZ(45px); background: linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.02)); }
+  .hero-cube .face.bottom { transform: rotateX(-90deg) translateZ(45px); background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.01)); }
+
+  @keyframes cubeSpin {
+    from { transform: rotateX(-20deg) rotateY(0deg); }
+    to   { transform: rotateX(-20deg) rotateY(360deg); }
+  }
+
+  @media (max-width: 860px) {
+    .hero-cube-wrap { display: none; }
+  }
+
   .eyebrow {
     display: inline-flex;
     align-items: center;
@@ -404,15 +449,31 @@
   .feature-card:hover { background: var(--zinc-950); }
 
   .feature-icon {
-    width: 44px; height: 44px;
-    border: 1px solid var(--line-strong);
-    border-radius: 10px;
+    width: 48px; height: 48px;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 24px;
-    background: rgba(255,255,255,0.02);
+    background: linear-gradient(145deg, var(--zinc-800), var(--void));
+    box-shadow:
+      inset 0 1px 1px rgba(255,255,255,0.2),
+      inset 0 -6px 10px rgba(0,0,0,0.6),
+      0 10px 20px rgba(0,0,0,0.45);
+    transform: perspective(400px) rotateX(6deg);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
   }
+
+  .feature-card:hover .feature-icon {
+    transform: perspective(400px) rotateX(-4deg) rotateY(6deg) translateY(-2px);
+    box-shadow:
+      inset 0 1px 1px rgba(255,255,255,0.3),
+      inset 0 -6px 10px rgba(0,0,0,0.6),
+      0 16px 28px rgba(0,0,0,0.55);
+  }
+
+  .feature-icon svg { position: relative; z-index: 1; }
 
   .feature-card h3 {
     font-size: 17px;
@@ -659,6 +720,19 @@
 
 <section class="hero">
   <div class="bg-grid"></div>
+
+  <div class="hero-cube-wrap">
+    <div class="hero-cube-stage">
+      <div class="hero-cube">
+        <div class="face front"></div>
+        <div class="face back"></div>
+        <div class="face right"></div>
+        <div class="face left"></div>
+        <div class="face top"></div>
+        <div class="face bottom"></div>
+      </div>
+    </div>
+  </div>
 
   <span class="eyebrow"><span class="dot"></span> A home for creators — now in open beta</span>
 
