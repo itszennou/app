@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chrono Overhaul — Zennou</title>
+<meta name="description" content="A total conversion mod that reworks time mechanics — hosted on Zennou.">
+<link rel="icon" href="assets/Zennou_Logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #000000;
+    --void: #0a0a0a;
+    --zinc-950: #0c0c0d;
+    --zinc-900: #141415;
+    --zinc-800: #1f1f21;
+    --zinc-700: #38383c;
+    --zinc-600: #5a5a60;
+    --zinc-500: #86868c;
+    --zinc-400: #adadb3;
+    --zinc-300: #cfcfd3;
+    --zinc-200: #e6e6e8;
+    --white: #ffffff;
+    --line: rgba(255,255,255,0.10);
+    --line-strong: rgba(255,255,255,0.18);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; overflow-x: hidden; width: 100%; }
+
+  body {
+    background: var(--black);
+    color: var(--zinc-300);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+  }
+
+  h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.02em; }
+  .mono { font-family: 'JetBrains Mono', monospace; letter-spacing: 0.02em; }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--white); color: var(--black); }
+
+  /* ============ NAV ============ */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 40px;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-brand img { height: 42px; width: 42px; object-fit: contain; }
+  .nav-links { display: flex; gap: 36px; align-items: center; }
+  .nav-links a { font-size: 14px; color: var(--zinc-400); transition: color 0.2s ease; }
+  .nav-links a:hover { color: var(--white); }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 10px 20px; font-size: 14px; font-weight: 500; border-radius: 8px;
+    cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap; border: 1px solid transparent;
+  }
+  .btn-ghost { color: var(--zinc-300); border-color: var(--line-strong); }
+  .btn-ghost:hover { color: var(--white); border-color: var(--zinc-500); background: rgba(255,255,255,0.03); }
+  .btn-solid { background: var(--white); color: var(--black); font-weight: 600; }
+  .btn-solid:hover { background: var(--zinc-200); transform: translateY(-1px); }
+  .btn-sm { padding: 8px 16px; font-size: 13px; }
+
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    nav { padding: 12px 20px; }
+    nav > .btn { display: none; }
+  }
+
+  /* ============ MOBILE MENU ============ */
+  .hamburger-btn {
+    display: none;
+    background: none;
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    width: 38px;
+    height: 38px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--zinc-300);
+  }
+  .hamburger-btn:hover { color: var(--white); border-color: var(--zinc-500); }
+
+  @media (max-width: 900px) {
+    .hamburger-btn { display: flex; }
+  }
+
+  .mobile-menu {
+    position: fixed;
+    top: 0; right: 0;
+    width: 78%;
+    max-width: 300px;
+    height: 100vh;
+    background: var(--zinc-950);
+    border-left: 1px solid var(--line-strong);
+    z-index: 200;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .mobile-menu.open { transform: translateX(0); }
+
+  .mobile-menu-close {
+    align-self: flex-end;
+    background: none;
+    border: none;
+    color: var(--zinc-400);
+    cursor: pointer;
+    padding: 8px;
+    margin-bottom: 12px;
+  }
+  .mobile-menu-close:hover { color: var(--white); }
+
+  .mobile-menu a {
+    padding: 14px 8px;
+    font-size: 15.5px;
+    color: var(--zinc-300);
+    border-bottom: 1px solid var(--line);
+  }
+  .mobile-menu a:hover { color: var(--white); }
+
+  .mobile-menu-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 199;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .mobile-menu-overlay.open { opacity: 1; pointer-events: auto; }
+
+  /* ============ BREADCRUMB ============ */
+  .breadcrumb {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 100px 32px 0;
+    font-size: 13px;
+    color: var(--zinc-600);
+  }
+  .breadcrumb a { color: var(--zinc-500); }
+  .breadcrumb a:hover { color: var(--zinc-200); }
+
+  /* ============ HEADER ============ */
+  .project-header {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 24px 32px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .project-title-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .project-title-clamp {
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.25;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  @media (max-width: 640px) {
+    .project-header { padding: 20px 20px 32px; gap: 16px; }
+    .project-title-row { gap: 14px; }
+    .project-title-clamp { font-size: 22px; }
+  }
+
+  .project-thumb {
+    width: 108px;
+    height: 108px;
+    border-radius: 16px;
+    border: 1px solid var(--line-strong);
+    background: linear-gradient(135deg, var(--zinc-800), var(--zinc-900));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .project-thumb svg { opacity: 0.5; }
+
+  @media (max-width: 640px) {
+    .project-thumb { width: 76px; height: 76px; border-radius: 12px; }
+    .project-thumb svg { width: 28px; height: 28px; }
+  }
+
+  .project-headtext { width: 100%; }
+
+  .project-category {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    color: var(--zinc-500);
+    letter-spacing: 0.05em;
+    border: 1px solid var(--line-strong);
+    padding: 4px 10px;
+    border-radius: 100px;
+    margin-bottom: 12px;
+  }
+
+  .project-tagline {
+    color: var(--zinc-500);
+    font-size: 15px;
+    margin-bottom: 16px;
+  }
+
+  .project-byline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13.5px;
+    color: var(--zinc-500);
+  }
+
+  .avatar-sm {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--zinc-700);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: var(--zinc-300);
+    font-weight: 600;
+  }
+
+  .project-byline a { color: var(--zinc-300); }
+  .project-byline a:hover { color: var(--white); }
+
+  .header-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+    max-width: 320px;
+  }
+
+  .download-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 14px 24px;
+    background: var(--white);
+    color: var(--black);
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+  }
+  .download-btn:hover { background: var(--zinc-200); transform: translateY(-1px); }
+  .download-btn .sub {
+    font-size: 11.5px;
+    font-weight: 400;
+    color: var(--zinc-700);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .secondary-actions {
+    display: flex;
+    gap: 8px;
+  }
+  .icon-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px;
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    color: var(--zinc-400);
+    font-size: 13px;
+    cursor: pointer;
+    background: transparent;
+    transition: all 0.2s ease;
+  }
+  .icon-btn:hover { color: var(--white); border-color: var(--zinc-500); background: rgba(255,255,255,0.03); }
+  .icon-btn.active { color: var(--white); border-color: var(--zinc-400); background: rgba(255,255,255,0.05); }
+
+  /* ============ STATS BAR ============ */
+  .stats-bar {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 32px 32px;
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 28px;
+  }
+  .stat-mini { display: flex; flex-direction: column; gap: 4px; }
+  .stat-mini .num { font-family: 'Space Grotesk', sans-serif; font-size: 19px; font-weight: 700; color: var(--white); }
+  .stat-mini .label { font-size: 11px; color: var(--zinc-500); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.03em; }
+
+  /* ============ LAYOUT ============ */
+  .content-wrap {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 40px 32px 100px;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 48px;
+  }
+
+  @media (max-width: 900px) {
+    .content-wrap { grid-template-columns: 1fr; }
+  }
+
+  /* ============ GALLERY ============ */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 40px;
+  }
+  .gallery-item {
+    aspect-ratio: 16/10;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: linear-gradient(135deg, var(--zinc-900), var(--zinc-950));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+    overflow: hidden;
+  }
+  .gallery-item:hover { border-color: var(--line-strong); }
+  .gallery-item:first-child { grid-column: span 3; aspect-ratio: 16/7; }
+  .gallery-item svg { opacity: 0.3; }
+
+  @media (max-width: 640px) {
+    .gallery { grid-template-columns: 1fr 1fr; }
+    .gallery-item:first-child { grid-column: span 2; }
+  }
+
+  /* ============ RATING SECTION ============ */
+  .rating-section {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 28px;
+    margin-bottom: 32px;
+    background: rgba(255,255,255,0.015);
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .rating-summary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 140px;
+    padding-right: 32px;
+    border-right: 1px solid var(--line);
+  }
+
+  .rating-score {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .rating-stars-static {
+    display: flex;
+    gap: 2px;
+    margin: 10px 0 6px;
+  }
+  .rating-stars-static svg { color: var(--white); }
+  .rating-stars-static svg.empty { color: var(--zinc-700); }
+
+  .rating-count {
+    font-size: 12px;
+    color: var(--zinc-500);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .rating-breakdown {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .breakdown-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12.5px;
+    color: var(--zinc-500);
+  }
+  .breakdown-row .star-num { width: 14px; font-family: 'JetBrains Mono', monospace; }
+  .breakdown-bar {
+    flex: 1;
+    height: 6px;
+    background: var(--zinc-800);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+  .breakdown-fill {
+    height: 100%;
+    background: var(--zinc-300);
+    border-radius: 100px;
+  }
+  .breakdown-pct { width: 32px; text-align: right; font-family: 'JetBrains Mono', monospace; }
+
+  .rate-this {
+    width: 100%;
+    padding-top: 20px;
+    margin-top: 4px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .rate-this-label { font-size: 13.5px; color: var(--zinc-400); }
+
+  .rate-this-stars {
+    display: flex;
+    gap: 4px;
+  }
+  .rate-star-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px;
+    color: var(--zinc-700);
+    transition: color 0.15s ease, transform 0.15s ease;
+  }
+  .rate-star-btn:hover, .rate-star-btn.hovered { color: var(--zinc-400); }
+  .rate-star-btn.selected { color: var(--white); }
+  .rate-star-btn:hover { transform: scale(1.1); }
+
+  .rate-feedback {
+    font-size: 12.5px;
+    color: var(--zinc-500);
+    margin-left: 8px;
+  }
+
+  @media (max-width: 560px) {
+    .rating-summary {
+      border-right: none;
+      border-bottom: 1px solid var(--line);
+      padding-right: 0;
+      padding-bottom: 20px;
+      width: 100%;
+    }
+  }
+
+  /* ============ TABS ============ */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 28px;
+  }
+  .tab-btn {
+    padding: 12px 4px;
+    margin-right: 24px;
+    font-size: 14.5px;
+    color: var(--zinc-500);
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    font-family: 'Inter', sans-serif;
+    transition: color 0.2s ease;
+  }
+  .tab-btn.active { color: var(--white); border-bottom-color: var(--white); }
+  .tab-btn:hover { color: var(--zinc-200); }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ============ DESCRIPTION ============ */
+  .description p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--zinc-400);
+    margin-bottom: 18px;
+  }
+  .description h3 {
+    font-size: 17px;
+    color: var(--white);
+    font-weight: 600;
+    margin: 28px 0 14px;
+  }
+  .description ul { padding-left: 22px; margin-bottom: 18px; }
+  .description li { font-size: 15px; line-height: 1.8; color: var(--zinc-400); margin-bottom: 8px; }
+  .description strong { color: var(--zinc-200); font-weight: 600; }
+
+  /* ============ VERSIONS TAB ============ */
+  .version-item {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 12px;
+  }
+  .version-item-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .version-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--white);
+    font-weight: 600;
+  }
+  .version-tag .latest-badge {
+    font-family: 'Inter', sans-serif;
+    font-size: 10.5px;
+    color: var(--zinc-950);
+    background: var(--white);
+    padding: 2px 8px;
+    border-radius: 100px;
+    margin-left: 8px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  .version-date { font-size: 12.5px; color: var(--zinc-600); font-family: 'JetBrains Mono', monospace; }
+  .version-changelog { font-size: 13.5px; color: var(--zinc-500); line-height: 1.7; margin-bottom: 14px; }
+  .version-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .version-file-info { font-size: 12px; color: var(--zinc-600); font-family: 'JetBrains Mono', monospace; }
+  .version-download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    border: 1px solid var(--line-strong);
+    border-radius: 7px;
+    font-size: 13px;
+    color: var(--zinc-200);
+    cursor: pointer;
+    background: transparent;
+    transition: all 0.2s ease;
+  }
+  .version-download-btn:hover { border-color: var(--zinc-500); background: rgba(255,255,255,0.03); color: var(--white); }
+
+  /* ============ COMMENTS TAB ============ */
+  .comment-form {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .comment-form textarea {
+    flex: 1;
+    background: var(--zinc-900);
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    padding: 12px 14px;
+    color: var(--zinc-200);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    resize: vertical;
+    min-height: 60px;
+  }
+  .comment-form textarea:focus { outline: none; border-color: var(--zinc-400); background: var(--zinc-800); }
+  .comment-form textarea::placeholder { color: var(--zinc-600); }
+
+  .comment-item { display: flex; gap: 12px; margin-bottom: 24px; }
+  .comment-body { flex: 1; }
+  .comment-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; flex-wrap: wrap; }
+  .comment-author { font-size: 13.5px; font-weight: 600; color: var(--zinc-200); }
+  .comment-time { font-size: 12px; color: var(--zinc-600); font-family: 'JetBrains Mono', monospace; }
+  .comment-text { font-size: 14px; line-height: 1.7; color: var(--zinc-400); }
+
+  /* ============ SIDEBAR ============ */
+  .sidebar-card {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 20px;
+    background: rgba(255,255,255,0.015);
+  }
+  .sidebar-card h3 {
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--zinc-500);
+    letter-spacing: 0.05em;
+    margin-bottom: 16px;
+  }
+  .sidebar-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 13.5px;
+  }
+  .sidebar-row:last-child { border-bottom: none; }
+  .sidebar-row .k { color: var(--zinc-500); }
+  .sidebar-row .v { color: var(--zinc-200); }
+  .sidebar-row .v a { color: var(--zinc-200); text-decoration: underline; text-underline-offset: 2px; }
+
+  .tag-chip {
+    display: inline-block;
+    font-size: 12px;
+    color: var(--zinc-400);
+    border: 1px solid var(--line-strong);
+    padding: 4px 10px;
+    border-radius: 100px;
+    margin: 0 6px 6px 0;
+  }
+
+  .creator-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .avatar-lg {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--zinc-700);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: var(--zinc-200);
+  }
+  .creator-info .name { font-size: 14.5px; font-weight: 600; color: var(--white); }
+  .creator-info .handle { font-size: 12.5px; color: var(--zinc-500); }
+
+  .report-link {
+    display: block;
+    text-align: center;
+    font-size: 12.5px;
+    color: var(--zinc-600);
+    margin-top: 8px;
+  }
+  .report-link:hover { color: var(--zinc-300); }
+
+  /* ============ FOOTER ============ */
+  footer { border-top: 1px solid var(--line); background: var(--void); }
+  .footer-inner {
+    max-width: 1140px; margin: 0 auto; padding: 40px 32px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 20px;
+  }
+  .footer-inner img { height: 26px; }
+  .footer-legal { display: flex; gap: 24px; }
+  .footer-legal a { font-size: 13px; color: var(--zinc-500); }
+  .footer-legal a:hover { color: var(--zinc-300); }
+  .footer-inner p { font-size: 13px; color: var(--zinc-600); }
+
+  a:focus-visible, button:focus-visible, textarea:focus-visible {
+    outline: 2px solid var(--white);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand"><img src="assets/Zennou_Logo.webp" alt="Zennou"></a>
+  <div class="nav-links">
+    <a href="browse.html">Browse</a>
+    <a href="index.html#features">Features</a>
+    <a href="about.html">About</a>
+  </div>
+  <a href="login.html" class="btn btn-ghost btn-sm">Log In</a>
+  <button class="hamburger-btn" onclick="toggleMobileMenu()" aria-label="Open menu">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+</nav>
+
+<div class="mobile-menu-overlay" id="menu-overlay" onclick="toggleMobileMenu()"></div>
+<div class="mobile-menu" id="mobile-menu">
+  <button class="mobile-menu-close" onclick="toggleMobileMenu()" aria-label="Close menu">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+  <a href="browse.html">Browse</a>
+  <a href="index.html#features">Features</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
+  <a href="login.html">Log In</a>
+</div>
+
+<div class="breadcrumb">
+  <a href="browse.html">Browse</a> / <a href="browse.html">Total Conversion</a> / Chrono Overhaul
+</div>
+
+<header class="project-header">
+  <div class="project-title-row">
+    <div class="project-thumb">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+    </div>
+    <h1 class="project-title-clamp">Chrono Overhaul</h1>
+  </div>
+
+  <div class="project-headtext">
+    <span class="project-category">TOTAL CONVERSION</span>
+    <p class="project-tagline">A complete rework of time mechanics — rewind, freeze, and paradox systems built from scratch.</p>
+    <div class="project-byline">
+      <span class="avatar-sm">RK</span>
+      by <a href="#">RiftKeeper</a> · updated 3 days ago
+    </div>
+  </div>
+
+  <div class="header-actions">
+    <a href="download.html" class="download-btn" style="text-decoration:none;">
+      Download v2.4.1
+      <span class="sub">42.8 MB · 18.2K downloads</span>
+    </a>
+    <div class="secondary-actions">
+      <button class="icon-btn" onclick="toggleLike(this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 000-7.8z"/></svg>
+        <span id="like-count">1,204</span>
+      </button>
+      <button class="icon-btn" onclick="toggleSave(this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+        Save
+      </button>
+      <button class="icon-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"/></svg>
+        Share
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-mini"><div class="num">18.2K</div><div class="label">DOWNLOADS</div></div>
+  <div class="stat-mini"><div class="num">1,204</div><div class="label">LIKES</div></div>
+  <div class="stat-mini"><div class="num">247</div><div class="label">RELEASES</div></div>
+  <div class="stat-mini"><div class="num">4.9</div><div class="label">RATING</div></div>
+</div>
+
+<div class="content-wrap">
+  <main>
+    <div class="gallery">
+      <div class="gallery-item"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+      <div class="gallery-item"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+      <div class="gallery-item"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+      <div class="gallery-item"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+    </div>
+
+    <div class="rating-section">
+      <div class="rating-summary">
+        <div class="rating-score">4.9</div>
+        <div class="rating-stars-static" id="static-stars"></div>
+        <div class="rating-count">312 ratings</div>
+      </div>
+
+      <div class="rating-breakdown">
+        <div class="breakdown-row"><span class="star-num">5</span><div class="breakdown-bar"><div class="breakdown-fill" style="width:84%"></div></div><span class="breakdown-pct">84%</span></div>
+        <div class="breakdown-row"><span class="star-num">4</span><div class="breakdown-bar"><div class="breakdown-fill" style="width:11%"></div></div><span class="breakdown-pct">11%</span></div>
+        <div class="breakdown-row"><span class="star-num">3</span><div class="breakdown-bar"><div class="breakdown-fill" style="width:3%"></div></div><span class="breakdown-pct">3%</span></div>
+        <div class="breakdown-row"><span class="star-num">2</span><div class="breakdown-bar"><div class="breakdown-fill" style="width:1%"></div></div><span class="breakdown-pct">1%</span></div>
+        <div class="breakdown-row"><span class="star-num">1</span><div class="breakdown-bar"><div class="breakdown-fill" style="width:1%"></div></div><span class="breakdown-pct">1%</span></div>
+      </div>
+
+      <div class="rate-this">
+        <span class="rate-this-label">Rate this project</span>
+        <div style="display:flex; align-items:center;">
+          <div class="rate-this-stars" id="rate-stars"></div>
+          <span class="rate-feedback" id="rate-feedback"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab(event, 'overview')">Overview</button>
+      <button class="tab-btn" onclick="switchTab(event, 'versions')">Versions <span class="mono" style="color:var(--zinc-600)">(247)</span></button>
+      <button class="tab-btn" onclick="switchTab(event, 'comments')">Comments <span class="mono" style="color:var(--zinc-600)">(86)</span></button>
+    </div>
+
+    <div class="tab-panel active" id="overview">
+      <div class="description">
+        <p>Chrono Overhaul rebuilds the game's time system from the ground up. Instead of a simple pause-and-rewind gimmick, this mod introduces layered timelines, paradox-triggered events, and a full UI overhaul for tracking temporal state.</p>
+
+        <h3>What's Included</h3>
+        <ul>
+          <li>Rewind system with configurable time-window limits</li>
+          <li>Freeze-frame puzzle mechanics with 40+ new encounter types</li>
+          <li>Paradox detection system that reshapes the environment when timelines conflict</li>
+          <li>Full UI rework for the temporal HUD</li>
+          <li>Compatible save-game migration tool for existing playthroughs</li>
+        </ul>
+
+        <h3>Installation</h3>
+        <p>Extract the archive into your game's <code>/mods</code> directory. Requires the base game updated to the latest patch. Full instructions are included in the archive's README.</p>
+
+        <h3>Compatibility Notes</h3>
+        <p>This is a total conversion mod — it is <strong>not compatible</strong> with other mods that modify core time mechanics. Conflicts with UI-overhaul mods are possible; check the comments section for community-reported compatibility notes.</p>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="versions">
+      <div class="version-item">
+        <div class="version-item-head">
+          <span class="version-tag">v2.4.1 <span class="latest-badge">LATEST</span></span>
+          <span class="version-date">3 days ago</span>
+        </div>
+        <p class="version-changelog">Fixed a crash when triggering paradox events near save points. Improved rewind performance on lower-end hardware.</p>
+        <div class="version-meta">
+          <span class="version-file-info">42.8 MB · 18,204 downloads</span>
+          <a href="download.html" class="version-download-btn" style="text-decoration:none;">Download</a>
+        </div>
+      </div>
+
+      <div class="version-item">
+        <div class="version-item-head">
+          <span class="version-tag">v2.4.0</span>
+          <span class="version-date">3 weeks ago</span>
+        </div>
+        <p class="version-changelog">Added the paradox detection system. Reworked the temporal HUD entirely. This is a major update — back up your saves before installing.</p>
+        <div class="version-meta">
+          <span class="version-file-info">41.2 MB · 9,847 downloads</span>
+          <a href="download.html" class="version-download-btn" style="text-decoration:none;">Download</a>
+        </div>
+      </div>
+
+      <div class="version-item">
+        <div class="version-item-head">
+          <span class="version-tag">v2.3.2</span>
+          <span class="version-date">2 months ago</span>
+        </div>
+        <p class="version-changelog">Minor bugfixes to the rewind window calculation. Updated translations for 3 languages.</p>
+        <div class="version-meta">
+          <span class="version-file-info">39.5 MB · 6,120 downloads</span>
+          <a href="download.html" class="version-download-btn" style="text-decoration:none;">Download</a>
+        </div>
+      </div>
+
+      <div class="version-item">
+        <div class="version-item-head">
+          <span class="version-tag">v2.3.1</span>
+          <span class="version-date">3 months ago</span>
+        </div>
+        <p class="version-changelog">Hotfix for a save-corruption bug reported after the v2.3.0 release. Everyone on v2.3.0 should update immediately.</p>
+        <div class="version-meta">
+          <span class="version-file-info">39.4 MB · 4,933 downloads</span>
+          <a href="download.html" class="version-download-btn" style="text-decoration:none;">Download</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="comments">
+      <div class="comment-form">
+        <textarea placeholder="Ask a question, report a bug, or leave feedback..."></textarea>
+      </div>
+
+      <div class="comment-item">
+        <span class="avatar-sm" style="width:32px;height:32px;font-size:12px;">MV</span>
+        <div class="comment-body">
+          <div class="comment-head">
+            <span class="comment-author">MidnightVale</span>
+            <span class="comment-time">2 days ago</span>
+          </div>
+          <p class="comment-text">The paradox system in 2.4.0 is incredible — completely changes how I approach the puzzle sections. Any plans to add a difficulty slider for how aggressive the paradox events are?</p>
+        </div>
+      </div>
+
+      <div class="comment-item">
+        <span class="avatar-sm" style="width:32px;height:32px;font-size:12px;">RK</span>
+        <div class="comment-body">
+          <div class="comment-head">
+            <span class="comment-author">RiftKeeper</span>
+            <span class="comment-time">1 day ago</span>
+          </div>
+          <p class="comment-text">Good idea — I'm considering it for 2.5. No promises on timing yet, but it's on the list.</p>
+        </div>
+      </div>
+
+      <div class="comment-item">
+        <span class="avatar-sm" style="width:32px;height:32px;font-size:12px;">TQ</span>
+        <div class="comment-body">
+          <div class="comment-head">
+            <span class="comment-author">TesseractQuill</span>
+            <span class="comment-time">5 days ago</span>
+          </div>
+          <p class="comment-text">Getting a crash on startup after updating to 2.4.1. Anyone else? Running it alongside a UI mod, might be a conflict.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <aside>
+    <div class="sidebar-card creator-card">
+      <div class="avatar-lg">RK</div>
+      <div class="creator-info">
+        <div class="name">RiftKeeper</div>
+        <div class="handle">247 releases · 12.4K followers</div>
+      </div>
+    </div>
+
+    <div class="sidebar-card">
+      <h3>PROJECT INFO</h3>
+      <div class="sidebar-row"><span class="k">License</span><span class="v">CC-BY-NC</span></div>
+      <div class="sidebar-row"><span class="k">Category</span><span class="v">Total Conversion</span></div>
+      <div class="sidebar-row"><span class="k">First released</span><span class="v">Mar 2024</span></div>
+      <div class="sidebar-row"><span class="k">Last updated</span><span class="v">3 days ago</span></div>
+    </div>
+
+    <div class="sidebar-card">
+      <h3>TAGS</h3>
+      <span class="tag-chip">time-mechanics</span>
+      <span class="tag-chip">total-conversion</span>
+      <span class="tag-chip">puzzle</span>
+      <span class="tag-chip">overhaul</span>
+    </div>
+
+    <a href="dmca.html" class="report-link">Report this project</a>
+  </aside>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <a href="index.html"><img src="assets/Zennou_Logo.webp" alt="Zennou"></a>
+    <p>© 2026 Zennou. All rights reserved.</p>
+    <div class="footer-legal">
+      <a href="terms.html">Terms</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="dmca.html">DMCA</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function toggleMobileMenu() {
+    document.getElementById('mobile-menu').classList.toggle('open');
+    document.getElementById('menu-overlay').classList.toggle('open');
+  }
+
+  // ===== Star icon builder =====
+  function starSVG(filled) {
+    return `<svg width="16" height="16" viewBox="0 0 24 24" fill="${filled ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
+  }
+
+  // Render static average-rating stars (4.9 out of 5)
+  const staticContainer = document.getElementById('static-stars');
+  const avgRating = 4.9;
+  for (let i = 1; i <= 5; i++) {
+    const filled = i <= Math.round(avgRating);
+    staticContainer.innerHTML += `<span class="${filled ? '' : 'empty'}">${starSVG(filled)}</span>`;
+  }
+
+  // Render interactive "rate this" stars
+  const rateContainer = document.getElementById('rate-stars');
+  const feedbackEl = document.getElementById('rate-feedback');
+  let userRating = 0;
+
+  function renderRateStars(hoverValue = 0) {
+    rateContainer.innerHTML = '';
+    for (let i = 1; i <= 5; i++) {
+      const btn = document.createElement('button');
+      btn.className = 'rate-star-btn';
+      btn.type = 'button';
+      const active = hoverValue ? i <= hoverValue : i <= userRating;
+      if (active) btn.classList.add(hoverValue ? 'hovered' : 'selected');
+      btn.innerHTML = starSVG(active);
+      btn.onmouseenter = () => renderRateStars(i);
+      btn.onmouseleave = () => renderRateStars(0);
+      btn.onclick = () => {
+        userRating = i;
+        renderRateStars(0);
+        feedbackEl.textContent = `You rated this ${i}/5 ✓`;
+      };
+      rateContainer.appendChild(btn);
+    }
+  }
+  renderRateStars();
+
+  function switchTab(e, tabId) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    e.currentTarget.classList.add('active');
+    document.getElementById(tabId).classList.add('active');
+  }
+
+  function toggleLike(btn) {
+    btn.classList.toggle('active');
+    const countEl = document.getElementById('like-count');
+    let count = parseInt(countEl.textContent.replace(',', ''));
+    count = btn.classList.contains('active') ? count + 1 : count - 1;
+    countEl.textContent = count.toLocaleString();
+  }
+
+  function toggleSave(btn) {
+    btn.classList.toggle('active');
+    btn.childNodes[btn.childNodes.length - 1].textContent = btn.classList.contains('active') ? ' Saved' : ' Save';
+  }
+</script>
+
+</body>
+</html>
