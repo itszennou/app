@@ -165,6 +165,65 @@
     cursor: pointer;
   }
 
+  /* Searchable country dropdown */
+  .country-select {
+    position: relative;
+  }
+  .country-input {
+    width: 100%;
+    background: var(--zinc-900);
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    padding: 12px 14px;
+    color: var(--zinc-200);
+    font-family: 'Inter', sans-serif;
+    font-size: 14.5px;
+    cursor: pointer;
+  }
+  .country-input:focus {
+    outline: none;
+    border-color: var(--zinc-400);
+    background: var(--zinc-800);
+  }
+  .country-input::placeholder { color: var(--zinc-600); }
+
+  .country-dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    max-height: 220px;
+    overflow-y: auto;
+    background: var(--zinc-900);
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    z-index: 20;
+    display: none;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+  }
+  .country-dropdown.open { display: block; }
+
+  .country-option {
+    padding: 10px 14px;
+    font-size: 14px;
+    color: var(--zinc-300);
+    cursor: pointer;
+  }
+  .country-option:hover, .country-option.active {
+    background: var(--zinc-800);
+    color: var(--white);
+  }
+  .country-option.no-results {
+    color: var(--zinc-600);
+    cursor: default;
+  }
+  .country-option.no-results:hover {
+    background: transparent;
+    color: var(--zinc-600);
+  }
+
+  .country-input.invalid { border-color: var(--zinc-400); }
+
   .btn-solid {
     width: 100%;
     display: inline-flex;
@@ -314,30 +373,12 @@
       </div>
 
       <div class="field-group">
-        <label for="country">Country</label>
-        <select id="country" name="country" required>
-          <option value="" disabled selected>Select your country</option>
-          <option value="ID">Indonesia</option>
-          <option value="US">United States</option>
-          <option value="GB">United Kingdom</option>
-          <option value="CA">Canada</option>
-          <option value="AU">Australia</option>
-          <option value="DE">Germany</option>
-          <option value="FR">France</option>
-          <option value="NL">Netherlands</option>
-          <option value="BR">Brazil</option>
-          <option value="MX">Mexico</option>
-          <option value="JP">Japan</option>
-          <option value="KR">South Korea</option>
-          <option value="PH">Philippines</option>
-          <option value="MY">Malaysia</option>
-          <option value="SG">Singapore</option>
-          <option value="TH">Thailand</option>
-          <option value="VN">Vietnam</option>
-          <option value="IN">India</option>
-          <option value="RU">Russia</option>
-          <option value="OTHER">Other</option>
-        </select>
+        <label for="country-search">Country</label>
+        <div class="country-select">
+          <input type="text" id="country-search" class="country-input" placeholder="Search your country..." autocomplete="off" onfocus="openCountryDropdown()" oninput="filterCountries()">
+          <input type="hidden" id="country" name="country" required>
+          <div class="country-dropdown" id="country-dropdown"></div>
+        </div>
       </div>
 
       <button type="submit" class="btn-solid" id="submit-btn">Create Account</button>
@@ -350,6 +391,76 @@
 </div>
 
 <script>
+  const countries = [
+    "Afghanistan","Albania","Algeria","Andorra","Angola","Antigua and Barbuda","Argentina","Armenia","Australia","Austria",
+    "Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bhutan",
+    "Bolivia","Bosnia and Herzegovina","Botswana","Brazil","Brunei","Bulgaria","Burkina Faso","Burundi","Cabo Verde","Cambodia",
+    "Cameroon","Canada","Central African Republic","Chad","Chile","China","Colombia","Comoros","Congo (Congo-Brazzaville)","Costa Rica",
+    "Croatia","Cuba","Cyprus","Czechia","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt",
+    "El Salvador","Equatorial Guinea","Eritrea","Estonia","Eswatini","Ethiopia","Fiji","Finland","France","Gabon",
+    "Gambia","Georgia","Germany","Ghana","Greece","Grenada","Guatemala","Guinea","Guinea-Bissau","Guyana",
+    "Haiti","Honduras","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Israel",
+    "Italy","Ivory Coast","Jamaica","Japan","Jordan","Kazakhstan","Kenya","Kiribati","Kosovo","Kuwait",
+    "Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg",
+    "Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Mauritania","Mauritius","Mexico",
+    "Micronesia","Moldova","Monaco","Mongolia","Montenegro","Morocco","Mozambique","Myanmar","Namibia","Nauru",
+    "Nepal","Netherlands","New Zealand","Nicaragua","Niger","Nigeria","North Korea","North Macedonia","Norway","Oman",
+    "Pakistan","Palau","Palestine","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal",
+    "Qatar","Romania","Russia","Rwanda","Saint Kitts and Nevis","Saint Lucia","Saint Vincent and the Grenadines","Samoa","San Marino","Sao Tome and Principe",
+    "Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Solomon Islands","Somalia",
+    "South Africa","South Korea","South Sudan","Spain","Sri Lanka","Sudan","Suriname","Sweden","Switzerland","Syria",
+    "Taiwan","Tajikistan","Tanzania","Thailand","Timor-Leste","Togo","Tonga","Trinidad and Tobago","Tunisia","Turkey",
+    "Turkmenistan","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States","Uruguay","Uzbekistan","Vanuatu",
+    "Vatican City","Venezuela","Vietnam","Yemen","Zambia","Zimbabwe"
+  ];
+
+  const searchInput = document.getElementById('country-search');
+  const hiddenInput = document.getElementById('country');
+  const dropdown = document.getElementById('country-dropdown');
+
+  function renderCountryOptions(list) {
+    dropdown.innerHTML = '';
+    if (list.length === 0) {
+      const div = document.createElement('div');
+      div.className = 'country-option no-results';
+      div.textContent = 'No matching country';
+      dropdown.appendChild(div);
+      return;
+    }
+    list.forEach(name => {
+      const div = document.createElement('div');
+      div.className = 'country-option';
+      div.textContent = name;
+      div.onclick = () => selectCountry(name);
+      dropdown.appendChild(div);
+    });
+  }
+
+  function selectCountry(name) {
+    searchInput.value = name;
+    hiddenInput.value = name;
+    dropdown.classList.remove('open');
+  }
+
+  function openCountryDropdown() {
+    renderCountryOptions(countries);
+    dropdown.classList.add('open');
+  }
+
+  function filterCountries() {
+    const query = searchInput.value.trim().toLowerCase();
+    hiddenInput.value = '';
+    const filtered = countries.filter(c => c.toLowerCase().includes(query));
+    renderCountryOptions(filtered);
+    dropdown.classList.add('open');
+  }
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.country-select')) {
+      dropdown.classList.remove('open');
+    }
+  });
+
   function togglePw() {
     const pw = document.getElementById('password');
     const btn = document.getElementById('pw-toggle-btn');
@@ -368,12 +479,14 @@
     const name = document.getElementById('account-name');
     const email = document.getElementById('email');
     const password = document.getElementById('password');
+    const country = document.getElementById('country');
     let valid = true;
 
     document.getElementById('name-error').classList.remove('show');
     document.getElementById('email-error').classList.remove('show');
     document.getElementById('password-error').classList.remove('show');
     [name, email, password].forEach(f => f.classList.remove('invalid'));
+    searchInput.classList.remove('invalid');
 
     if (!name.checkValidity()) {
       document.getElementById('name-error').classList.add('show');
@@ -388,6 +501,10 @@
     if (!password.checkValidity()) {
       document.getElementById('password-error').classList.add('show');
       password.classList.add('invalid');
+      valid = false;
+    }
+    if (!country.value) {
+      searchInput.classList.add('invalid');
       valid = false;
     }
 
