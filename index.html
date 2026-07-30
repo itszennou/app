@@ -106,9 +106,13 @@
 
   .nav-brand span {
     font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: 18px;
-    letter-spacing: 0.02em;
+    font-weight: 600;
+    font-size: 21px;
+    letter-spacing: 0.06em;
+    background: linear-gradient(135deg, #ffffff 0%, #adadb3 55%, #6a6a70 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   .nav-links {
@@ -174,6 +178,92 @@
     nav { padding: 16px 20px; }
   }
 
+  /* ============ MENU TOGGLE + SIDEBAR ============ */
+  .menu-toggle {
+    width: 40px; height: 40px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 5px;
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.02);
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  .menu-toggle:hover { border-color: var(--zinc-500); background: rgba(255,255,255,0.05); }
+  .menu-toggle span {
+    width: 18px; height: 1.5px;
+    background: var(--zinc-300);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  .menu-toggle.active span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .menu-toggle.active span:nth-child(2) { opacity: 0; }
+  .menu-toggle.active span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  .sidebar-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    z-index: 199;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+  .sidebar-overlay.active { opacity: 1; pointer-events: auto; }
+
+  .sidebar {
+    position: fixed;
+    top: 0; right: 0;
+    height: 100%;
+    width: 320px;
+    max-width: 85vw;
+    background: var(--zinc-950);
+    border-left: 1px solid var(--line-strong);
+    z-index: 200;
+    padding: 28px 28px 40px;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .sidebar.active { transform: translateX(0); }
+
+  .sidebar-close {
+    align-self: flex-end;
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    color: var(--zinc-400);
+    cursor: pointer;
+    margin-bottom: 32px;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+  .sidebar-close:hover { color: var(--white); border-color: var(--zinc-500); }
+
+  .sidebar-links {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 32px;
+  }
+  .sidebar-links a {
+    font-size: 15px;
+    color: var(--zinc-300);
+    padding: 12px 4px;
+    border-bottom: 1px solid var(--line);
+    transition: color 0.2s ease, padding-left 0.2s ease;
+  }
+  .sidebar-links a:hover { color: var(--white); padding-left: 8px; }
+
+  .sidebar-ctas {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: auto;
+  }
+  .sidebar-ctas .btn { width: 100%; }
+
   /* ============ HERO ============ */
   .hero {
     position: relative;
@@ -212,12 +302,13 @@
 
   /* ============ HERO CHROME CUBE ============ */
   .hero-cube-wrap {
-    position: absolute;
-    top: 8%;
-    right: 6%;
+    position: relative;
+    display: flex;
+    justify-content: center;
     z-index: 5;
+    margin-bottom: 24px;
     opacity: 0;
-    animation: fadeUp 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+    animation: fadeUp 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
     pointer-events: none;
   }
 
@@ -252,7 +343,16 @@
   }
 
   @media (max-width: 860px) {
-    .hero-cube-wrap { display: none; }
+    .hero-cube { width: 60px; height: 60px; }
+    .hero-cube .face { width: 60px; height: 60px; }
+    .hero-cube .face.front, .hero-cube .face.back,
+    .hero-cube .face.right, .hero-cube .face.left { transform: none; }
+    .hero-cube .face.front  { transform: translateZ(30px); }
+    .hero-cube .face.back   { transform: rotateY(180deg) translateZ(30px); }
+    .hero-cube .face.right  { transform: rotateY(90deg) translateZ(30px); }
+    .hero-cube .face.left   { transform: rotateY(-90deg) translateZ(30px); }
+    .hero-cube .face.top    { transform: rotateX(90deg) translateZ(30px); }
+    .hero-cube .face.bottom { transform: rotateX(-90deg) translateZ(30px); }
   }
 
   .eyebrow {
@@ -705,7 +805,7 @@
 
 <nav>
   <div class="nav-brand">
-    <img src="assets/Zennou_Logo.webp" alt="Zennou">
+    <span>Zennou</span>
   </div>
   <div class="nav-links">
     <a href="#features">Features</a>
@@ -714,9 +814,28 @@
     <a href="#faq">FAQ</a>
   </div>
   <div class="nav-cta">
-    <a href="login.html" class="btn btn-ghost btn-sm">Log In</a>
+    <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
+
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-close" id="sidebar-close">✕</div>
+  <div class="sidebar-links">
+    <a href="#features">Features</a>
+    <a href="#showcase">Showcase</a>
+    <a href="#community">Community</a>
+    <a href="#faq">FAQ</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <div class="sidebar-ctas">
+    <a href="login.html" class="btn btn-ghost">Log In</a>
+    <a href="register.html" class="btn btn-solid">Register Free</a>
+  </div>
+</aside>
 
 <section class="hero">
   <div class="bg-grid"></div>
@@ -932,6 +1051,29 @@
   }, { threshold: 0.15 });
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  const menuToggle = document.getElementById('menu-toggle');
+  const sidebar = document.getElementById('sidebar');
+  const sidebarOverlay = document.getElementById('sidebar-overlay');
+  const sidebarClose = document.getElementById('sidebar-close');
+
+  function openSidebar() {
+    sidebar.classList.add('active');
+    sidebarOverlay.classList.add('active');
+    menuToggle.classList.add('active');
+  }
+  function closeSidebar() {
+    sidebar.classList.remove('active');
+    sidebarOverlay.classList.remove('active');
+    menuToggle.classList.remove('active');
+  }
+
+  menuToggle.addEventListener('click', () => {
+    sidebar.classList.contains('active') ? closeSidebar() : openSidebar();
+  });
+  sidebarClose.addEventListener('click', closeSidebar);
+  sidebarOverlay.addEventListener('click', closeSidebar);
+  sidebar.querySelectorAll('a').forEach(a => a.addEventListener('click', closeSidebar));
 </script>
 
 </body>
