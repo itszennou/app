@@ -698,8 +698,14 @@
     font-weight: 600;
     color: var(--zinc-200);
   }
-  .creator-info .name { font-size: 14.5px; font-weight: 600; color: var(--white); }
+  .creator-info .name { font-size: 14.5px; font-weight: 600; color: var(--white); display: flex; align-items: center; gap: 5px; }
   .creator-info .handle { font-size: 12.5px; color: var(--zinc-500); }
+  .verified-badge {
+    display: inline-flex;
+    width: 15px; height: 15px;
+    flex-shrink: 0;
+  }
+  .verified-badge svg { width: 100%; height: 100%; }
 
   .report-link {
     display: block;
@@ -981,10 +987,23 @@
   </main>
 
   <aside>
+    <div class="sidebar-card">
+      <h3>LATEST UPDATE</h3>
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px;">
+        <span style="font-size:15px;font-weight:600;color:var(--zinc-100);">v2.4.1</span>
+        <span style="font-size:12px;color:var(--zinc-600);font-family:'JetBrains Mono',monospace;">3 days ago</span>
+      </div>
+      <ul style="margin:0;padding-left:18px;font-size:13px;color:var(--zinc-500);line-height:1.8;">
+        <li>Fixed crash on startup with certain UI mods</li>
+        <li>Rebalanced paradox event frequency</li>
+        <li>Save migration tool improvements</li>
+      </ul>
+    </div>
+
     <div class="sidebar-card creator-card">
       <div class="avatar-lg">RK</div>
       <div class="creator-info">
-        <div class="name">RiftKeeper</div>
+        <div class="name">RiftKeeper <span class="verified-badge" title="Verified — 100K+ total downloads"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 1.6 2.85-.4 1.15 2.6 2.6 1.15-.4 2.85L22 12l-1.6 2.4.4 2.85-2.6 1.15-1.15 2.6-2.85-.4L12 22l-2.4-1.6-2.85.4-1.15-2.6-2.6-1.15.4-2.85L2 12l1.6-2.4-.4-2.85 2.6-1.15L7.15 3l2.85.4L12 2z" fill="var(--zinc-200)"/><path d="M8.5 12.5l2.2 2.2 4.3-4.8" stroke="var(--zinc-950)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
         <div class="handle">247 releases · 12.4K followers</div>
       </div>
     </div>
