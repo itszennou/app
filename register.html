@@ -99,6 +99,14 @@
 
   .field-group { margin-bottom: 20px; }
 
+  .optional-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--zinc-600);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+  }
+
   label {
     display: block;
     font-size: 12.5px;
@@ -340,9 +348,14 @@
 
     <form id="register-form" onsubmit="return handleRegister(event)" novalidate>
       <div class="field-group">
-        <label for="account-name">Account Name</label>
-        <input type="text" id="account-name" name="account-name" placeholder="e.g. shadowmodder" required minlength="3" maxlength="24" pattern="[a-zA-Z0-9_]+">
-        <div class="field-error" id="name-error">Use 3–24 characters: letters, numbers, or underscores only.</div>
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="e.g. shadowmodder" required minlength="3" maxlength="24" pattern="[a-zA-Z0-9_]+">
+        <div class="field-error" id="username-error">Use 3–24 characters: letters, numbers, or underscores only.</div>
+      </div>
+
+      <div class="field-group">
+        <label for="display-name">Display Name <span class="optional-tag">optional</span></label>
+        <input type="text" id="display-name" name="display-name" placeholder="e.g. Shadow Modder" maxlength="40">
       </div>
 
       <div class="field-group">
@@ -465,20 +478,20 @@
   function handleRegister(e) {
     e.preventDefault();
 
-    const name = document.getElementById('account-name');
+    const name = document.getElementById('username');
     const email = document.getElementById('email');
     const password = document.getElementById('password');
     const country = document.getElementById('country');
     let valid = true;
 
-    document.getElementById('name-error').classList.remove('show');
+    document.getElementById('username-error').classList.remove('show');
     document.getElementById('email-error').classList.remove('show');
     document.getElementById('password-error').classList.remove('show');
     [name, email, password].forEach(f => f.classList.remove('invalid'));
     searchInput.classList.remove('invalid');
 
     if (!name.checkValidity()) {
-      document.getElementById('name-error').classList.add('show');
+      document.getElementById('username-error').classList.add('show');
       name.classList.add('invalid');
       valid = false;
     }
