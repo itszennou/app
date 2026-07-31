@@ -252,7 +252,7 @@
   .gallery {
     display: flex;
     gap: 8px;
-    margin: 0 -16px 40px;
+    margin: 0 -16px;
     padding: 0 8px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
@@ -302,6 +302,26 @@
     width: 100%;
     height: 100%;
     border: none;
+  }
+
+  .gallery-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 12px;
+    margin-bottom: 40px;
+  }
+  .gallery-dots .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--zinc-700);
+    transition: background 0.2s ease, width 0.2s ease;
+  }
+  .gallery-dots .dot.active {
+    background: var(--zinc-200);
+    width: 18px;
+    border-radius: 100px;
   }
 
   /* ============ RATING SECTION ============ */
@@ -730,7 +750,7 @@
 
 <div class="content-wrap">
   <main>
-    <div class="gallery">
+    <div class="gallery" id="gallery">
       <!-- Video slot: optional, only renders if creator added a YouTube link in dashboard -->
       <div class="gallery-item video-item">
         <div class="video-frame">
@@ -741,6 +761,13 @@
       <div class="gallery-item"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
       <div class="gallery-item"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
       <div class="gallery-item"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+    </div>
+    <div class="gallery-dots" id="galleryDots">
+      <span class="dot active"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
     </div>
 
     <div class="rating-section">
@@ -910,11 +937,24 @@
     </div>
 
     <div class="sidebar-card">
+      <h3>REQUIREMENTS</h3>
+      <div class="sidebar-row"><span class="k">Base game</span><span class="v">v1.8.0+</span></div>
+      <div class="sidebar-row"><span class="k">Platform</span><span class="v">Windows, Linux</span></div>
+      <div class="sidebar-row"><span class="k">Disk space</span><span class="v">~180 MB</span></div>
+    </div>
+
+    <div class="sidebar-card">
       <h3>TAGS</h3>
       <span class="tag-chip">time-mechanics</span>
       <span class="tag-chip">total-conversion</span>
       <span class="tag-chip">puzzle</span>
       <span class="tag-chip">overhaul</span>
+    </div>
+
+    <div class="sidebar-card">
+      <h3>SUPPORT THIS CREATOR</h3>
+      <p style="font-size:13px;color:var(--zinc-500);line-height:1.6;margin-bottom:14px;">RiftKeeper builds total conversion mods full-time. Following helps them reach more players.</p>
+      <button class="btn btn-ghost" style="width:100%;">Follow RiftKeeper</button>
     </div>
 
     <a href="dmca.html" class="report-link">Report this project</a>
@@ -933,6 +973,23 @@
 </footer>
 
 <script>
+  // ===== Gallery scroll dots =====
+  (function() {
+    const gallery = document.getElementById('gallery');
+    const dots = document.querySelectorAll('#galleryDots .dot');
+    if (!gallery || !dots.length) return;
+    gallery.addEventListener('scroll', () => {
+      const items = gallery.querySelectorAll('.gallery-item');
+      let closestIdx = 0;
+      let closestDist = Infinity;
+      items.forEach((item, i) => {
+        const dist = Math.abs(item.offsetLeft - gallery.scrollLeft);
+        if (dist < closestDist) { closestDist = dist; closestIdx = i; }
+      });
+      dots.forEach((d, i) => d.classList.toggle('active', i === closestIdx));
+    }, { passive: true });
+  })();
+
   // ===== Star icon builder =====
   function starSVG(filled) {
     return `<svg width="16" height="16" viewBox="0 0 24 24" fill="${filled ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
