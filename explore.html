@@ -49,11 +49,10 @@
 <nav class="sticky top-0 z-30 bg-zinc-950/80 backdrop-blur-md border-b border-zinc-800/50">
     <div class="max-w-6xl mx-auto px-4 md:px-6">
         <div class="flex items-center gap-4 h-14 md:h-16">
-            <a href="#" class="hidden md:flex items-center gap-2.5 group flex-shrink-0">
-                <div class="w-7 h-7 md:w-8 md:h-8 bg-white rounded-lg flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+            <a href="dashboard.html" class="hidden md:flex items-center flex-shrink-0" title="Go to dashboard">
+                <div class="w-7 h-7 md:w-8 md:h-8 bg-white rounded-lg flex items-center justify-center transition-transform duration-300 hover:scale-105">
                     <svg class="w-4 h-4 md:w-[18px] md:h-[18px] text-zinc-950" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm0 2c-3.34 0-10 1.68-10 5v1a2 2 0 002 2h16a2 2 0 002-2v-1c0-3.32-6.66-5-10-5z"/></svg>
                 </div>
-                <div class="hidden sm:block"><h1 class="font-bold text-base text-white">Zennou</h1><p class="text-[9px] text-zinc-500 tracking-widest uppercase font-mono">Beyond Limits</p></div>
             </a>
 
             <div class="flex-1 md:hidden">
@@ -63,21 +62,42 @@
                 </div>
             </div>
 
-            <div class="hidden md:block flex-1 max-w-md mx-auto">
+            <div class="hidden md:flex items-center gap-6 flex-shrink-0">
+                <a href="explore.html" class="text-sm text-white font-medium">Explore</a>
+                <a href="#" class="text-sm text-zinc-400 hover:text-white transition-colors">Games</a>
+                <a href="#" class="text-sm text-zinc-400 hover:text-white transition-colors">Tools</a>
+                <div class="relative group">
+                    <button class="flex items-center gap-1 text-sm text-zinc-400 hover:text-white transition-colors">
+                        Category
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="absolute left-0 top-full pt-2 hidden group-hover:block">
+                        <div class="w-72 bg-zinc-950 border border-zinc-800 rounded-2xl shadow-2xl p-4">
+                            <div class="flex flex-wrap gap-2">
+                                <button class="px-3 py-1.5 rounded-full border border-zinc-700 text-zinc-300 text-xs font-medium hover:border-zinc-500 hover:text-white transition-colors">Graphics</button>
+                                <button class="px-3 py-1.5 rounded-full border border-zinc-700 text-zinc-300 text-xs font-medium hover:border-zinc-500 hover:text-white transition-colors">Gameplay</button>
+                                <button class="px-3 py-1.5 rounded-full border border-zinc-700 text-zinc-300 text-xs font-medium hover:border-zinc-500 hover:text-white transition-colors">Audio</button>
+                                <button class="px-3 py-1.5 rounded-full border border-zinc-700 text-zinc-300 text-xs font-medium hover:border-zinc-500 hover:text-white transition-colors">Fangame</button>
+                                <button class="px-3 py-1.5 rounded-full border border-zinc-700 text-zinc-300 text-xs font-medium hover:border-zinc-500 hover:text-white transition-colors">UI Tools</button>
+                                <button class="px-3 py-1.5 rounded-full border border-zinc-700 text-zinc-300 text-xs font-medium hover:border-zinc-500 hover:text-white transition-colors">Total Conversion</button>
+                                <button class="px-3 py-1.5 rounded-full border border-zinc-700 text-zinc-300 text-xs font-medium hover:border-zinc-500 hover:text-white transition-colors">Patches</button>
+                                <button class="px-3 py-1.5 rounded-full border border-zinc-700 text-zinc-300 text-xs font-medium hover:border-zinc-500 hover:text-white transition-colors">Utilities</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#" class="text-sm text-zinc-400 hover:text-white transition-colors">Community</a>
+            </div>
+
+            <div class="hidden md:block flex-1 max-w-sm">
                 <div class="relative">
                     <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                     <input type="text" placeholder="Search creations, tags, or creators..." class="w-full pl-10 pr-4 py-2 bg-zinc-900 border border-zinc-700 rounded-xl text-sm text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-zinc-500 transition-all">
                 </div>
             </div>
 
-            <div class="hidden md:flex items-center gap-6 flex-shrink-0">
-                <a href="#" class="text-sm text-white font-medium">Explore</a>
-                <a href="#" class="text-sm text-zinc-400 hover:text-white transition-colors">Community</a>
-                <a href="#" class="text-sm text-zinc-400 hover:text-white transition-colors">Docs</a>
-            </div>
             <div class="hidden md:flex items-center gap-3 flex-shrink-0">
-                <a href="#" class="text-sm text-zinc-400 hover:text-white transition-colors">Sign In</a>
-                <a href="#" class="text-sm bg-white text-zinc-950 px-4 py-2 rounded-xl font-semibold hover:bg-zinc-200 transition-all">Upload Mod</a>
+                <a href="login.html" class="text-sm text-zinc-400 hover:text-white transition-colors">Sign In</a>
             </div>
 
             <button onclick="openMobileMenu()" class="md:hidden flex-shrink-0 p-2 text-zinc-400 hover:text-white rounded-lg"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
