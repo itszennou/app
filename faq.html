@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ — Zennou</title>
+<meta name="description" content="Frequently asked questions about Zennou — accounts, uploads, licensing, downloads, and moderation.">
+<link rel="icon" href="assets/Zennou_Logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #000000;
+    --void: #0a0a0a;
+    --zinc-950: #0c0c0d;
+    --zinc-900: #141415;
+    --zinc-800: #1f1f21;
+    --zinc-700: #38383c;
+    --zinc-600: #5a5a60;
+    --zinc-500: #86868c;
+    --zinc-400: #adadb3;
+    --zinc-300: #cfcfd3;
+    --zinc-200: #e6e6e8;
+    --white: #ffffff;
+    --line: rgba(255,255,255,0.10);
+    --line-strong: rgba(255,255,255,0.18);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  body {
+    background: var(--black);
+    color: var(--zinc-300);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  .mono { font-family: 'JetBrains Mono', monospace; letter-spacing: 0.02em; }
+
+  a { color: inherit; text-decoration: none; }
+
+  ::selection { background: var(--white); color: var(--black); }
+
+  /* ============ DOC HEADER ============ */
+  .doc-header {
+    padding: 80px 24px 60px;
+    text-align: center;
+    border-bottom: 1px solid var(--line);
+    background: var(--void);
+  }
+
+  .doc-header .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: var(--zinc-500);
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 18px;
+  }
+
+  .doc-header h1 {
+    font-size: 40px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+
+  .doc-header p {
+    color: var(--zinc-500);
+    font-size: 15px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* ============ SEARCH ============ */
+  .faq-search-wrap {
+    max-width: 560px;
+    margin: -28px auto 0;
+    padding: 0 24px;
+    position: relative;
+    z-index: 2;
+  }
+  .faq-search {
+    width: 100%;
+    background: var(--zinc-900);
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    padding: 14px 18px 14px 44px;
+    color: var(--zinc-200);
+    font-family: 'Inter', sans-serif;
+    font-size: 14.5px;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.5);
+  }
+  .faq-search:focus { outline: none; border-color: var(--zinc-500); background: var(--zinc-800); }
+  .faq-search::placeholder { color: var(--zinc-600); }
+  .faq-search-wrap .icon {
+    position: absolute;
+    left: 42px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--zinc-600);
+    pointer-events: none;
+  }
+
+  /* ============ BODY LAYOUT ============ */
+  .doc-body {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 56px 28px 120px;
+  }
+
+  .category-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 56px;
+  }
+  .category-nav a {
+    font-size: 13px;
+    color: var(--zinc-400);
+    border: 1px solid var(--line-strong);
+    padding: 7px 14px;
+    border-radius: 100px;
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+  .category-nav a:hover { color: var(--white); border-color: var(--zinc-500); background: rgba(255,255,255,0.03); }
+
+  .faq-category {
+    margin-bottom: 52px;
+    scroll-margin-top: 32px;
+  }
+
+  .faq-category-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 4px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .faq-category-head .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--zinc-600);
+  }
+  .faq-category-head h2 {
+    font-size: 21px;
+    font-weight: 600;
+    color: var(--white);
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .faq-question {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 2px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--zinc-200);
+  }
+
+  .faq-question .icon {
+    flex-shrink: 0;
+    width: 20px; height: 20px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--zinc-500);
+    transition: transform 0.3s ease;
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  .faq-item.open .faq-question .icon { transform: rotate(45deg); }
+
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .faq-answer p {
+    padding: 0 2px 20px;
+    color: var(--zinc-500);
+    font-size: 14px;
+    line-height: 1.75;
+  }
+  .faq-answer p + p { padding-top: 10px; }
+  .faq-answer .status-note {
+    display: inline-block;
+    margin-top: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    color: var(--zinc-600);
+    border: 1px solid var(--line-strong);
+    padding: 3px 9px;
+    border-radius: 100px;
+  }
+
+  /* ============ STILL NEED HELP ============ */
+  .help-cta {
+    margin-top: 64px;
+    border: 1px solid var(--line-strong);
+    border-radius: 14px;
+    padding: 36px 32px;
+    text-align: center;
+    background: rgba(255,255,255,0.015);
+  }
+  .help-cta h3 { font-size: 19px; color: var(--white); margin-bottom: 8px; }
+  .help-cta p { font-size: 14px; color: var(--zinc-500); margin-bottom: 20px; }
+  .help-cta .btn {
+    display: inline-flex;
+    padding: 10px 22px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 8px;
+    background: var(--white);
+    color: var(--black);
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .help-cta .btn:hover { background: var(--zinc-200); transform: translateY(-1px); }
+
+  /* ============ FOOTER ============ */
+  footer {
+    border-top: 1px solid var(--line);
+    background: var(--void);
+  }
+  .footer-inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 48px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .footer-legal { display: flex; gap: 24px; }
+  .footer-legal a { font-size: 13px; color: var(--zinc-500); }
+  .footer-legal a:hover { color: var(--zinc-300); }
+  .footer-inner p { font-size: 13px; color: var(--zinc-600); }
+
+  a:focus-visible, button:focus-visible, input:focus-visible {
+    outline: 2px solid var(--white);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<header class="doc-header">
+  <span class="tag">// SUPPORT</span>
+  <h1>Frequently Asked Questions</h1>
+  <p>Answers about accounts, uploads, licensing, downloads, and moderation on Zennou.</p>
+</header>
+
+<div class="faq-search-wrap">
+  <span class="icon">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+  </span>
+  <input type="text" class="faq-search" id="faq-search" placeholder="Search questions...">
+</div>
+
+<main class="doc-body">
+
+  <nav class="category-nav" aria-label="FAQ categories">
+    <a href="#accounts">Accounts &amp; Getting Started</a>
+    <a href="#uploads">Uploads &amp; Creations</a>
+    <a href="#licensing">Licensing &amp; Copyright</a>
+    <a href="#downloads">Downloads</a>
+    <a href="#moderation">Moderation &amp; Reporting</a>
+    <a href="#costs">Cost &amp; Fees</a>
+  </nav>
+
+  <section class="faq-category" id="accounts">
+    <div class="faq-category-head">
+      <span class="num">01</span>
+      <h2>Accounts &amp; Getting Started</h2>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">Do I need an account to browse Zennou? <span class="icon">+</span></button>
+      <div class="faq-answer"><p>No. Browsing, viewing project pages, and downloading are open to everyone. An account is only required if you want to upload your own creations, comment, rate projects, or follow creators.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">Is there a minimum age to create an account? <span class="icon">+</span></button>
+      <div class="faq-answer"><p>Yes, you must be at least 13 years old to create a Zennou account.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">How do I sign up? <span class="icon">+</span></button>
+      <div class="faq-answer"><p>Registration currently uses email and password. Sign-in with Google or Discord is planned but not yet connected.</p><span class="status-note">COMING SOON</span></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">Can I delete my account? <span class="icon">+</span></button>
+      <div class="faq-answer"><p>Yes. Account deletion is self-serve directly from your dashboard — there's no manual approval process or need to contact support.</p></div>
+    </div>
+  </section>
+
+  <section class="faq-category" id="uploads">
+    <div class="faq-category-head">
+      <span class="num">02</span>
+      <h2>Uploads &amp; Creations</h2>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">What counts as a "creation"? <span class="icon">+</span></button>
+      <div class="faq-answer"><p>Mods, fan games, patches, tools, and any passion project worth sharing and versioning properly. "Creations" is used deliberately instead of "mods" so the platform isn't limited to one type of work.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">Is there a file size limit? <span class="icon">+</span></button>
+      <div class="faq-answer"><p>File size limits are still being finalized as upload infrastructure is built out. This section will be updated once limits are confirmed.</p><span class="status-note">TBD</span></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">Can I upload multiple versions of the same project? <span class="icon">+</span></button>
+      <div class="faq-answer"><p>Yes. Every project supports Version Releases — you can publish new versions with changelogs, similar to Git tags, while keeping older versions accessible.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">Can I add a trailer or gameplay video? <span class="icon">+</span></button>
+      <div class="faq-answer"><p>Yes — video previews are added via a YouTube link rather than direct file upload. This keeps things fast for you and gives your video its own view count and audience on YouTube.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">Can I control who sees my project? <span class="icon">+</span></button>
+      <div class="faq-answer"><p>Yes. Each project can be set to draft, unlisted, or public, and you choose the distribution license yourself.</p></div>
+    </div>
+  </section>
+
+  <section class="faq-category" id="licensing">
+    <div class="faq-category-head">
+      <span class="num">03</span>
+      <h2>Licensing &amp; Copyright</h2>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">Do I keep ownership of what I upload? <span class="icon">+</span></button>
+      <div class="faq-answer"><p>Yes. You retain ownership of your original work. Uploading to Zennou doesn't transfer any rights to us.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">Can I upload a mod that uses assets from the base game? <span class="icon">+</span></button>
+      <div class="faq-answer"><p>You should avoid redistributing original copyrighted assets — art, models, audio, source code — that you don't own or have rights to. Clearly separate your own original contributions from third-party IP, and respect any modding policy the original rights holder has published.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">What happens if someone files a copyright claim against my project? <span class="icon">+</span></button>
+      <div class="faq-answer"><p>We follow a standard notice-and-takedown process. If your content is removed following a valid notice, you'll be notified and given the option to file a counter-notice. Full details are in the DMCA Policy.</p></div>
+    </div>
+  </section>
+
+  <section class="faq-category" id="downloads">
+    <div class="faq-category-head">
+      <span class="num">04</span>
+      <h2>Downloads</h2>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">Why is there a page before my download starts? <span class="icon">+</span></button>
+      <div class="faq-answer"><p>Hosting large files isn't free — storage and bandwidth cost real money as the platform grows. The download page may show advertising to help cover those costs, so the platform can stay free for creators and downloaders alike.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">Do I need an account to download? <span class="icon">+</span></button>
+      <div class="faq-answer"><p>No. Downloading doesn't require an account.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">Are old versions of a project still downloadable? <span class="icon">+</span></button>
+      <div class="faq-answer"><p>In general, yes — previous releases remain accessible through the Versions tab on a project page, unless the creator has removed them.</p></div>
+    </div>
+  </section>
+
+  <section class="faq-category" id="moderation">
+    <div class="faq-category-head">
+      <span class="num">05</span>
+      <h2>Moderation &amp; Reporting</h2>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">How do I report a project? <span class="icon">+</span></button>
+      <div class="faq-answer"><p>Every project page has a "Report this project" link. For copyright-specific issues, use the DMCA process instead — it's handled separately from general reports.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">What happens to repeat copyright infringers? <span class="icon">+</span></button>
+      <div class="faq-answer"><p>Accounts with multiple valid, unrebutted takedown notices against them may be disabled or terminated, in line with our Repeat Infringer Policy.</p></div>
+    </div>
+  </section>
+
+  <section class="faq-category" id="costs">
+    <div class="faq-category-head">
+      <span class="num">06</span>
+      <h2>Cost &amp; Fees</h2>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">Is Zennou free to use? <span class="icon">+</span></button>
+      <div class="faq-answer"><p>Yes. Creating an account, uploading creations, and browsing the platform is free. If paid features are introduced later, they'll be optional and clearly separate from the core experience.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">Do creators get paid for popular projects? <span class="icon">+</span></button>
+      <div class="faq-answer"><p>There's no revenue-sharing program at this time. Instead, creators are recognized through platform features — like Verified status once a project crosses certain download milestones — rather than direct payouts.</p></div>
+    </div>
+  </section>
+
+  <div class="help-cta">
+    <h3>Still need help?</h3>
+    <p>Can't find what you're looking for? Reach out to the team directly.</p>
+    <a href="contact.html" class="btn">Contact Us</a>
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <p>© 2026 Zennou. All rights reserved.</p>
+    <div class="footer-legal">
+      <a href="terms.html">Terms</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="dmca.html">DMCA</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.faq-item').forEach(item => {
+    const question = item.querySelector('.faq-question');
+    const answer = item.querySelector('.faq-answer');
+    question.addEventListener('click', () => {
+      const isOpen = item.classList.contains('open');
+      if (!isOpen) {
+        item.classList.add('open');
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+      } else {
+        item.classList.remove('open');
+        answer.style.maxHeight = null;
+      }
+    });
+  });
+
+  // Simple client-side search: filters visible items, opens matches
+  const searchInput = document.getElementById('faq-search');
+  searchInput.addEventListener('input', () => {
+    const query = searchInput.value.trim().toLowerCase();
+    document.querySelectorAll('.faq-category').forEach(category => {
+      let anyVisible = false;
+      category.querySelectorAll('.faq-item').forEach(item => {
+        const text = item.textContent.toLowerCase();
+        const match = query === '' || text.includes(query);
+        item.style.display = match ? '' : 'none';
+        if (match) anyVisible = true;
+      });
+      category.style.display = anyVisible ? '' : 'none';
+    });
+  });
+</script>
+
+</body>
+</html>
