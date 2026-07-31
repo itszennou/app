@@ -251,38 +251,35 @@
   /* ============ GALLERY ============ */
   .gallery {
     display: flex;
-    gap: 10px;
-    margin-bottom: 40px;
+    gap: 0;
+    margin: 0 -32px 40px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scrollbar-width: thin;
     scrollbar-color: var(--zinc-700) transparent;
-    padding-bottom: 4px;
   }
   .gallery::-webkit-scrollbar { height: 6px; }
   .gallery::-webkit-scrollbar-thumb { background: var(--zinc-700); border-radius: 10px; }
   .gallery::-webkit-scrollbar-track { background: transparent; }
 
   .gallery-item {
-    flex: 0 0 auto;
-    width: 340px;
+    flex: 0 0 100%;
+    width: 100%;
     aspect-ratio: 16/10;
-    border-radius: 10px;
-    border: 1px solid var(--line);
+    border-radius: 0;
+    border: none;
     background: linear-gradient(135deg, var(--zinc-900), var(--zinc-950));
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: border-color 0.2s ease;
     overflow: hidden;
     scroll-snap-align: start;
   }
-  .gallery-item:hover { border-color: var(--line-strong); }
   .gallery-item svg { opacity: 0.3; }
 
   .gallery-item.video-item {
-    width: 480px;
+    width: 100%;
     aspect-ratio: 16/9;
     display: block;
     padding: 0;
@@ -303,29 +300,6 @@
     width: 100%;
     height: 100%;
     border: none;
-  }
-  .gallery-item.video-item .play-badge {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 10px;
-    border-radius: 100px;
-    background: rgba(0,0,0,0.6);
-    backdrop-filter: blur(6px);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--zinc-200);
-    letter-spacing: 0.03em;
-    pointer-events: none;
-  }
-
-  @media (max-width: 640px) {
-    .gallery-item { width: 78vw; }
-    .gallery-item.video-item { width: 88vw; }
   }
 
   /* ============ RATING SECTION ============ */
@@ -757,7 +731,6 @@
     <div class="gallery">
       <!-- Video slot: optional, only renders if creator added a YouTube link in dashboard -->
       <div class="gallery-item video-item">
-        <span class="play-badge">▶ VIDEO</span>
         <div class="video-frame">
           <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Chrono Overhaul trailer" allowfullscreen loading="lazy"></iframe>
         </div>
