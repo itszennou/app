@@ -463,12 +463,18 @@
     gap: 4px;
     border-bottom: 1px solid var(--line);
     margin-bottom: 28px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
   }
+  .tabs::-webkit-scrollbar { display: none; }
   .tab-btn {
     padding: 12px 4px;
     margin-right: 24px;
     font-size: 14.5px;
     color: var(--zinc-500);
+    white-space: nowrap;
+    flex-shrink: 0;
     border-bottom: 2px solid transparent;
     cursor: pointer;
     background: none;
@@ -657,6 +663,26 @@
     margin: 0 6px 6px 0;
   }
 
+  .contributor-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .contributor-item:last-child { border-bottom: none; }
+  .contributor-avatar {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: var(--zinc-800);
+    border: 1px solid var(--line-strong);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 600; color: var(--zinc-300);
+    flex-shrink: 0;
+  }
+  .contributor-name { font-size: 13.5px; color: var(--zinc-200); font-weight: 500; }
+  .contributor-role { font-size: 12px; color: var(--zinc-500); }
+
   .creator-card {
     display: flex;
     align-items: center;
@@ -808,6 +834,7 @@
 
     <div class="tabs">
       <button class="tab-btn active" onclick="switchTab(event, 'overview')">Overview</button>
+      <button class="tab-btn" onclick="switchTab(event, 'documentation')">Documentation</button>
       <button class="tab-btn" onclick="switchTab(event, 'versions')">Versions <span class="mono" style="color:var(--zinc-600)">(247)</span></button>
       <button class="tab-btn" onclick="switchTab(event, 'comments')">Comments <span class="mono" style="color:var(--zinc-600)">(86)</span></button>
     </div>
@@ -830,6 +857,28 @@
 
         <h3>Compatibility Notes</h3>
         <p>This is a total conversion mod — it is <strong>not compatible</strong> with other mods that modify core time mechanics. Conflicts with UI-overhaul mods are possible; check the comments section for community-reported compatibility notes.</p>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="documentation">
+      <div class="description">
+        <p>Detailed setup, configuration, and troubleshooting reference for Chrono Overhaul. This section is maintained separately from the version changelog and covers usage beyond the basic README.</p>
+
+        <h3>Configuration</h3>
+        <p>Time-window limits, paradox sensitivity, and HUD layout can be adjusted in <code>config/chrono_settings.ini</code>. Each option is documented inline with default values and safe ranges.</p>
+
+        <h3>Save Compatibility</h3>
+        <p>Existing saves are migrated automatically on first load after install. Back up your save folder before updating major versions — migration is one-way and cannot be reversed by downgrading the mod.</p>
+
+        <h3>Known Issues</h3>
+        <ul>
+          <li>Paradox events may not trigger correctly in split-screen co-op mode</li>
+          <li>Rewind HUD can overlap with other UI-overhaul mods; disable HUD scaling if this occurs</li>
+          <li>Very long rewind windows (60s+) may cause a brief stutter on lower-end hardware</li>
+        </ul>
+
+        <h3>API for Other Mods</h3>
+        <p>Chrono Overhaul exposes a small hook API for mods that want to read or react to time-state changes. See <code>docs/api_reference.md</code> in the archive for available events and functions.</p>
       </div>
     </div>
 
@@ -937,6 +986,24 @@
       <div class="creator-info">
         <div class="name">RiftKeeper</div>
         <div class="handle">247 releases · 12.4K followers</div>
+      </div>
+    </div>
+
+    <div class="sidebar-card">
+      <h3>CONTRIBUTORS</h3>
+      <div class="contributor-item">
+        <div class="contributor-avatar">MV</div>
+        <div>
+          <div class="contributor-name">MidnightVale</div>
+          <div class="contributor-role">3D assets</div>
+        </div>
+      </div>
+      <div class="contributor-item">
+        <div class="contributor-avatar">TQ</div>
+        <div>
+          <div class="contributor-name">TesseractQuill</div>
+          <div class="contributor-role">Translation (JP)</div>
+        </div>
       </div>
     </div>
 
