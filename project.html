@@ -71,10 +71,12 @@
 
   /* ============ HEADER ============ */
   .project-header {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 24px 32px 40px;
     display: flex;
     flex-direction: column;
     gap: 20px;
-    margin-bottom: 28px;
   }
 
   .project-title-row {
@@ -220,12 +222,14 @@
 
   /* ============ STATS BAR ============ */
   .stats-bar {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 32px 32px;
     display: flex;
     gap: 32px;
     flex-wrap: wrap;
     border-bottom: 1px solid var(--line);
     padding-bottom: 28px;
-    margin-bottom: 28px;
   }
   .stat-mini { display: flex; flex-direction: column; gap: 4px; }
   .stat-mini .num { font-family: 'Space Grotesk', sans-serif; font-size: 19px; font-weight: 700; color: var(--white); }
@@ -242,7 +246,7 @@
   }
 
   @media (max-width: 900px) {
-    .content-wrap { grid-template-columns: minmax(0, 1fr); }
+    .content-wrap { grid-template-columns: minmax(0, 1fr); gap: 32px; }
   }
 
   /* ============ GALLERY ============ */
@@ -742,54 +746,54 @@
   <a href="explore.html">Explore</a> / <a href="explore.html">Total Conversion</a> / Chrono Overhaul
 </div>
 
+<header class="project-header">
+  <div class="project-title-row">
+    <div class="project-thumb">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+    </div>
+    <h1 class="project-title-clamp">Chrono Overhaul</h1>
+  </div>
+
+  <div class="project-headtext">
+    <span class="project-category">TOTAL CONVERSION</span>
+    <p class="project-tagline">A complete rework of time mechanics — rewind, freeze, and paradox systems built from scratch.</p>
+    <div class="project-byline">
+      <span class="avatar-sm">RK</span>
+      by <a href="#">RiftKeeper</a> · updated 3 days ago
+    </div>
+  </div>
+
+  <div class="header-actions">
+    <a href="download.html" class="download-btn" style="text-decoration:none;">
+      Download v2.4.1
+      <span class="sub">42.8 MB · 18.2K downloads</span>
+    </a>
+    <div class="secondary-actions">
+      <button class="icon-btn" onclick="toggleLike(this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 000-7.8z"/></svg>
+        <span id="like-count">1,204</span>
+      </button>
+      <button class="icon-btn" onclick="toggleSave(this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+        Save
+      </button>
+      <button class="icon-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"/></svg>
+        Share
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-mini"><div class="num">18.2K</div><div class="label">DOWNLOADS</div></div>
+  <div class="stat-mini"><div class="num">1,204</div><div class="label">LIKES</div></div>
+  <div class="stat-mini"><div class="num">247</div><div class="label">RELEASES</div></div>
+  <div class="stat-mini"><div class="num">4.9</div><div class="label">RATING</div></div>
+</div>
+
 <div class="content-wrap">
   <main>
-    <header class="project-header">
-      <div class="project-title-row">
-        <div class="project-thumb">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-        </div>
-        <h1 class="project-title-clamp">Chrono Overhaul</h1>
-      </div>
-
-      <div class="project-headtext">
-        <span class="project-category">TOTAL CONVERSION</span>
-        <p class="project-tagline">A complete rework of time mechanics — rewind, freeze, and paradox systems built from scratch.</p>
-        <div class="project-byline">
-          <span class="avatar-sm">RK</span>
-          by <a href="#">RiftKeeper</a> · updated 3 days ago
-        </div>
-      </div>
-
-      <div class="header-actions">
-        <a href="download.html" class="download-btn" style="text-decoration:none;">
-          Download v2.4.1
-          <span class="sub">42.8 MB · 18.2K downloads</span>
-        </a>
-        <div class="secondary-actions">
-          <button class="icon-btn" onclick="toggleLike(this)">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 000-7.8z"/></svg>
-            <span id="like-count">1,204</span>
-          </button>
-          <button class="icon-btn" onclick="toggleSave(this)">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
-            Save
-          </button>
-          <button class="icon-btn">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"/></svg>
-            Share
-          </button>
-        </div>
-      </div>
-    </header>
-
-    <div class="stats-bar">
-      <div class="stat-mini"><div class="num">18.2K</div><div class="label">DOWNLOADS</div></div>
-      <div class="stat-mini"><div class="num">1,204</div><div class="label">LIKES</div></div>
-      <div class="stat-mini"><div class="num">247</div><div class="label">RELEASES</div></div>
-      <div class="stat-mini"><div class="num">4.9</div><div class="label">RATING</div></div>
-    </div>
-
     <div class="gallery" id="gallery">
       <!-- Video slot: optional, only renders if creator added a YouTube link in dashboard -->
       <div class="gallery-item video-item">
