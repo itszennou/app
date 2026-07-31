@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Mods — Zennou</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        zinc: { 750: '#323238', 850: '#1f1f23', 925: '#141416', 950: '#0a0a0b' }
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #3f3f46 #18181b; }
+        *::-webkit-scrollbar { width: 4px; height: 4px; }
+        *::-webkit-scrollbar-track { background: #18181b; }
+        *::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 2px; }
+        .glass-light { background: rgba(39,39,42,0.5); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .card-hover { transition: all 0.25s ease; }
+        .card-hover:hover { background: rgba(255,255,255,0.04); border-color: #52525b; }
+        .card-hover:hover .mod-logo { transform: scale(1.05); box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        .mod-logo { transition: all 0.3s ease; }
+        .mobile-menu { transform: translateX(100%); transition: transform 0.3s ease; }
+        .mobile-menu.open { transform: translateX(0); }
+        .overlay { opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+        .overlay.open { opacity: 1; visibility: visible; }
+        .star { color: #52525b; }
+        .star.filled { color: #facc15; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-sans antialiased overflow-x-hidden">
+
+<div id="overlay" class="overlay fixed inset-0 bg-black/80 z-40 lg:hidden" onclick="closeMobileMenu()"></div>
+
+<!-- NAVBAR -->
+<nav class="sticky top-0 z-30 bg-zinc-950/80 backdrop-blur-md border-b border-zinc-800/50">
+    <div class="max-w-6xl mx-auto px-4 md:px-6">
+        <div class="flex items-center gap-4 h-14 md:h-16">
+            <a href="#" class="hidden md:flex items-center gap-2.5 group flex-shrink-0">
+                <div class="w-7 h-7 md:w-8 md:h-8 bg-white rounded-lg flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+                    <svg class="w-4 h-4 md:w-[18px] md:h-[18px] text-zinc-950" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm0 2c-3.34 0-10 1.68-10 5v1a2 2 0 002 2h16a2 2 0 002-2v-1c0-3.32-6.66-5-10-5z"/></svg>
+                </div>
+                <div class="hidden sm:block"><h1 class="font-bold text-base text-white">Zennou</h1><p class="text-[9px] text-zinc-500 tracking-widest uppercase font-mono">Beyond Limits</p></div>
+            </a>
+
+            <div class="flex-1 md:hidden">
+                <div class="relative">
+                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    <input type="text" placeholder="Search creations..." class="w-full pl-9 pr-3 py-2 bg-zinc-900 border border-zinc-700 rounded-xl text-sm text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-zinc-500 transition-all">
+                </div>
+            </div>
+
+            <div class="hidden md:block flex-1 max-w-md mx-auto">
+                <div class="relative">
+                    <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    <input type="text" placeholder="Search creations, tags, or creators..." class="w-full pl-10 pr-4 py-2 bg-zinc-900 border border-zinc-700 rounded-xl text-sm text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-zinc-500 transition-all">
+                </div>
+            </div>
+
+            <div class="hidden md:flex items-center gap-6 flex-shrink-0">
+                <a href="#" class="text-sm text-white font-medium">Explore</a>
+                <a href="#" class="text-sm text-zinc-400 hover:text-white transition-colors">Community</a>
+                <a href="#" class="text-sm text-zinc-400 hover:text-white transition-colors">Docs</a>
+            </div>
+            <div class="hidden md:flex items-center gap-3 flex-shrink-0">
+                <a href="#" class="text-sm text-zinc-400 hover:text-white transition-colors">Sign In</a>
+                <a href="#" class="text-sm bg-white text-zinc-950 px-4 py-2 rounded-xl font-semibold hover:bg-zinc-200 transition-all">Upload Mod</a>
+            </div>
+
+            <button onclick="openMobileMenu()" class="md:hidden flex-shrink-0 p-2 text-zinc-400 hover:text-white rounded-lg"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+        </div>
+    </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div id="mobileMenu" class="mobile-menu fixed inset-y-0 right-0 w-72 bg-zinc-950 border-l border-zinc-800 z-50 shadow-2xl overflow-y-auto">
+    <div class="p-5 border-b border-zinc-800/50 flex items-center justify-end">
+        <button onclick="closeMobileMenu()" class="p-2 text-zinc-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+    </div>
+    <div class="p-5 space-y-2">
+        <a href="explore.html" class="block px-3 py-2.5 text-white bg-white/10 rounded-lg text-sm font-medium">Explore</a>
+        <a href="index.html#community" class="block px-3 py-2.5 text-zinc-400 text-sm">Community</a>
+        <a href="#" class="block px-3 py-2.5 text-zinc-400 text-sm">Docs</a>
+    </div>
+    <div class="px-5 pt-2 pb-5">
+        <h4 class="text-[11px] font-mono tracking-wider text-zinc-600 px-3 mb-2">PRODUCT</h4>
+        <a href="index.html#features" class="block px-3 py-2 text-zinc-400 text-sm">Features</a>
+        <a href="index.html#showcase" class="block px-3 py-2 text-zinc-400 text-sm">Showcase</a>
+        <a href="index.html#faq" class="block px-3 py-2 text-zinc-400 text-sm">FAQ</a>
+        <a href="#" class="block px-3 py-2 text-zinc-400 text-sm">Changelog</a>
+        <a href="#" class="block px-3 py-2 text-zinc-400 text-sm">Roadmap</a>
+    </div>
+    <div class="px-5 pb-5">
+        <h4 class="text-[11px] font-mono tracking-wider text-zinc-600 px-3 mb-2">COMMUNITY</h4>
+        <a href="#" class="block px-3 py-2 text-zinc-400 text-sm">Discord</a>
+        <a href="#" class="block px-3 py-2 text-zinc-400 text-sm">Forum</a>
+        <a href="#" class="block px-3 py-2 text-zinc-400 text-sm">Creator Guide</a>
+        <a href="#" class="block px-3 py-2 text-zinc-400 text-sm">Blog</a>
+    </div>
+    <div class="px-5 pb-5">
+        <h4 class="text-[11px] font-mono tracking-wider text-zinc-600 px-3 mb-2">COMPANY</h4>
+        <a href="about.html" class="block px-3 py-2 text-zinc-400 text-sm">About</a>
+        <a href="contact.html" class="block px-3 py-2 text-zinc-400 text-sm">Contact</a>
+        <a href="terms.html" class="block px-3 py-2 text-zinc-400 text-sm">Terms of Service</a>
+        <a href="privacy.html" class="block px-3 py-2 text-zinc-400 text-sm">Privacy Policy</a>
+        <a href="dmca.html" class="block px-3 py-2 text-zinc-400 text-sm">DMCA Policy</a>
+    </div>
+    <div class="p-5 pt-2 space-y-2 border-t border-zinc-800/50">
+        <a href="login.html" class="block px-3 py-3 border border-zinc-700 text-zinc-200 rounded-xl font-semibold text-center text-sm">Log In</a>
+        <a href="register.html" class="block px-3 py-3 bg-white text-zinc-950 rounded-xl font-semibold text-center text-sm">Register Free</a>
+    </div>
+</div>
+
+<!-- HERO -->
+<div class="border-b border-zinc-800/50 py-6 md:py-10">
+    <div class="max-w-3xl mx-auto px-4 md:px-6 text-center">
+        <h1 class="text-2xl md:text-4xl font-bold text-white tracking-tight mb-2">Discover Creations</h1>
+        <p class="text-zinc-500 text-sm">Browse mods, fangames, and passion projects from creators worldwide</p>
+    </div>
+</div>
+
+<!-- MAIN -->
+<main class="max-w-6xl mx-auto px-4 md:px-6 py-5 md:py-7 pb-24 md:pb-7 space-y-8 md:space-y-10">
+
+    <!-- FILTER TABS -->
+    <div class="flex items-center gap-2 overflow-x-auto hide-scrollbar pb-2 -mx-4 px-4 md:mx-0 md:px-0">
+        <button class="px-4 py-2 text-sm font-semibold bg-white text-zinc-950 rounded-xl whitespace-nowrap flex-shrink-0">For You</button>
+        <button class="px-4 py-2 text-sm font-medium text-zinc-400 hover:text-zinc-200 hover:bg-white/5 rounded-xl whitespace-nowrap flex-shrink-0 transition-colors">Top Downloads</button>
+        <button class="px-4 py-2 text-sm font-medium text-zinc-400 hover:text-zinc-200 hover:bg-white/5 rounded-xl whitespace-nowrap flex-shrink-0 transition-colors">Top Rated</button>
+        <button class="px-4 py-2 text-sm font-medium text-zinc-400 hover:text-zinc-200 hover:bg-white/5 rounded-xl whitespace-nowrap flex-shrink-0 transition-colors">Trending</button>
+        <button class="px-4 py-2 text-sm font-medium text-zinc-400 hover:text-zinc-200 hover:bg-white/5 rounded-xl whitespace-nowrap flex-shrink-0 transition-colors">New</button>
+    </div>
+
+    <!-- SECTION: Trending Now -->
+    <section>
+        <div class="flex items-center justify-between mb-3 md:mb-4">
+            <h2 class="text-lg md:text-xl font-bold text-white">Trending Now</h2>
+            <a href="#" class="text-xs text-zinc-500 hover:text-zinc-300 transition-colors font-medium">See all</a>
+        </div>
+        <div class="flex gap-3 md:gap-4 overflow-x-auto hide-scrollbar pb-2 -mx-4 px-4 md:mx-0 md:px-0">
+            <a href="#" class="card-hover glass-light rounded-2xl border border-zinc-800 p-4 flex items-center gap-4 flex-shrink-0 w-[300px] md:w-[340px] group cursor-pointer block">
+                <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                    <span class="text-zinc-400 font-bold text-lg">W3</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h3 class="font-semibold text-white text-sm md:text-base">Witcher 3 HD Reworked</h3>
+                    <p class="text-xs text-zinc-500">The Witcher 3 - Graphics</p>
+                    <div class="flex items-center gap-2 mt-1.5">
+                        <span class="text-xs text-yellow-400 font-semibold">4.9</span>
+                        <div class="flex items-center gap-0.5">
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        </div>
+                    <span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">4.2 GB</span>
+                    </div>
+                </div>
+            </a>
+            <a href="#" class="card-hover glass-light rounded-2xl border border-zinc-800 p-4 flex items-center gap-4 flex-shrink-0 w-[300px] md:w-[340px] group cursor-pointer block">
+                <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                    <span class="text-zinc-400 font-bold text-lg">NC</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h3 class="font-semibold text-white text-sm md:text-base">Night City Visual Overhaul</h3>
+                    <p class="text-xs text-zinc-500">Cyberpunk 2077 - Graphics</p>
+                    <div class="flex items-center gap-2 mt-1.5">
+                        <span class="text-xs text-yellow-400 font-semibold">4.7</span>
+                        <div class="flex items-center gap-0.5">
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        </div>
+                    <span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">3.6 GB</span>
+                    </div>
+                </div>
+            </a>
+            <a href="#" class="card-hover glass-light rounded-2xl border border-zinc-800 p-4 flex items-center gap-4 flex-shrink-0 w-[300px] md:w-[340px] group cursor-pointer block">
+                <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                    <span class="text-zinc-400 font-bold text-lg">FT</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h3 class="font-semibold text-white text-sm md:text-base">Fast Travel from Anywhere</h3>
+                    <p class="text-xs text-zinc-500">The Witcher 3 - Gameplay</p>
+                    <div class="flex items-center gap-2 mt-1.5">
+                        <span class="text-xs text-yellow-400 font-semibold">4.8</span>
+                        <div class="flex items-center gap-0.5">
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        </div>
+                    <span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">12 MB</span>
+                    </div>
+                </div>
+            </a>
+            <a href="#" class="card-hover glass-light rounded-2xl border border-zinc-800 p-4 flex items-center gap-4 flex-shrink-0 w-[300px] md:w-[340px] group cursor-pointer block">
+                <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                    <span class="text-zinc-400 font-bold text-lg">SK</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h3 class="font-semibold text-white text-sm md:text-base">Skyrim Enhanced Shaders</h3>
+                    <p class="text-xs text-zinc-500">Skyrim SE - Graphics</p>
+                    <div class="flex items-center gap-2 mt-1.5">
+                        <span class="text-xs text-yellow-400 font-semibold">4.6</span>
+                        <div class="flex items-center gap-0.5">
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        </div>
+                    <span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">1.8 GB</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- SECTION: Top Rated -->
+    <section>
+        <div class="flex items-center justify-between mb-3 md:mb-4">
+            <h2 class="text-lg md:text-xl font-bold text-white">Top Rated</h2>
+            <a href="#" class="text-xs text-zinc-500 hover:text-zinc-300 transition-colors font-medium">See all</a>
+        </div>
+        <div class="flex gap-3 md:gap-4 overflow-x-auto hide-scrollbar pb-2 -mx-4 px-4 md:mx-0 md:px-0">
+            <a href="#" class="card-hover glass-light rounded-2xl border border-zinc-800 p-4 flex items-center gap-4 flex-shrink-0 w-[300px] md:w-[340px] group cursor-pointer block">
+                <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                    <span class="text-zinc-400 font-bold text-lg">RR</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h3 class="font-semibold text-white text-sm md:text-base">Red Dead Realism Reshade</h3>
+                    <p class="text-xs text-zinc-500">RDR2 - Graphics</p>
+                    <div class="flex items-center gap-2 mt-1.5">
+                        <span class="text-xs text-yellow-400 font-semibold">4.4</span>
+                        <div class="flex items-center gap-0.5">
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        </div>
+                    <span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">890 MB</span>
+                    </div>
+                </div>
+            </a>
+            <a href="#" class="card-hover glass-light rounded-2xl border border-zinc-800 p-4 flex items-center gap-4 flex-shrink-0 w-[300px] md:w-[340px] group cursor-pointer block">
+                <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                    <span class="text-zinc-400 font-bold text-lg">LB</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h3 class="font-semibold text-white text-sm md:text-base">Lands Between HD Pack</h3>
+                    <p class="text-xs text-zinc-500">Elden Ring - Graphics</p>
+                    <div class="flex items-center gap-2 mt-1.5">
+                        <span class="text-xs text-yellow-400 font-semibold">4.3</span>
+                        <div class="flex items-center gap-0.5">
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        </div>
+                    <span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">2.1 GB</span>
+                    </div>
+                </div>
+            </a>
+            <a href="#" class="card-hover glass-light rounded-2xl border border-zinc-800 p-4 flex items-center gap-4 flex-shrink-0 w-[300px] md:w-[340px] group cursor-pointer block">
+                <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                    <span class="text-zinc-400 font-bold text-lg">FV</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h3 class="font-semibold text-white text-sm md:text-base">Faerun Visual Enhancement</h3>
+                    <p class="text-xs text-zinc-500">Baldur's Gate 3 - Graphics</p>
+                    <div class="flex items-center gap-2 mt-1.5">
+                        <span class="text-xs text-yellow-400 font-semibold">4.2</span>
+                        <div class="flex items-center gap-0.5">
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        </div>
+                    <span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">1.4 GB</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- SECTION: New & Updated -->
+    <section>
+        <div class="flex items-center justify-between mb-3 md:mb-4">
+            <h2 class="text-lg md:text-xl font-bold text-white">New & Updated</h2>
+            <a href="#" class="text-xs text-zinc-500 hover:text-zinc-300 transition-colors font-medium">See all</a>
+        </div>
+        <div class="flex gap-3 md:gap-4 overflow-x-auto hide-scrollbar pb-2 -mx-4 px-4 md:mx-0 md:px-0">
+            <a href="#" class="card-hover glass-light rounded-2xl border border-zinc-800 p-4 flex items-center gap-4 flex-shrink-0 w-[300px] md:w-[340px] group cursor-pointer block">
+                <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                    <span class="text-zinc-400 font-bold text-lg">SF</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h3 class="font-semibold text-white text-sm md:text-base">Starfield HD Textures</h3>
+                    <p class="text-xs text-zinc-500">Starfield - Graphics</p>
+                    <div class="flex items-center gap-2 mt-1.5">
+                        <span class="text-xs text-yellow-400 font-semibold">4.0</span>
+                        <div class="flex items-center gap-0.5">
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        </div>
+                    <span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">3.9 GB</span>
+                    </div>
+                </div>
+            </a>
+            <a href="#" class="card-hover glass-light rounded-2xl border border-zinc-800 p-4 flex items-center gap-4 flex-shrink-0 w-[300px] md:w-[340px] group cursor-pointer block">
+                <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                    <span class="text-zinc-400 font-bold text-lg">CM</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h3 class="font-semibold text-white text-sm md:text-base">Combat Animation Overhaul</h3>
+                    <p class="text-xs text-zinc-500">Elden Ring - Gameplay</p>
+                    <div class="flex items-center gap-2 mt-1.5">
+                        <span class="text-xs text-yellow-400 font-semibold">4.3</span>
+                        <div class="flex items-center gap-0.5">
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="w-3 h-3 star" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        </div>
+                    <span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">487 MB</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </section>
+
+</main>
+
+<footer class="border-t border-zinc-800/50 bg-zinc-950">
+    <div class="max-w-6xl mx-auto px-4 md:px-6 py-8">
+        <p class="text-[13px] text-zinc-600 mb-4">© 2026 Zennou. All rights reserved.</p>
+        <div class="flex gap-6">
+            <a href="terms.html" class="text-[13px] text-zinc-600 hover:text-zinc-300 transition-colors">Terms</a>
+            <a href="privacy.html" class="text-[13px] text-zinc-600 hover:text-zinc-300 transition-colors">Privacy</a>
+            <a href="dmca.html" class="text-[13px] text-zinc-600 hover:text-zinc-300 transition-colors">DMCA</a>
+        </div>
+    </div>
+</footer>
+
+<!-- BOTTOM TAB NAV (mobile only) -->
+<nav id="bottomNav" class="md:hidden fixed bottom-0 inset-x-0 z-40 bg-zinc-950/95 backdrop-blur-md border-t border-zinc-800/50">
+    <div class="grid grid-cols-5">
+        <button data-tab="home" onclick="setActiveTab('home')" class="tab-btn flex flex-col items-center justify-center gap-1 py-2.5 text-white">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h4a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h4a1 1 0 001-1V10"/></svg>
+            <span class="text-[10px] font-medium">Home</span>
+        </button>
+        <button data-tab="games" onclick="setActiveTab('games')" class="tab-btn flex flex-col items-center justify-center gap-1 py-2.5 text-zinc-500">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="12" rx="4"/><path stroke-linecap="round" d="M8 11v4M6 13h4M15.5 12h.01M18.5 15h.01"/></svg>
+            <span class="text-[10px] font-medium">Games</span>
+        </button>
+        <button data-tab="tools" onclick="setActiveTab('tools')" class="tab-btn flex flex-col items-center justify-center gap-1 py-2.5 text-zinc-500">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.1-3.1a4 4 0 01-5.4 5.4L6 21l-3-3 9.6-9.4a4 4 0 015.4-5.4l-3.1 3.1z"/></svg>
+            <span class="text-[10px] font-medium">Tools</span>
+        </button>
+        <button data-tab="category" onclick="openCategoryPanel()" class="tab-btn flex flex-col items-center justify-center gap-1 py-2.5 text-zinc-500">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
+            <span class="text-[10px] font-medium">Category</span>
+        </button>
+        <a href="dashboard.html" class="tab-btn flex flex-col items-center justify-center gap-1 py-2.5 text-zinc-500">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path stroke-linecap="round" d="M4 21v-1a6 6 0 016-6h4a6 6 0 016 6v1"/></svg>
+            <span class="text-[10px] font-medium">Profile</span>
+        </a>
+    </div>
+</nav>
+
+<!-- CATEGORY PANEL (bottom sheet) -->
+<div id="categoryOverlay" class="overlay fixed inset-0 bg-black/70 z-40 md:hidden" onclick="closeCategoryPanel()"></div>
+<div id="categoryPanel" class="fixed left-0 right-0 bottom-0 z-50 md:hidden bg-zinc-950 border-t border-zinc-800 rounded-t-3xl p-5 pb-8 translate-y-full transition-transform duration-300 ease-out max-h-[75vh] flex flex-col">
+    <div class="w-10 h-1 bg-zinc-700 rounded-full mx-auto mb-5 flex-shrink-0"></div>
+    <div class="flex items-center justify-between mb-4 flex-shrink-0">
+        <h3 class="text-lg font-bold text-white">Browse by category</h3>
+        <button onclick="closeCategoryPanel()" class="p-1.5 text-zinc-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+    </div>
+
+    <div class="relative mb-4 flex-shrink-0">
+        <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input type="text" id="categorySearchInput" oninput="filterCategoryTags(this.value)" placeholder="Search tags..." class="w-full pl-10 pr-4 py-2.5 bg-zinc-900 border border-zinc-700 rounded-xl text-sm text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-zinc-500 transition-all">
+    </div>
+
+    <div id="categoryTagList" class="flex flex-wrap gap-2 overflow-y-auto">
+        <button onclick="selectCategory('Graphics')" data-tag="graphics" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Graphics</button>
+        <button onclick="selectCategory('Gameplay')" data-tag="gameplay" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Gameplay</button>
+        <button onclick="selectCategory('Audio')" data-tag="audio" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Audio</button>
+        <button onclick="selectCategory('Fangame')" data-tag="fangame" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Fangame</button>
+        <button onclick="selectCategory('UI Tools')" data-tag="ui tools" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">UI Tools</button>
+        <button onclick="selectCategory('Total Conversion')" data-tag="total conversion" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Total Conversion</button>
+        <button onclick="selectCategory('Patches')" data-tag="patches" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Patches</button>
+        <button onclick="selectCategory('Utilities')" data-tag="utilities" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Utilities</button>
+        <button onclick="selectCategory('Time-Mechanics')" data-tag="time-mechanics" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Time-Mechanics</button>
+        <button onclick="selectCategory('Puzzle')" data-tag="puzzle" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Puzzle</button>
+        <button onclick="selectCategory('Overhaul')" data-tag="overhaul" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Overhaul</button>
+        <button onclick="selectCategory('Retexture')" data-tag="retexture" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Retexture</button>
+        <button onclick="selectCategory('Soundtrack')" data-tag="soundtrack" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Soundtrack</button>
+        <button onclick="selectCategory('Total Overhaul')" data-tag="total overhaul" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Total Overhaul</button>
+        <p id="categoryNoResults" class="hidden w-full text-center text-zinc-600 text-sm py-6">No tags match your search.</p>
+    </div>
+</div>
+
+<script>
+function openMobileMenu(){document.getElementById('mobileMenu').classList.add('open');document.getElementById('overlay').classList.add('open');document.body.style.overflow='hidden'}
+function closeMobileMenu(){document.getElementById('mobileMenu').classList.remove('open');document.getElementById('overlay').classList.remove('open');document.body.style.overflow=''}
+window.addEventListener('resize',()=>{if(window.innerWidth>=768)closeMobileMenu()});
+
+function setActiveTab(tab){
+    document.querySelectorAll('.tab-btn[data-tab]').forEach(btn=>{
+        if(btn.dataset.tab===tab){btn.classList.remove('text-zinc-500');btn.classList.add('text-white')}
+        else{btn.classList.remove('text-white');btn.classList.add('text-zinc-500')}
+    });
+}
+
+function openCategoryPanel(){
+    document.getElementById('categoryPanel').classList.remove('translate-y-full');
+    document.getElementById('categoryOverlay').classList.add('open');
+    document.body.style.overflow='hidden';
+    document.querySelectorAll('.tab-btn[data-tab]').forEach(btn=>{
+        btn.classList.remove('text-white');btn.classList.add('text-zinc-500');
+    });
+    const catBtn = document.querySelector('.tab-btn[data-tab="category"]');
+    catBtn.classList.remove('text-zinc-500');catBtn.classList.add('text-white');
+}
+function closeCategoryPanel(){
+    document.getElementById('categoryPanel').classList.add('translate-y-full');
+    document.getElementById('categoryOverlay').classList.remove('open');
+    document.body.style.overflow='';
+    document.getElementById('categorySearchInput').value='';
+    filterCategoryTags('');
+}
+function selectCategory(name){
+    closeCategoryPanel();
+    // Placeholder: hook this up to actual filtering logic once category data exists.
+    console.log('Selected category:', name);
+}
+function filterCategoryTags(query){
+    const q = query.trim().toLowerCase();
+    const tags = document.querySelectorAll('#categoryTagList .category-tag');
+    let visibleCount = 0;
+    tags.forEach(tag=>{
+        const match = tag.dataset.tag.includes(q);
+        tag.style.display = match ? '' : 'none';
+        if(match) visibleCount++;
+    });
+    document.getElementById('categoryNoResults').classList.toggle('hidden', visibleCount > 0);
+}
+</script>
+</body>
+</html>
