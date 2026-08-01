@@ -96,16 +96,25 @@
                 </div>
             </div>
 
-            <div class="hidden md:flex items-center gap-3 flex-shrink-0">
-                <a href="login.html" class="text-sm text-zinc-400 hover:text-white transition-colors">Sign In</a>
+            <div class="hidden md:flex items-center flex-shrink-0">
+                <button onclick="openMobileMenu()" class="p-2 text-zinc-400 hover:text-white rounded-lg transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
             </div>
 
             <button onclick="openMobileMenu()" class="md:hidden flex-shrink-0 p-2 text-zinc-400 hover:text-white rounded-lg"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
         </div>
+
+        <!-- FILTER TABS (sticky, part of navbar) -->
+        <div class="flex items-center gap-6 overflow-x-auto hide-scrollbar -mx-4 px-4 md:mx-0 md:px-0 border-t border-zinc-800/50">
+            <button class="py-3 text-sm font-semibold text-white border-b-2 border-white whitespace-nowrap flex-shrink-0 transition-colors">For You</button>
+            <button class="py-3 text-sm font-medium text-zinc-500 hover:text-zinc-200 border-b-2 border-transparent whitespace-nowrap flex-shrink-0 transition-colors">Top Downloads</button>
+            <button class="py-3 text-sm font-medium text-zinc-500 hover:text-zinc-200 border-b-2 border-transparent whitespace-nowrap flex-shrink-0 transition-colors">Top Rated</button>
+            <button class="py-3 text-sm font-medium text-zinc-500 hover:text-zinc-200 border-b-2 border-transparent whitespace-nowrap flex-shrink-0 transition-colors">Trending</button>
+            <button class="py-3 text-sm font-medium text-zinc-500 hover:text-zinc-200 border-b-2 border-transparent whitespace-nowrap flex-shrink-0 transition-colors">New</button>
+        </div>
     </div>
 </nav>
 
-<!-- MOBILE MENU -->
+<!-- SLIDE MENU (mobile + desktop) -->
 <div id="mobileMenu" class="mobile-menu fixed inset-y-0 right-0 w-72 bg-zinc-950 border-l border-zinc-800 z-50 shadow-2xl overflow-y-auto">
     <div class="p-5 border-b border-zinc-800/50 flex items-center justify-end">
         <button onclick="closeMobileMenu()" class="p-2 text-zinc-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
@@ -113,7 +122,6 @@
     <div class="p-5 space-y-2">
         <a href="explore.html" class="block px-3 py-2.5 text-white bg-white/10 rounded-lg text-sm font-medium">Explore</a>
         <a href="index.html#community" class="block px-3 py-2.5 text-zinc-400 text-sm">Community</a>
-        <a href="#" class="block px-3 py-2.5 text-zinc-400 text-sm">Docs</a>
     </div>
     <div class="px-5 pt-2 pb-5">
         <h4 class="text-[11px] font-mono tracking-wider text-zinc-600 px-3 mb-2">PRODUCT</h4>
@@ -154,15 +162,6 @@
 
 <!-- MAIN -->
 <main class="max-w-6xl mx-auto px-4 md:px-6 py-5 md:py-7 pb-24 md:pb-7 space-y-8 md:space-y-10">
-
-    <!-- FILTER TABS -->
-    <div class="flex items-center gap-2 overflow-x-auto hide-scrollbar pb-2 -mx-4 px-4 md:mx-0 md:px-0">
-        <button class="px-4 py-2 text-sm font-semibold bg-white text-zinc-950 rounded-xl whitespace-nowrap flex-shrink-0">For You</button>
-        <button class="px-4 py-2 text-sm font-medium text-zinc-400 hover:text-zinc-200 hover:bg-white/5 rounded-xl whitespace-nowrap flex-shrink-0 transition-colors">Top Downloads</button>
-        <button class="px-4 py-2 text-sm font-medium text-zinc-400 hover:text-zinc-200 hover:bg-white/5 rounded-xl whitespace-nowrap flex-shrink-0 transition-colors">Top Rated</button>
-        <button class="px-4 py-2 text-sm font-medium text-zinc-400 hover:text-zinc-200 hover:bg-white/5 rounded-xl whitespace-nowrap flex-shrink-0 transition-colors">Trending</button>
-        <button class="px-4 py-2 text-sm font-medium text-zinc-400 hover:text-zinc-200 hover:bg-white/5 rounded-xl whitespace-nowrap flex-shrink-0 transition-colors">New</button>
-    </div>
 
     <!-- SECTION: Trending Now -->
     <section>
