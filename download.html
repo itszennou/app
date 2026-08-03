@@ -169,10 +169,10 @@
 
   .captcha-check-icon { display: none; color: var(--zinc-200); }
   .captcha-box.verified .captcha-check-icon { display: block; }
-  .captcha-box.verified .captcha-check { border-color: var(--zinc-300); background: var(--zinc-200); }
+  .captcha-box.verified .captcha-check { border-color: var(--white); background: var(--zinc-200); }
   .captcha-box.verified .captcha-check-icon { color: var(--zinc-950); }
 
-  .captcha-label { font-size: 14px; color: var(--zinc-300); font-weight: 500; }
+  .captcha-label { font-size: 14px; color: var(--white); font-weight: 500; }
   .captcha-sublabel { font-size: 11.5px; color: var(--zinc-600); margin-top: 2px; font-family: 'JetBrains Mono', monospace; }
 
   /* ============ STEP FLOW ============ */
@@ -293,7 +293,6 @@
         </div>
         <div>
           <div class="captcha-label" id="captcha-label">I'm not a robot</div>
-          <div class="captcha-sublabel" id="captcha-sublabel">Zennou Verify</div>
         </div>
       </div>
 
@@ -328,7 +327,6 @@
 
   const captchaBox = document.getElementById('captcha-box');
   const captchaLabel = document.getElementById('captcha-label');
-  const captchaSublabel = document.getElementById('captcha-sublabel');
   const humanBtn = document.getElementById('human-btn');
   const returnPanel1 = document.getElementById('return-panel-1');
   const returnBtn1 = document.getElementById('return-btn-1');
@@ -346,13 +344,11 @@
 
     captchaBox.classList.add('loading', 'disabled');
     captchaLabel.textContent = 'Verifying...';
-    captchaSublabel.textContent = 'Please wait';
 
     setTimeout(() => {
       captchaBox.classList.remove('loading');
       captchaBox.classList.add('verified');
       captchaLabel.textContent = "You're verified";
-      captchaSublabel.textContent = 'Zennou Verify';
 
       humanBtn.classList.remove('flow-hidden');
       flowNote.textContent = "Click below to continue.";
