@@ -617,7 +617,42 @@
     padding: 2px 7px;
     border-radius: 100px;
   }
-  .comment-time { font-size: 12px; color: var(--zinc-600); font-family: 'JetBrains Mono', monospace; }
+  .comment-time {
+    font-size: 12px;
+    color: var(--zinc-600);
+    font-family: 'JetBrains Mono', monospace;
+    position: relative;
+    cursor: default;
+    border-bottom: 1px dotted var(--zinc-700);
+  }
+  .comment-time::after {
+    content: attr(data-full);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 0;
+    white-space: nowrap;
+    background: var(--zinc-900);
+    border: 1px solid var(--line-strong);
+    color: var(--zinc-200);
+    font-size: 11px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(4px);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    pointer-events: none;
+    z-index: 10;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+  .comment-time:hover::after,
+  .comment-time.tooltip-active::after {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
   .comment-text { font-size: 14px; line-height: 1.7; color: var(--zinc-400); margin-bottom: 8px; }
   .comment-reply-btn {
     background: none;
@@ -956,7 +991,7 @@
         <div class="comment-body">
           <div class="comment-head">
             <span class="comment-author">MidnightVale</span>
-            <span class="comment-time">2 days ago</span>
+            <span class="comment-time" data-timestamp="2026-07-31T09:15:00"></span>
           </div>
           <p class="comment-text">The paradox system in 2.4.0 is incredible — completely changes how I approach the puzzle sections. Any plans to add a difficulty slider for how aggressive the paradox events are?</p>
           <button class="comment-reply-btn">Reply</button>
@@ -970,7 +1005,7 @@
           <div class="comment-head">
             <span class="comment-author">RiftKeeper</span>
             <span class="author-badge">CREATOR</span>
-            <span class="comment-time">1 day ago</span>
+            <span class="comment-time" data-timestamp="2026-08-02T18:40:00"></span>
           </div>
           <p class="comment-text">Good idea — I'm considering it for 2.5. No promises on timing yet, but it's on the list.</p>
           <button class="comment-reply-btn">Reply</button>
@@ -982,7 +1017,7 @@
         <div class="comment-body">
           <div class="comment-head">
             <span class="comment-author">TesseractQuill</span>
-            <span class="comment-time">5 days ago</span>
+            <span class="comment-time" data-timestamp="2026-07-29T11:05:00"></span>
           </div>
           <p class="comment-text">Getting a crash on startup after updating to 2.4.1. Anyone else? Running it alongside a UI mod, might be a conflict.</p>
           <button class="comment-reply-btn">Reply</button>
@@ -996,7 +1031,7 @@
       <h3>LATEST UPDATE</h3>
       <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px;">
         <span style="font-size:15px;font-weight:600;color:var(--zinc-100);">v2.4.1</span>
-        <span style="font-size:12px;color:var(--zinc-600);font-family:'JetBrains Mono',monospace;">3 days ago</span>
+        <span class="comment-time" style="font-size:12px;" data-timestamp="2026-07-30T16:20:00"></span>
       </div>
       <ul style="margin:0;padding-left:18px;font-size:13px;color:var(--zinc-500);line-height:1.8;">
         <li>Fixed crash on startup with certain UI mods</li>
@@ -1151,6 +1186,57 @@
     btn.classList.toggle('active');
     btn.childNodes[btn.childNodes.length - 1].textContent = btn.classList.contains('active') ? ' Saved' : ' Save';
   }
+
+  /* ============ RELATIVE TIME + TOOLTIP ============ */
+  function formatRelativeTime(date) {
+    const now = new Date();
+    const diffMs = now - date;
+    const diffSec = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHour = Math.floor(diffMin / 60);
+    const diffDay = Math.floor(diffHour / 24);
+    const diffWeek = Math.floor(diffDay / 7);
+    const diffMonth = Math.floor(diffDay / 30);
+    const diffYear = Math.floor(diffDay / 365);
+
+    if (diffSec < 60) return 'just now';
+    if (diffMin < 60) return `${diffMin}m ago`;
+    if (diffHour < 24) return `${diffHour}h ago`;
+    if (diffDay < 7) return `${diffDay}d ago`;
+    if (diffWeek < 4) return `${diffWeek}w ago`;
+    if (diffMonth < 12) return `${diffMonth}mo ago`;
+    return `${diffYear}y ago`;
+  }
+
+  function formatFullDate(date) {
+    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false };
+    return date.toLocaleString('en-US', options);
+  }
+
+  function initTimestamps() {
+    document.querySelectorAll('[data-timestamp]').forEach(el => {
+      const date = new Date(el.getAttribute('data-timestamp'));
+      if (isNaN(date)) return;
+      el.textContent = formatRelativeTime(date);
+      el.setAttribute('data-full', formatFullDate(date));
+    });
+  }
+
+  initTimestamps();
+
+  /* tap-to-toggle tooltip on touch devices */
+  document.querySelectorAll('[data-timestamp]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      if (!window.matchMedia('(hover: none)').matches) return;
+      e.stopPropagation();
+      const wasActive = el.classList.contains('tooltip-active');
+      document.querySelectorAll('.tooltip-active').forEach(t => t.classList.remove('tooltip-active'));
+      if (!wasActive) el.classList.add('tooltip-active');
+    });
+  });
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.tooltip-active').forEach(t => t.classList.remove('tooltip-active'));
+  });
 </script>
 
 </body>
