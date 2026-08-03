@@ -68,11 +68,13 @@
 <body class="bg-zinc-950 text-zinc-100 font-sans antialiased overflow-x-hidden">
 
     <!-- ==================== PROFILE HEADER ==================== -->
-    <main>
+    <main class="pt-6 md:pt-10">
         
         <!-- Cover / Banner Area -->
-        <div class="relative h-32 md:h-48 bg-gradient-to-b from-zinc-800 to-zinc-900 border-b border-zinc-800/50">
-            <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 30% 50%, #52525b 0%, transparent 60%);"></div>
+        <!-- Recommended image size: 1500x500px (3:1 ratio), under ~500KB, JPG/WebP -->
+        <div class="relative h-32 md:h-48 bg-gradient-to-b from-zinc-800 to-zinc-900 border-b border-zinc-800/50 overflow-hidden">
+            <img src="assets/cover-placeholder.jpg" alt="Profile cover" class="w-full h-full object-cover" onerror="this.style.display='none'">
+            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/40 to-transparent"></div>
         </div>
 
         <!-- Profile Info -->
