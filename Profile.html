@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halk Hogan — Zennou</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        zinc: {
+                            750: '#323238',
+                            850: '#1f1f23',
+                            925: '#141416',
+                            950: '#0a0a0b',
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #3f3f46 #18181b; }
+        *::-webkit-scrollbar { width: 4px; }
+        *::-webkit-scrollbar-track { background: #18181b; }
+        *::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 2px; }
+        
+        .glass {
+            background: rgba(24, 24, 27, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .glass-light {
+            background: rgba(39, 39, 42, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            border-color: #52525b;
+        }
+        
+        .tab-btn.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+        
+        .badge-verified {
+            background: linear-gradient(135deg, #ffffff, #a1a1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-sans antialiased overflow-x-hidden">
+
+    <!-- ==================== PROFILE HEADER ==================== -->
+    <main>
+        
+        <!-- Cover / Banner Area -->
+        <div class="relative h-32 md:h-48 bg-gradient-to-b from-zinc-800 to-zinc-900 border-b border-zinc-800/50">
+            <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 30% 50%, #52525b 0%, transparent 60%);"></div>
+        </div>
+
+        <!-- Profile Info -->
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="relative -mt-16 md:-mt-20 mb-6 md:mb-8">
+                <div class="flex flex-col sm:flex-row sm:items-end gap-4 md:gap-6">
+                    
+                    <!-- Avatar -->
+                    <div class="relative flex-shrink-0">
+                        <img src="https://ui-avatars.com/api/?name=Halk+Hogan&background=fff&color=000&bold=true&size=120" class="w-24 h-24 md:w-32 md:h-32 rounded-2xl ring-4 ring-zinc-950 shadow-2xl" alt="Halk Hogan">
+                    </div>
+
+                    <!-- Name & Bio -->
+                    <div class="flex-1 pt-2">
+                        <div class="flex items-center gap-2 md:gap-3 flex-wrap">
+                            <h1 class="text-2xl md:text-4xl font-bold text-white tracking-tight">Halk Hogan</h1>
+                            <span class="badge-verified text-xs md:text-sm font-semibold bg-white/10 px-2.5 py-1 rounded-lg flex items-center gap-1">
+                                <svg class="w-3.5 h-3.5 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+                                Verified Creator
+                            </span>
+                        </div>
+                        <p class="text-sm md:text-base text-zinc-400 mt-1.5">@halkhogan · Pro Modder</p>
+                        <p class="text-sm text-zinc-500 mt-2 max-w-2xl">Creator of the most popular texture overhaul mods for The Witcher 3, Cyberpunk 2077, and Skyrim. Passionate about pushing visual fidelity beyond limits.</p>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex items-center gap-2 md:gap-3 flex-shrink-0 mt-2 sm:mt-0">
+                        <button class="bg-white text-zinc-950 px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-zinc-200 transition-all hover:scale-105 active:scale-95">
+                            Follow
+                        </button>
+                        <button class="glass-light border border-zinc-700 text-zinc-300 px-5 py-2.5 rounded-xl text-sm font-medium hover:border-zinc-500 hover:text-white transition-all">
+                            Message
+                        </button>
+                        <div class="relative flex-shrink-0">
+                            <button onclick="toggleMoreMenu()" class="glass-light border border-zinc-700 text-zinc-400 p-2.5 rounded-xl hover:border-zinc-500 hover:text-white transition-all">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+                            </button>
+                            <div id="moreMenu" class="hidden absolute right-0 mt-2 w-48 glass rounded-xl border border-zinc-800 shadow-2xl overflow-hidden z-10">
+                                <button onclick="copyProfileLink()" class="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-zinc-300 hover:bg-white/5 hover:text-white transition-colors text-left">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                                    Copy Profile Link
+                                </button>
+                                <button onclick="reportUser()" class="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 transition-colors text-left">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>
+                                    Report User
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="border-y border-zinc-800/50 bg-zinc-950/50">
+            <div class="max-w-7xl mx-auto px-4 md:px-6">
+                <div class="flex gap-6 md:gap-10 overflow-x-auto py-3 md:py-4">
+                    <div class="text-center flex-shrink-0">
+                        <p class="text-lg md:text-2xl font-bold text-white font-mono">12</p>
+                        <p class="text-[10px] md:text-xs text-zinc-500">Mods</p>
+                    </div>
+                    <div class="text-center flex-shrink-0">
+                        <p class="text-lg md:text-2xl font-bold text-white font-mono">1.2M</p>
+                        <p class="text-[10px] md:text-xs text-zinc-500">Total Downloads</p>
+                    </div>
+                    <div class="text-center flex-shrink-0">
+                        <p class="text-lg md:text-2xl font-bold text-white font-mono">45.8K</p>
+                        <p class="text-[10px] md:text-xs text-zinc-500">Total Likes</p>
+                    </div>
+                    <div class="text-center flex-shrink-0">
+                        <p class="text-lg md:text-2xl font-bold text-white font-mono">3.2K</p>
+                        <p class="text-[10px] md:text-xs text-zinc-500">Followers</p>
+                    </div>
+                    <div class="text-center flex-shrink-0">
+                        <p class="text-lg md:text-2xl font-bold text-white font-mono">847</p>
+                        <p class="text-[10px] md:text-xs text-zinc-500">Following</p>
+                    </div>
+                    <div class="text-center flex-shrink-0">
+                        <p class="text-lg md:text-2xl font-bold text-white font-mono">Jan 2024</p>
+                        <p class="text-[10px] md:text-xs text-zinc-500">Joined</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="border-b border-zinc-800/50">
+            <div class="max-w-7xl mx-auto px-4 md:px-6">
+                <div class="flex gap-1 overflow-x-auto -mb-px">
+                    <button class="tab-btn active px-4 md:px-5 py-3 text-sm font-medium text-zinc-400 hover:text-white rounded-t-lg transition-colors whitespace-nowrap" onclick="switchTab('mods')">Mods</button>
+                    <button class="tab-btn px-4 md:px-5 py-3 text-sm font-medium text-zinc-400 hover:text-white rounded-t-lg transition-colors whitespace-nowrap" onclick="switchTab('collections')">Collections</button>
+                    <button class="tab-btn px-4 md:px-5 py-3 text-sm font-medium text-zinc-400 hover:text-white rounded-t-lg transition-colors whitespace-nowrap" onclick="switchTab('activity')">Activity</button>
+                    <button class="tab-btn px-4 md:px-5 py-3 text-sm font-medium text-zinc-400 hover:text-white rounded-t-lg transition-colors whitespace-nowrap" onclick="switchTab('about')">About</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-8">
+            
+            <!-- MODS TAB -->
+            <div id="tab-mods" class="tab-panel active">
+                
+                <!-- Filter Bar -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-end gap-3 mb-6">
+                    <select class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-400 focus:outline-none focus:border-zinc-600">
+                        <option>Most Downloaded</option>
+                        <option>Recently Updated</option>
+                        <option>Most Liked</option>
+                        <option>Newest First</option>
+                    </select>
+                </div>
+
+                <!-- Mods Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+                    
+                    <!-- Mod Card 1 -->
+                    <div class="glass-light rounded-2xl border border-zinc-800 card-hover overflow-hidden cursor-pointer group">
+                        <div class="aspect-video bg-zinc-800 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 to-transparent"></div>
+                            <div class="absolute top-3 left-3">
+                                <span class="text-[10px] font-medium bg-white/20 backdrop-blur-sm text-white px-2.5 py-1 rounded-full">The Witcher 3</span>
+                            </div>
+                            <div class="absolute bottom-3 right-3">
+                                <span class="text-[10px] font-mono text-green-400 bg-zinc-950/80 px-2 py-0.5 rounded-full flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 bg-green-400 rounded-full"></span>v2.1.0
+                                </span>
+                            </div>
+                        </div>
+                        <div class="p-4 md:p-5">
+                            <h3 class="font-semibold text-white group-hover:text-zinc-200 transition-colors">Witcher 3 HD Reworked</h3>
+                            <p class="text-xs text-zinc-500 mt-1 line-clamp-2">Complete 4K texture overhaul with PBR materials and enhanced lighting for next-gen update.</p>
+                            <div class="flex items-center justify-between mt-4 pt-3 border-t border-zinc-800/50">
+                                <div class="flex items-center gap-3 text-xs text-zinc-500">
+                                    <span class="flex items-center gap-1">⬇ 124K</span>
+                                    <span class="flex items-center gap-1">❤️ 8.2K</span>
+                                </div>
+                                <span class="text-[10px] text-zinc-600">2 days ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mod Card 2 -->
+                    <div class="glass-light rounded-2xl border border-zinc-800 card-hover overflow-hidden cursor-pointer group">
+                        <div class="aspect-video bg-zinc-800 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 to-transparent"></div>
+                            <div class="absolute top-3 left-3">
+                                <span class="text-[10px] font-medium bg-white/20 backdrop-blur-sm text-white px-2.5 py-1 rounded-full">Cyberpunk 2077</span>
+                            </div>
+                            <div class="absolute bottom-3 right-3">
+                                <span class="text-[10px] font-mono text-yellow-400 bg-zinc-950/80 px-2 py-0.5 rounded-full flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 bg-yellow-400 rounded-full"></span>v1.8.0
+                                </span>
+                            </div>
+                        </div>
+                        <div class="p-4 md:p-5">
+                            <h3 class="font-semibold text-white group-hover:text-zinc-200 transition-colors">Night City Visual Overhaul</h3>
+                            <p class="text-xs text-zinc-500 mt-1 line-clamp-2">Complete lighting and texture redesign for Cyberpunk 2077, featuring ray-traced reflections.</p>
+                            <div class="flex items-center justify-between mt-4 pt-3 border-t border-zinc-800/50">
+                                <div class="flex items-center gap-3 text-xs text-zinc-500">
+                                    <span class="flex items-center gap-1">⬇ 89K</span>
+                                    <span class="flex items-center gap-1">❤️ 6.1K</span>
+                                </div>
+                                <span class="text-[10px] text-zinc-600">1 week ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mod Card 3 -->
+                    <div class="glass-light rounded-2xl border border-zinc-800 card-hover overflow-hidden cursor-pointer group">
+                        <div class="aspect-video bg-zinc-800 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 to-transparent"></div>
+                            <div class="absolute top-3 left-3">
+                                <span class="text-[10px] font-medium bg-white/20 backdrop-blur-sm text-white px-2.5 py-1 rounded-full">Skyrim SE</span>
+                            </div>
+                        </div>
+                        <div class="p-4 md:p-5">
+                            <h3 class="font-semibold text-white group-hover:text-zinc-200 transition-colors">Skyrim 4K Parallax Textures</h3>
+                            <p class="text-xs text-zinc-500 mt-1 line-clamp-2">High-quality parallax occlusion mapped textures for all Skyrim landscapes and architecture.</p>
+                            <div class="flex items-center justify-between mt-4 pt-3 border-t border-zinc-800/50">
+                                <div class="flex items-center gap-3 text-xs text-zinc-500">
+                                    <span class="flex items-center gap-1">⬇ 67K</span>
+                                    <span class="flex items-center gap-1">❤️ 4.5K</span>
+                                </div>
+                                <span class="text-[10px] text-zinc-600">3 weeks ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mod Card 4 -->
+                    <div class="glass-light rounded-2xl border border-zinc-800 card-hover overflow-hidden cursor-pointer group">
+                        <div class="aspect-video bg-zinc-800 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 to-transparent"></div>
+                            <div class="absolute top-3 left-3">
+                                <span class="text-[10px] font-medium bg-white/20 backdrop-blur-sm text-white px-2.5 py-1 rounded-full">RDR2</span>
+                            </div>
+                        </div>
+                        <div class="p-4 md:p-5">
+                            <h3 class="font-semibold text-white group-hover:text-zinc-200 transition-colors">Red Dead Realism Reshade</h3>
+                            <p class="text-xs text-zinc-500 mt-1 line-clamp-2">Photorealistic color grading and enhanced ambient occlusion for Red Dead Redemption 2.</p>
+                            <div class="flex items-center justify-between mt-4 pt-3 border-t border-zinc-800/50">
+                                <div class="flex items-center gap-3 text-xs text-zinc-500">
+                                    <span class="flex items-center gap-1">⬇ 42K</span>
+                                    <span class="flex items-center gap-1">❤️ 3.2K</span>
+                                </div>
+                                <span class="text-[10px] text-zinc-600">1 month ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mod Card 5 -->
+                    <div class="glass-light rounded-2xl border border-zinc-800 card-hover overflow-hidden cursor-pointer group">
+                        <div class="aspect-video bg-zinc-800 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 to-transparent"></div>
+                            <div class="absolute top-3 left-3">
+                                <span class="text-[10px] font-medium bg-white/20 backdrop-blur-sm text-white px-2.5 py-1 rounded-full">Elden Ring</span>
+                            </div>
+                        </div>
+                        <div class="p-4 md:p-5">
+                            <h3 class="font-semibold text-white group-hover:text-zinc-200 transition-colors">Lands Between HD Texture Pack</h3>
+                            <p class="text-xs text-zinc-500 mt-1 line-clamp-2">Upscaled textures for all environments in Elden Ring, optimized for minimal FPS impact.</p>
+                            <div class="flex items-center justify-between mt-4 pt-3 border-t border-zinc-800/50">
+                                <div class="flex items-center gap-3 text-xs text-zinc-500">
+                                    <span class="flex items-center gap-1">⬇ 31K</span>
+                                    <span class="flex items-center gap-1">❤️ 2.8K</span>
+                                </div>
+                                <span class="text-[10px] text-zinc-600">2 months ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mod Card 6 -->
+                    <div class="glass-light rounded-2xl border border-zinc-800 card-hover overflow-hidden cursor-pointer group">
+                        <div class="aspect-video bg-zinc-800 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 to-transparent"></div>
+                            <div class="absolute top-3 left-3">
+                                <span class="text-[10px] font-medium bg-white/20 backdrop-blur-sm text-white px-2.5 py-1 rounded-full">Baldur's Gate 3</span>
+                            </div>
+                        </div>
+                        <div class="p-4 md:p-5">
+                            <h3 class="font-semibold text-white group-hover:text-zinc-200 transition-colors">Faerun Visual Enhancement</h3>
+                            <p class="text-xs text-zinc-500 mt-1 line-clamp-2">Enhanced spell effects, character textures, and environmental details for BG3.</p>
+                            <div class="flex items-center justify-between mt-4 pt-3 border-t border-zinc-800/50">
+                                <div class="flex items-center gap-3 text-xs text-zinc-500">
+                                    <span class="flex items-center gap-1">⬇ 28K</span>
+                                    <span class="flex items-center gap-1">❤️ 2.1K</span>
+                                </div>
+                                <span class="text-[10px] text-zinc-600">3 months ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="flex items-center justify-between mt-8 pt-6 border-t border-zinc-800/50">
+                    <p class="text-xs md:text-sm text-zinc-500">Showing 6 of 12 mods</p>
+                    <div class="flex gap-1">
+                        <button class="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-lg text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800 transition-all text-xs md:text-sm">1</button>
+                        <button class="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-lg bg-white/10 text-zinc-200 text-xs md:text-sm font-medium">2</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COLLECTIONS TAB -->
+            <div id="tab-collections" class="tab-panel">
+                <div class="glass-light rounded-2xl p-8 border border-zinc-800 text-center">
+                    <div class="w-16 h-16 bg-zinc-800 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Mod Collections</h3>
+                    <p class="text-zinc-500">Curated collections of mods by Halk Hogan for specific games and themes.</p>
+                </div>
+            </div>
+
+            <!-- ACTIVITY TAB -->
+            <div id="tab-activity" class="tab-panel">
+                <div class="space-y-3">
+                    <div class="glass-light rounded-2xl border border-zinc-800 p-4 md:p-5 flex items-start gap-3">
+                        <div class="w-8 h-8 bg-zinc-800 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-sm text-zinc-200">Released <span class="font-semibold text-white">Witcher 3 HD Reworked v2.1.0</span></p>
+                            <p class="text-xs text-zinc-500 mt-0.5">Added next-gen patch 4.04 compatibility</p>
+                            <span class="text-[10px] text-zinc-600 mt-1 inline-block">2 days ago</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-light rounded-2xl border border-zinc-800 p-4 md:p-5 flex items-start gap-3">
+                        <div class="w-8 h-8 bg-zinc-800 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-sm text-zinc-200">Replied to <span class="font-semibold text-white">DarkSouls99</span> on Witcher 3 HD Reworked</p>
+                            <p class="text-xs text-zinc-500 mt-0.5">"Yes, it's fully compatible with Immersive Lighting Mod..."</p>
+                            <span class="text-[10px] text-zinc-600 mt-1 inline-block">1 week ago</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-light rounded-2xl border border-zinc-800 p-4 md:p-5 flex items-start gap-3">
+                        <div class="w-8 h-8 bg-zinc-800 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-sm text-zinc-200">Created new mod <span class="font-semibold text-white">Night City Visual Overhaul</span></p>
+                            <p class="text-xs text-zinc-500 mt-0.5">For Cyberpunk 2077</p>
+                            <span class="text-[10px] text-zinc-600 mt-1 inline-block">2 weeks ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABOUT TAB -->
+            <div id="tab-about" class="tab-panel">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    <!-- Bio -->
+                    <div class="md:col-span-2 glass-light rounded-2xl border border-zinc-800 p-5 md:p-6">
+                        <h3 class="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-4">About</h3>
+                        <p class="text-sm text-zinc-300 leading-relaxed mb-4">
+                            I'm a passionate modder with over 5 years of experience in game texture overhaul and visual enhancement. My goal is to push the visual boundaries of every game I work on, bringing next-gen quality to beloved titles.
+                        </p>
+                        <p class="text-sm text-zinc-300 leading-relaxed mb-4">
+                            Specializing in 4K texture remastering, PBR material conversion, and Reshade preset creation. All my mods are optimized for performance while delivering maximum visual impact.
+                        </p>
+                        
+                        <h4 class="text-sm font-semibold text-white mt-6 mb-3">Skills & Expertise</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs bg-zinc-800 text-zinc-300 px-3 py-1.5 rounded-xl">4K Texturing</span>
+                            <span class="text-xs bg-zinc-800 text-zinc-300 px-3 py-1.5 rounded-xl">PBR Materials</span>
+                            <span class="text-xs bg-zinc-800 text-zinc-300 px-3 py-1.5 rounded-xl">Reshade</span>
+                            <span class="text-xs bg-zinc-800 text-zinc-300 px-3 py-1.5 rounded-xl">Normal Mapping</span>
+                            <span class="text-xs bg-zinc-800 text-zinc-300 px-3 py-1.5 rounded-xl">Photoshop</span>
+                            <span class="text-xs bg-zinc-800 text-zinc-300 px-3 py-1.5 rounded-xl">Substance Painter</span>
+                            <span class="text-xs bg-zinc-800 text-zinc-300 px-3 py-1.5 rounded-xl">Blender</span>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar Info -->
+                    <div class="space-y-4">
+                        <div class="glass-light rounded-2xl border border-zinc-800 p-5">
+                            <h4 class="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-4">Links</h4>
+                            <div class="space-y-3">
+                                <a href="#" class="flex items-center gap-3 text-sm text-zinc-400 hover:text-white transition-colors">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                                    GitHub
+                                </a>
+                                <a href="#" class="flex items-center gap-3 text-sm text-zinc-400 hover:text-white transition-colors">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                                    Website
+                                </a>
+                                <a href="#" class="flex items-center gap-3 text-sm text-zinc-400 hover:text-white transition-colors">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+                                    Twitter / X
+                                </a>
+                                <a href="#" class="flex items-center gap-3 text-sm text-zinc-400 hover:text-white transition-colors">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+                                    Discord
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="glass-light rounded-2xl border border-zinc-800 p-5">
+                            <h4 class="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-4">Badges</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-[10px] font-semibold bg-white text-zinc-950 px-2.5 py-1 rounded-lg">Verified Creator</span>
+                                <span class="text-[10px] font-semibold bg-zinc-800 text-zinc-300 px-2.5 py-1 rounded-lg">Top Contributor</span>
+                                <span class="text-[10px] font-semibold bg-zinc-800 text-zinc-300 px-2.5 py-1 rounded-lg">1M+ Downloads</span>
+                                <span class="text-[10px] font-semibold bg-zinc-800 text-zinc-300 px-2.5 py-1 rounded-lg">Early Adopter</span>
+                            </div>
+                        </div>
+
+                        <div class="glass-light rounded-2xl border border-zinc-800 p-5">
+                            <h4 class="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-4">Support</h4>
+                            <a href="#" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors">
+                                <span>☕</span> Buy me a coffee
+                            </a>
+                            <a href="#" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors mt-2">
+                                <span>💛</span> Become a Sponsor
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        function toggleMoreMenu() {
+            document.getElementById('moreMenu').classList.toggle('hidden');
+        }
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('moreMenu');
+            const isButton = e.target.closest('button[onclick="toggleMoreMenu()"]');
+            if (menu && !menu.contains(e.target) && !isButton) {
+                menu.classList.add('hidden');
+            }
+        });
+        function copyProfileLink() {
+            navigator.clipboard.writeText(window.location.href);
+            document.getElementById('moreMenu').classList.add('hidden');
+            // Placeholder — swap for a proper toast notification later
+            alert('Profile link copied!');
+        }
+        function reportUser() {
+            document.getElementById('moreMenu').classList.add('hidden');
+            // Placeholder — wire up to actual report flow/modal later
+            alert('Report flow not implemented yet.');
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            
+            const panel = document.getElementById('tab-' + tabName);
+            if (panel) panel.classList.add('active');
+            
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                if (btn.textContent.toLowerCase().includes(tabName)) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
