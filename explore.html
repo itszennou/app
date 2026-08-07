@@ -38,6 +38,21 @@
         .star { color: #52525b; }
         .star.filled { color: #facc15; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
+
+        /* LOADING SPINNER */
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spinner {
+            width: 22px; height: 22px;
+            border: 2.5px solid rgba(255,255,255,0.15);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+        .inline-loading {
+            display: flex; align-items: center; justify-content: center;
+            padding: 40px 0;
+            width: 100%;
+        }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
@@ -58,14 +73,14 @@
             <div class="flex-1 md:hidden">
                 <div class="relative">
                     <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                    <input type="text" placeholder="Search creations..." class="w-full pl-9 pr-3 py-2 bg-zinc-900 border border-zinc-700 rounded-xl text-sm text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-zinc-500 transition-all">
+                    <input type="text" id="searchInputMobile" oninput="liveSearch(this.value)" placeholder="Search creations..." class="w-full pl-9 pr-3 py-2 bg-zinc-900 border border-zinc-700 rounded-xl text-sm text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-zinc-500 transition-all">
                 </div>
             </div>
 
             <div class="hidden md:flex items-center gap-6 flex-shrink-0">
                 <a href="explore.html" class="text-sm text-white font-medium">Explore</a>
-                <a href="#" class="text-sm text-zinc-400 hover:text-white transition-colors">Games</a>
-                <a href="#" class="text-sm text-zinc-400 hover:text-white transition-colors">Tools</a>
+                <a href="#" onclick="filterByType('games','Games'); return false;" class="text-sm text-zinc-400 hover:text-white transition-colors">Games</a>
+                <a href="#" onclick="filterByType('tools','Tools'); return false;" class="text-sm text-zinc-400 hover:text-white transition-colors">Tools</a>
                 <div class="relative group">
                     <button class="flex items-center gap-1 text-sm text-zinc-400 hover:text-white transition-colors">
                         Category
@@ -74,14 +89,14 @@
                     <div class="absolute left-0 top-full pt-2 hidden group-hover:block">
                         <div class="w-72 bg-zinc-950 border border-zinc-800 rounded-2xl shadow-2xl p-4">
                             <div class="flex flex-wrap gap-2">
-                                <button class="px-3 py-1.5 rounded-full border border-zinc-700 text-zinc-300 text-xs font-medium hover:border-zinc-500 hover:text-white transition-colors">Graphics</button>
-                                <button class="px-3 py-1.5 rounded-full border border-zinc-700 text-zinc-300 text-xs font-medium hover:border-zinc-500 hover:text-white transition-colors">Gameplay</button>
-                                <button class="px-3 py-1.5 rounded-full border border-zinc-700 text-zinc-300 text-xs font-medium hover:border-zinc-500 hover:text-white transition-colors">Audio</button>
-                                <button class="px-3 py-1.5 rounded-full border border-zinc-700 text-zinc-300 text-xs font-medium hover:border-zinc-500 hover:text-white transition-colors">Fangame</button>
-                                <button class="px-3 py-1.5 rounded-full border border-zinc-700 text-zinc-300 text-xs font-medium hover:border-zinc-500 hover:text-white transition-colors">UI Tools</button>
-                                <button class="px-3 py-1.5 rounded-full border border-zinc-700 text-zinc-300 text-xs font-medium hover:border-zinc-500 hover:text-white transition-colors">Total Conversion</button>
-                                <button class="px-3 py-1.5 rounded-full border border-zinc-700 text-zinc-300 text-xs font-medium hover:border-zinc-500 hover:text-white transition-colors">Patches</button>
-                                <button class="px-3 py-1.5 rounded-full border border-zinc-700 text-zinc-300 text-xs font-medium hover:border-zinc-500 hover:text-white transition-colors">Utilities</button>
+                                <button onclick="selectCategory('Graphics', 'graphics')" class="px-3 py-1.5 rounded-full border border-zinc-700 text-zinc-300 text-xs font-medium hover:border-zinc-500 hover:text-white transition-colors">Graphics</button>
+                                <button onclick="selectCategory('Gameplay', 'gameplay')" class="px-3 py-1.5 rounded-full border border-zinc-700 text-zinc-300 text-xs font-medium hover:border-zinc-500 hover:text-white transition-colors">Gameplay</button>
+                                <button onclick="selectCategory('Audio', 'audio')" class="px-3 py-1.5 rounded-full border border-zinc-700 text-zinc-300 text-xs font-medium hover:border-zinc-500 hover:text-white transition-colors">Audio</button>
+                                <button onclick="selectCategory('Fangame', 'fangame')" class="px-3 py-1.5 rounded-full border border-zinc-700 text-zinc-300 text-xs font-medium hover:border-zinc-500 hover:text-white transition-colors">Fangame</button>
+                                <button onclick="selectCategory('UI Tools', 'ui tools')" class="px-3 py-1.5 rounded-full border border-zinc-700 text-zinc-300 text-xs font-medium hover:border-zinc-500 hover:text-white transition-colors">UI Tools</button>
+                                <button onclick="selectCategory('Total Conversion', 'total conversion')" class="px-3 py-1.5 rounded-full border border-zinc-700 text-zinc-300 text-xs font-medium hover:border-zinc-500 hover:text-white transition-colors">Total Conversion</button>
+                                <button onclick="selectCategory('Patches', 'patches')" class="px-3 py-1.5 rounded-full border border-zinc-700 text-zinc-300 text-xs font-medium hover:border-zinc-500 hover:text-white transition-colors">Patches</button>
+                                <button onclick="selectCategory('Utilities', 'utilities')" class="px-3 py-1.5 rounded-full border border-zinc-700 text-zinc-300 text-xs font-medium hover:border-zinc-500 hover:text-white transition-colors">Utilities</button>
                             </div>
                         </div>
                     </div>
@@ -92,7 +107,7 @@
             <div class="hidden md:block flex-1 max-w-sm">
                 <div class="relative">
                     <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                    <input type="text" placeholder="Search creations, tags, or creators..." class="w-full pl-10 pr-4 py-2 bg-zinc-900 border border-zinc-700 rounded-xl text-sm text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-zinc-500 transition-all">
+                    <input type="text" id="searchInputDesktop" oninput="liveSearch(this.value)" placeholder="Search creations, tags, or creators..." class="w-full pl-10 pr-4 py-2 bg-zinc-900 border border-zinc-700 rounded-xl text-sm text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-zinc-500 transition-all">
                 </div>
             </div>
 
@@ -104,12 +119,12 @@
         </div>
 
         <!-- FILTER TABS (sticky, part of navbar) -->
-        <div class="flex items-center gap-6 overflow-x-auto hide-scrollbar -mx-4 px-4 md:mx-0 md:px-0 border-t border-zinc-800/50">
-            <button class="py-3 text-sm font-semibold text-white border-b-2 border-white whitespace-nowrap flex-shrink-0 transition-colors">For You</button>
-            <button class="py-3 text-sm font-medium text-zinc-500 hover:text-zinc-200 border-b-2 border-transparent whitespace-nowrap flex-shrink-0 transition-colors">Top Downloads</button>
-            <button class="py-3 text-sm font-medium text-zinc-500 hover:text-zinc-200 border-b-2 border-transparent whitespace-nowrap flex-shrink-0 transition-colors">Top Rated</button>
-            <button class="py-3 text-sm font-medium text-zinc-500 hover:text-zinc-200 border-b-2 border-transparent whitespace-nowrap flex-shrink-0 transition-colors">Trending</button>
-            <button class="py-3 text-sm font-medium text-zinc-500 hover:text-zinc-200 border-b-2 border-transparent whitespace-nowrap flex-shrink-0 transition-colors">New</button>
+        <div id="sortFilterTabs" class="flex items-center gap-6 overflow-x-auto hide-scrollbar -mx-4 px-4 md:mx-0 md:px-0 border-t border-zinc-800/50">
+            <button data-sort="foryou" onclick="applySortFilter('foryou')" class="sort-tab py-3 text-sm font-semibold text-white border-b-2 border-white whitespace-nowrap flex-shrink-0 transition-colors">For You</button>
+            <button data-sort="downloads" onclick="applySortFilter('downloads')" class="sort-tab py-3 text-sm font-medium text-zinc-500 hover:text-zinc-200 border-b-2 border-transparent whitespace-nowrap flex-shrink-0 transition-colors">Top Downloads</button>
+            <button data-sort="rating" onclick="applySortFilter('rating')" class="sort-tab py-3 text-sm font-medium text-zinc-500 hover:text-zinc-200 border-b-2 border-transparent whitespace-nowrap flex-shrink-0 transition-colors">Top Rated</button>
+            <button data-sort="trending" onclick="applySortFilter('trending')" class="sort-tab py-3 text-sm font-medium text-zinc-500 hover:text-zinc-200 border-b-2 border-transparent whitespace-nowrap flex-shrink-0 transition-colors">Trending</button>
+            <button data-sort="new" onclick="applySortFilter('new')" class="sort-tab py-3 text-sm font-medium text-zinc-500 hover:text-zinc-200 border-b-2 border-transparent whitespace-nowrap flex-shrink-0 transition-colors">New</button>
         </div>
     </div>
 </nav>
@@ -163,215 +178,364 @@
 <!-- MAIN -->
 <main class="max-w-6xl mx-auto px-4 md:px-6 py-5 md:py-7 pb-24 md:pb-7 space-y-8 md:space-y-10">
 
-    <!-- SECTION: Trending Now -->
+    <!-- SEARCH RESULTS (shown when the search box has text) -->
+    <section id="searchResultsSection" class="hidden">
+        <div class="flex items-center justify-between mb-3 md:mb-4">
+            <div class="flex items-center gap-2">
+                <h2 class="text-lg md:text-xl font-bold text-white">Search results</h2>
+                <span id="searchResultsCount" class="text-xs text-zinc-500 font-mono"></span>
+            </div>
+            <button onclick="clearSearch()" class="text-xs text-zinc-500 hover:text-zinc-300 transition-colors font-medium flex items-center gap-1">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                Clear search
+            </button>
+        </div>
+        <div id="searchResultsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4"></div>
+        <p id="searchResultsEmpty" class="hidden text-center text-zinc-600 text-sm py-10">No creations match your search.</p>
+    </section>
+
+    <!-- FILTERED RESULTS (shown when a category is selected) -->
+    <section id="filteredResultsSection" class="hidden">
+        <div class="flex items-center justify-between mb-3 md:mb-4">
+            <div class="flex items-center gap-2">
+                <h2 id="filteredResultsTitle" class="text-lg md:text-xl font-bold text-white">Graphics</h2>
+                <span id="filteredResultsCount" class="text-xs text-zinc-500 font-mono"></span>
+            </div>
+            <button onclick="clearCategoryFilter()" class="text-xs text-zinc-500 hover:text-zinc-300 transition-colors font-medium flex items-center gap-1">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                Clear filter
+            </button>
+        </div>
+        <div id="filteredResultsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4"></div>
+        <p id="filteredResultsEmpty" class="hidden text-center text-zinc-600 text-sm py-10">No creations found in this category yet.</p>
+    </section>
+
+    <!-- SORT FILTERED (shown when For You / Top Downloads / etc is active) -->
+    <section id="sortFilteredSection" class="hidden">
+        <div class="flex items-center justify-between mb-3 md:mb-4">
+            <div class="flex items-center gap-2">
+                <h2 id="sortFilteredTitle" class="text-lg md:text-xl font-bold text-white">Top Downloads</h2>
+                <span id="sortFilteredCount" class="text-xs text-zinc-500 font-mono"></span>
+            </div>
+        </div>
+        <div id="sortFilteredGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4"></div>
+        <p id="sortFilteredEmpty" class="hidden text-center text-zinc-600 text-sm py-10">No creations found.</p>
+    </section>
+
+    <!-- TYPE FILTERED (Games / Tools tabs) — same look as Home, just pre-filtered -->
+    <div id="typeFilteredSections" class="hidden space-y-8 md:space-y-10">
+        <!-- Sections are generated dynamically below, one per category present in the results -->
+        <p id="typeFilteredEmpty" class="hidden text-center text-zinc-600 text-sm py-10">No creations found for this type yet.</p>
+    </div>
+
+    <!-- DEFAULT SECTIONS (hidden when a category filter is active) -->
+    <div id="defaultSections" class="space-y-8 md:space-y-10">
+
+    <!-- SECTION: Visual Overhauls -->
     <section>
         <div class="flex items-center justify-between mb-3 md:mb-4">
-            <h2 class="text-lg md:text-xl font-bold text-white">Trending Now</h2>
+            <h2 class="text-lg md:text-xl font-bold text-white">Graphics</h2>
             <a href="#" class="text-xs text-zinc-500 hover:text-zinc-300 transition-colors font-medium">See all</a>
         </div>
         <div class="flex gap-3 md:gap-4 overflow-x-auto hide-scrollbar pb-2 -mx-4 px-4 md:mx-0 md:px-0">
-            <a href="#" class="card-hover glass-light rounded-2xl border border-zinc-800 p-4 flex items-center gap-4 flex-shrink-0 w-[300px] md:w-[340px] group cursor-pointer block">
-                <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
-                    <span class="text-zinc-400 font-bold text-lg">W3</span>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <h3 class="font-semibold text-white text-sm md:text-base">Witcher 3 HD Reworked</h3>
-                    <p class="text-xs text-zinc-500">The Witcher 3 - Graphics</p>
-                    <div class="flex items-center gap-2 mt-1.5">
-                        <span class="text-xs text-yellow-400 font-semibold">4.9</span>
-                        <div class="flex items-center gap-0.5">
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                        </div>
-                    <span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">4.2 GB</span>
+            <!-- Group 1 -->
+            <div class="flex flex-col gap-2 flex-shrink-0 w-[300px] md:w-[340px]">
+                <a href="#" class="card-hover rounded-2xl p-4 flex items-center gap-4 group cursor-pointer block" data-category="graphics" data-type="games">
+                    <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                        <span class="text-zinc-400 font-bold text-lg">W3</span>
                     </div>
-                </div>
-            </a>
-            <a href="#" class="card-hover glass-light rounded-2xl border border-zinc-800 p-4 flex items-center gap-4 flex-shrink-0 w-[300px] md:w-[340px] group cursor-pointer block">
-                <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
-                    <span class="text-zinc-400 font-bold text-lg">NC</span>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <h3 class="font-semibold text-white text-sm md:text-base">Night City Visual Overhaul</h3>
-                    <p class="text-xs text-zinc-500">Cyberpunk 2077 - Graphics</p>
-                    <div class="flex items-center gap-2 mt-1.5">
-                        <span class="text-xs text-yellow-400 font-semibold">4.7</span>
-                        <div class="flex items-center gap-0.5">
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-white text-sm md:text-base">Witcher 3 HD Reworked</h3>
+                        <p class="text-xs text-zinc-500 truncate">The Witcher 3 - Graphics</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="text-xs text-yellow-400 font-semibold">&#9733; 4.9</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">4.2 GB</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500">Windows</span>
                         </div>
-                    <span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">3.6 GB</span>
                     </div>
-                </div>
-            </a>
-            <a href="#" class="card-hover glass-light rounded-2xl border border-zinc-800 p-4 flex items-center gap-4 flex-shrink-0 w-[300px] md:w-[340px] group cursor-pointer block">
-                <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
-                    <span class="text-zinc-400 font-bold text-lg">FT</span>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <h3 class="font-semibold text-white text-sm md:text-base">Fast Travel from Anywhere</h3>
-                    <p class="text-xs text-zinc-500">The Witcher 3 - Gameplay</p>
-                    <div class="flex items-center gap-2 mt-1.5">
-                        <span class="text-xs text-yellow-400 font-semibold">4.8</span>
-                        <div class="flex items-center gap-0.5">
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </a>
+                <a href="#" class="card-hover rounded-2xl p-4 flex items-center gap-4 group cursor-pointer block" data-category="graphics" data-type="games">
+                    <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                        <span class="text-zinc-400 font-bold text-lg">NC</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-white text-sm md:text-base">Night City Visual Overhaul</h3>
+                        <p class="text-xs text-zinc-500 truncate">Cyberpunk 2077 - Graphics</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="text-xs text-yellow-400 font-semibold">&#9733; 4.7</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">3.6 GB</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500">Windows</span>
                         </div>
-                    <span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">12 MB</span>
                     </div>
-                </div>
-            </a>
-            <a href="#" class="card-hover glass-light rounded-2xl border border-zinc-800 p-4 flex items-center gap-4 flex-shrink-0 w-[300px] md:w-[340px] group cursor-pointer block">
-                <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
-                    <span class="text-zinc-400 font-bold text-lg">SK</span>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <h3 class="font-semibold text-white text-sm md:text-base">Skyrim Enhanced Shaders</h3>
-                    <p class="text-xs text-zinc-500">Skyrim SE - Graphics</p>
-                    <div class="flex items-center gap-2 mt-1.5">
-                        <span class="text-xs text-yellow-400 font-semibold">4.6</span>
-                        <div class="flex items-center gap-0.5">
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </a>
+                <a href="#" class="card-hover rounded-2xl p-4 flex items-center gap-4 group cursor-pointer block" data-category="graphics" data-type="games">
+                    <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                        <span class="text-zinc-400 font-bold text-lg">SK</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-white text-sm md:text-base">Skyrim Enhanced Shaders</h3>
+                        <p class="text-xs text-zinc-500 truncate">Skyrim SE - Graphics</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="text-xs text-yellow-400 font-semibold">&#9733; 4.6</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">1.8 GB</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500">Windows</span>
                         </div>
-                    <span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">1.8 GB</span>
                     </div>
-                </div>
-            </a>
+                </a>
+            </div>
+            <!-- Group 2 -->
+            <div class="flex flex-col gap-2 flex-shrink-0 w-[300px] md:w-[340px]">
+                <a href="#" class="card-hover rounded-2xl p-4 flex items-center gap-4 group cursor-pointer block" data-category="graphics" data-type="games">
+                    <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                        <span class="text-zinc-400 font-bold text-lg">RR</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-white text-sm md:text-base">Red Dead Realism Reshade</h3>
+                        <p class="text-xs text-zinc-500 truncate">RDR2 - Graphics</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="text-xs text-yellow-400 font-semibold">&#9733; 4.4</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">890 MB</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500">Windows</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="#" class="card-hover rounded-2xl p-4 flex items-center gap-4 group cursor-pointer block" data-category="graphics" data-type="games">
+                    <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                        <span class="text-zinc-400 font-bold text-lg">LB</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-white text-sm md:text-base">Lands Between HD Pack</h3>
+                        <p class="text-xs text-zinc-500 truncate">Elden Ring - Graphics</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="text-xs text-yellow-400 font-semibold">&#9733; 4.3</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">2.1 GB</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500">Windows, macOS</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="#" class="card-hover rounded-2xl p-4 flex items-center gap-4 group cursor-pointer block" data-category="graphics" data-type="games">
+                    <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                        <span class="text-zinc-400 font-bold text-lg">FV</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-white text-sm md:text-base">Faerun Visual Enhancement</h3>
+                        <p class="text-xs text-zinc-500 truncate">Baldur's Gate 3 - Graphics</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="text-xs text-yellow-400 font-semibold">&#9733; 4.2</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">1.4 GB</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500">Windows</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!-- Group 3 -->
+            <div class="flex flex-col gap-2 flex-shrink-0 w-[300px] md:w-[340px]">
+                <a href="#" class="card-hover rounded-2xl p-4 flex items-center gap-4 group cursor-pointer block" data-category="graphics" data-type="games">
+                    <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                        <span class="text-zinc-400 font-bold text-lg">SF</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-white text-sm md:text-base">Starfield HD Textures</h3>
+                        <p class="text-xs text-zinc-500 truncate">Starfield - Graphics</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="text-xs text-yellow-400 font-semibold">&#9733; 4.0</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">3.9 GB</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500">Windows, Android</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="#" class="card-hover rounded-2xl p-4 flex items-center gap-4 group cursor-pointer block" data-category="graphics" data-type="games">
+                    <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                        <span class="text-zinc-400 font-bold text-lg">FT</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-white text-sm md:text-base">Foliage Texture Pack</h3>
+                        <p class="text-xs text-zinc-500 truncate">Skyrim SE - Graphics</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="text-xs text-yellow-400 font-semibold">&#9733; 4.5</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">1.1 GB</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500">Windows</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="#" class="card-hover rounded-2xl p-4 flex items-center gap-4 group cursor-pointer block" data-category="graphics" data-type="games">
+                    <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                        <span class="text-zinc-400 font-bold text-lg">LC</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-white text-sm md:text-base">Lighting Correction Suite</h3>
+                        <p class="text-xs text-zinc-500 truncate">Cyberpunk 2077 - Graphics</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="text-xs text-yellow-400 font-semibold">&#9733; 4.1</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">640 MB</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500">Windows</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
         </div>
     </section>
 
-    <!-- SECTION: Top Rated -->
+
+    <!-- SECTION: Gameplay Tweaks -->
     <section>
         <div class="flex items-center justify-between mb-3 md:mb-4">
-            <h2 class="text-lg md:text-xl font-bold text-white">Top Rated</h2>
+            <h2 class="text-lg md:text-xl font-bold text-white">Gameplay</h2>
             <a href="#" class="text-xs text-zinc-500 hover:text-zinc-300 transition-colors font-medium">See all</a>
         </div>
         <div class="flex gap-3 md:gap-4 overflow-x-auto hide-scrollbar pb-2 -mx-4 px-4 md:mx-0 md:px-0">
-            <a href="#" class="card-hover glass-light rounded-2xl border border-zinc-800 p-4 flex items-center gap-4 flex-shrink-0 w-[300px] md:w-[340px] group cursor-pointer block">
-                <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
-                    <span class="text-zinc-400 font-bold text-lg">RR</span>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <h3 class="font-semibold text-white text-sm md:text-base">Red Dead Realism Reshade</h3>
-                    <p class="text-xs text-zinc-500">RDR2 - Graphics</p>
-                    <div class="flex items-center gap-2 mt-1.5">
-                        <span class="text-xs text-yellow-400 font-semibold">4.4</span>
-                        <div class="flex items-center gap-0.5">
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                        </div>
-                    <span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">890 MB</span>
+            <!-- Group 1 -->
+            <div class="flex flex-col gap-2 flex-shrink-0 w-[300px] md:w-[340px]">
+                <a href="#" class="card-hover rounded-2xl p-4 flex items-center gap-4 group cursor-pointer block" data-category="gameplay" data-type="games">
+                    <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                        <span class="text-zinc-400 font-bold text-lg">FT</span>
                     </div>
-                </div>
-            </a>
-            <a href="#" class="card-hover glass-light rounded-2xl border border-zinc-800 p-4 flex items-center gap-4 flex-shrink-0 w-[300px] md:w-[340px] group cursor-pointer block">
-                <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
-                    <span class="text-zinc-400 font-bold text-lg">LB</span>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <h3 class="font-semibold text-white text-sm md:text-base">Lands Between HD Pack</h3>
-                    <p class="text-xs text-zinc-500">Elden Ring - Graphics</p>
-                    <div class="flex items-center gap-2 mt-1.5">
-                        <span class="text-xs text-yellow-400 font-semibold">4.3</span>
-                        <div class="flex items-center gap-0.5">
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-white text-sm md:text-base">Fast Travel from Anywhere</h3>
+                        <p class="text-xs text-zinc-500 truncate">The Witcher 3 - Gameplay</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="text-xs text-yellow-400 font-semibold">&#9733; 4.8</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">12 MB</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500">Windows, Android</span>
                         </div>
-                    <span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">2.1 GB</span>
                     </div>
-                </div>
-            </a>
-            <a href="#" class="card-hover glass-light rounded-2xl border border-zinc-800 p-4 flex items-center gap-4 flex-shrink-0 w-[300px] md:w-[340px] group cursor-pointer block">
-                <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
-                    <span class="text-zinc-400 font-bold text-lg">FV</span>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <h3 class="font-semibold text-white text-sm md:text-base">Faerun Visual Enhancement</h3>
-                    <p class="text-xs text-zinc-500">Baldur's Gate 3 - Graphics</p>
-                    <div class="flex items-center gap-2 mt-1.5">
-                        <span class="text-xs text-yellow-400 font-semibold">4.2</span>
-                        <div class="flex items-center gap-0.5">
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </a>
+                <a href="#" class="card-hover rounded-2xl p-4 flex items-center gap-4 group cursor-pointer block" data-category="gameplay" data-type="games">
+                    <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                        <span class="text-zinc-400 font-bold text-lg">SL</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-white text-sm md:text-base">Stealth Overhaul Light</h3>
+                        <p class="text-xs text-zinc-500 truncate">Cyberpunk 2077 - Gameplay</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="text-xs text-yellow-400 font-semibold">&#9733; 4.4</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">28 MB</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500">Windows</span>
                         </div>
-                    <span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">1.4 GB</span>
                     </div>
-                </div>
-            </a>
+                </a>
+                <a href="#" class="card-hover rounded-2xl p-4 flex items-center gap-4 group cursor-pointer block" data-category="gameplay" data-type="games">
+                    <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                        <span class="text-zinc-400 font-bold text-lg">EL</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-white text-sm md:text-base">Extended Level Cap</h3>
+                        <p class="text-xs text-zinc-500 truncate">Skyrim SE - Gameplay</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="text-xs text-yellow-400 font-semibold">&#9733; 4.2</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">4 MB</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500">Windows, Android</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!-- Group 2 -->
+            <div class="flex flex-col gap-2 flex-shrink-0 w-[300px] md:w-[340px]">
+                <a href="#" class="card-hover rounded-2xl p-4 flex items-center gap-4 group cursor-pointer block" data-category="gameplay" data-type="games">
+                    <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                        <span class="text-zinc-400 font-bold text-lg">CM</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-white text-sm md:text-base">Combat Animation Overhaul</h3>
+                        <p class="text-xs text-zinc-500 truncate">Elden Ring - Gameplay</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="text-xs text-yellow-400 font-semibold">&#9733; 4.3</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">487 MB</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500">Windows</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="#" class="card-hover rounded-2xl p-4 flex items-center gap-4 group cursor-pointer block" data-category="gameplay" data-type="games">
+                    <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                        <span class="text-zinc-400 font-bold text-lg">SD</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-white text-sm md:text-base">Smarter Difficulty Scaling</h3>
+                        <p class="text-xs text-zinc-500 truncate">Baldur's Gate 3 - Gameplay</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="text-xs text-yellow-400 font-semibold">&#9733; 4.6</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">36 MB</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500">Windows</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="#" class="card-hover rounded-2xl p-4 flex items-center gap-4 group cursor-pointer block" data-category="gameplay" data-type="games">
+                    <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                        <span class="text-zinc-400 font-bold text-lg">SP</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-white text-sm md:text-base">Survival Perks Expansion</h3>
+                        <p class="text-xs text-zinc-500 truncate">RDR2 - Gameplay</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="text-xs text-yellow-400 font-semibold">&#9733; 4.1</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">64 MB</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500">Windows, Android</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
         </div>
     </section>
 
-    <!-- SECTION: New & Updated -->
+    <!-- SECTION: Utilities & Tools -->
     <section>
         <div class="flex items-center justify-between mb-3 md:mb-4">
-            <h2 class="text-lg md:text-xl font-bold text-white">New & Updated</h2>
+            <h2 class="text-lg md:text-xl font-bold text-white">Utilities</h2>
             <a href="#" class="text-xs text-zinc-500 hover:text-zinc-300 transition-colors font-medium">See all</a>
         </div>
         <div class="flex gap-3 md:gap-4 overflow-x-auto hide-scrollbar pb-2 -mx-4 px-4 md:mx-0 md:px-0">
-            <a href="#" class="card-hover glass-light rounded-2xl border border-zinc-800 p-4 flex items-center gap-4 flex-shrink-0 w-[300px] md:w-[340px] group cursor-pointer block">
-                <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
-                    <span class="text-zinc-400 font-bold text-lg">SF</span>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <h3 class="font-semibold text-white text-sm md:text-base">Starfield HD Textures</h3>
-                    <p class="text-xs text-zinc-500">Starfield - Graphics</p>
-                    <div class="flex items-center gap-2 mt-1.5">
-                        <span class="text-xs text-yellow-400 font-semibold">4.0</span>
-                        <div class="flex items-center gap-0.5">
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                        </div>
-                    <span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">3.9 GB</span>
+            <!-- Group 1 -->
+            <div class="flex flex-col gap-2 flex-shrink-0 w-[300px] md:w-[340px]">
+                <a href="#" class="card-hover rounded-2xl p-4 flex items-center gap-4 group cursor-pointer block" data-category="utilities" data-type="tools">
+                    <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                        <span class="text-zinc-400 font-bold text-lg">PP</span>
                     </div>
-                </div>
-            </a>
-            <a href="#" class="card-hover glass-light rounded-2xl border border-zinc-800 p-4 flex items-center gap-4 flex-shrink-0 w-[300px] md:w-[340px] group cursor-pointer block">
-                <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
-                    <span class="text-zinc-400 font-bold text-lg">CM</span>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <h3 class="font-semibold text-white text-sm md:text-base">Combat Animation Overhaul</h3>
-                    <p class="text-xs text-zinc-500">Elden Ring - Gameplay</p>
-                    <div class="flex items-center gap-2 mt-1.5">
-                        <span class="text-xs text-yellow-400 font-semibold">4.3</span>
-                        <div class="flex items-center gap-0.5">
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star filled" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="w-3 h-3 star" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-white text-sm md:text-base">PPSSPP Config Booster</h3>
+                        <p class="text-xs text-zinc-500 truncate">Emulator - Utilities</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="text-xs text-yellow-400 font-semibold">&#9733; 4.5</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">8 MB</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500">Windows, Android</span>
                         </div>
-                    <span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">487 MB</span>
                     </div>
-                </div>
-            </a>
+                </a>
+                <a href="#" class="card-hover rounded-2xl p-4 flex items-center gap-4 group cursor-pointer block" data-category="utilities" data-type="tools">
+                    <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                        <span class="text-zinc-400 font-bold text-lg">AB</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-white text-sm md:text-base">Auto Backup Scheduler</h3>
+                        <p class="text-xs text-zinc-500 truncate">Utility - Backup Tools</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="text-xs text-yellow-400 font-semibold">&#9733; 4.3</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">11 MB</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500">Windows</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="#" class="card-hover rounded-2xl p-4 flex items-center gap-4 group cursor-pointer block" data-category="utilities" data-type="tools">
+                    <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                        <span class="text-zinc-400 font-bold text-lg">TL</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-white text-sm md:text-base">Texture Loader Lite</h3>
+                        <p class="text-xs text-zinc-500 truncate">Emulator - Utilities</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="text-xs text-yellow-400 font-semibold">&#9733; 4.1</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">3 MB</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500">Windows, Android</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!-- Group 2 -->
+            <div class="flex flex-col gap-2 flex-shrink-0 w-[300px] md:w-[340px]">
+                <a href="#" class="card-hover rounded-2xl p-4 flex items-center gap-4 group cursor-pointer block" data-category="utilities" data-type="tools">
+                    <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                        <span class="text-zinc-400 font-bold text-lg">SE</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-white text-sm md:text-base">Universal Save Editor</h3>
+                        <p class="text-xs text-zinc-500 truncate">Utility - Save Tools</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="text-xs text-yellow-400 font-semibold">&#9733; 4.2</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">24 MB</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500">Windows</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="#" class="card-hover rounded-2xl p-4 flex items-center gap-4 group cursor-pointer block" data-category="utilities" data-type="tools">
+                    <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                        <span class="text-zinc-400 font-bold text-lg">MC</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-white text-sm md:text-base">Mod Conflict Checker</h3>
+                        <p class="text-xs text-zinc-500 truncate">Utility - Load Order</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="text-xs text-yellow-400 font-semibold">&#9733; 4.4</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">15 MB</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500">Windows</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="#" class="card-hover rounded-2xl p-4 flex items-center gap-4 group cursor-pointer block" data-category="utilities" data-type="tools">
+                    <div class="mod-logo w-14 h-14 md:w-16 md:h-16 bg-zinc-800 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-zinc-700">
+                        <span class="text-zinc-400 font-bold text-lg">RC</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-white text-sm md:text-base">Resolution Config Tool</h3>
+                        <p class="text-xs text-zinc-500 truncate">Utility - Display Settings</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="text-xs text-yellow-400 font-semibold">&#9733; 4.0</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500 font-mono">6 MB</span><span class="text-xs text-zinc-600">&middot;</span><span class="text-xs text-zinc-500">Windows</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
         </div>
     </section>
+
+    </div>
 
 </main>
 
@@ -389,15 +553,15 @@
 <!-- BOTTOM TAB NAV (mobile only) -->
 <nav id="bottomNav" class="md:hidden fixed bottom-0 inset-x-0 z-40 bg-zinc-950/95 backdrop-blur-md border-t border-zinc-800/50">
     <div class="grid grid-cols-5">
-        <button data-tab="home" onclick="setActiveTab('home')" class="tab-btn flex flex-col items-center justify-center gap-1 py-2.5 text-white">
+        <button data-tab="home" onclick="setActiveTab('home'); clearTypeFilter(); clearCategoryFilter();" class="tab-btn flex flex-col items-center justify-center gap-1 py-2.5 text-white">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h4a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h4a1 1 0 001-1V10"/></svg>
             <span class="text-[10px] font-medium">Home</span>
         </button>
-        <button data-tab="games" onclick="setActiveTab('games')" class="tab-btn flex flex-col items-center justify-center gap-1 py-2.5 text-zinc-500">
+        <button data-tab="games" onclick="setActiveTab('games'); filterByType('games','Games');" class="tab-btn flex flex-col items-center justify-center gap-1 py-2.5 text-zinc-500">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="12" rx="4"/><path stroke-linecap="round" d="M8 11v4M6 13h4M15.5 12h.01M18.5 15h.01"/></svg>
             <span class="text-[10px] font-medium">Games</span>
         </button>
-        <button data-tab="tools" onclick="setActiveTab('tools')" class="tab-btn flex flex-col items-center justify-center gap-1 py-2.5 text-zinc-500">
+        <button data-tab="tools" onclick="setActiveTab('tools'); filterByType('tools','Tools');" class="tab-btn flex flex-col items-center justify-center gap-1 py-2.5 text-zinc-500">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.1-3.1a4 4 0 01-5.4 5.4L6 21l-3-3 9.6-9.4a4 4 0 015.4-5.4l-3.1 3.1z"/></svg>
             <span class="text-[10px] font-medium">Tools</span>
         </button>
@@ -427,26 +591,31 @@
     </div>
 
     <div id="categoryTagList" class="flex flex-wrap gap-2 overflow-y-auto">
-        <button onclick="selectCategory('Graphics')" data-tag="graphics" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Graphics</button>
-        <button onclick="selectCategory('Gameplay')" data-tag="gameplay" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Gameplay</button>
-        <button onclick="selectCategory('Audio')" data-tag="audio" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Audio</button>
-        <button onclick="selectCategory('Fangame')" data-tag="fangame" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Fangame</button>
-        <button onclick="selectCategory('UI Tools')" data-tag="ui tools" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">UI Tools</button>
-        <button onclick="selectCategory('Total Conversion')" data-tag="total conversion" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Total Conversion</button>
-        <button onclick="selectCategory('Patches')" data-tag="patches" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Patches</button>
-        <button onclick="selectCategory('Utilities')" data-tag="utilities" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Utilities</button>
-        <button onclick="selectCategory('Time-Mechanics')" data-tag="time-mechanics" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Time-Mechanics</button>
-        <button onclick="selectCategory('Puzzle')" data-tag="puzzle" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Puzzle</button>
-        <button onclick="selectCategory('Overhaul')" data-tag="overhaul" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Overhaul</button>
-        <button onclick="selectCategory('Retexture')" data-tag="retexture" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Retexture</button>
-        <button onclick="selectCategory('Soundtrack')" data-tag="soundtrack" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Soundtrack</button>
-        <button onclick="selectCategory('Total Overhaul')" data-tag="total overhaul" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Total Overhaul</button>
+        <button onclick="selectCategory('Graphics', 'graphics')" data-tag="graphics" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Graphics</button>
+        <button onclick="selectCategory('Gameplay', 'gameplay')" data-tag="gameplay" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Gameplay</button>
+        <button onclick="selectCategory('Audio', 'audio')" data-tag="audio" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Audio</button>
+        <button onclick="selectCategory('Fangame', 'fangame')" data-tag="fangame" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Fangame</button>
+        <button onclick="selectCategory('UI Tools', 'ui tools')" data-tag="ui tools" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">UI Tools</button>
+        <button onclick="selectCategory('Total Conversion', 'total conversion')" data-tag="total conversion" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Total Conversion</button>
+        <button onclick="selectCategory('Patches', 'patches')" data-tag="patches" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Patches</button>
+        <button onclick="selectCategory('Utilities', 'utilities')" data-tag="utilities" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Utilities</button>
+        <button onclick="selectCategory('Time-Mechanics', 'time-mechanics')" data-tag="time-mechanics" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Time-Mechanics</button>
+        <button onclick="selectCategory('Puzzle', 'puzzle')" data-tag="puzzle" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Puzzle</button>
+        <button onclick="selectCategory('Overhaul', 'overhaul')" data-tag="overhaul" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Overhaul</button>
+        <button onclick="selectCategory('Retexture', 'retexture')" data-tag="retexture" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Retexture</button>
+        <button onclick="selectCategory('Soundtrack', 'soundtrack')" data-tag="soundtrack" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Soundtrack</button>
+        <button onclick="selectCategory('Total Overhaul', 'total overhaul')" data-tag="total overhaul" class="category-tag px-3.5 py-2 rounded-full border border-zinc-700 text-zinc-300 text-[12.5px] font-medium hover:border-zinc-500 hover:text-white transition-colors">Total Overhaul</button>
         <p id="categoryNoResults" class="hidden w-full text-center text-zinc-600 text-sm py-6">No tags match your search.</p>
     </div>
 </div>
 
 <script>
 function openMobileMenu(){document.getElementById('mobileMenu').classList.add('open');document.getElementById('overlay').classList.add('open');document.body.style.overflow='hidden'}
+
+function showInlineLoading(targetId){
+    const el = document.getElementById(targetId);
+    if(el) el.innerHTML = '<div class="inline-loading"><div class="spinner"></div></div>';
+}
 function closeMobileMenu(){document.getElementById('mobileMenu').classList.remove('open');document.getElementById('overlay').classList.remove('open');document.body.style.overflow=''}
 window.addEventListener('resize',()=>{if(window.innerWidth>=768)closeMobileMenu()});
 
@@ -474,10 +643,323 @@ function closeCategoryPanel(){
     document.getElementById('categorySearchInput').value='';
     filterCategoryTags('');
 }
-function selectCategory(name){
+// --- INFINITE SCROLL HELPER ---
+// Renders items into a grid in batches: first 5, then +10 each time the
+// user scrolls near the bottom of that grid. Reusable across Category,
+// Sort, and Search results. Swap the `allItems` source for a real
+// paginated API response once the backend is live.
+const _infiniteScrollState = {};
+function renderGridInfinite(gridId, countId, emptyId, allItems, formatCountLabel){
+    // Clean up any previous observer attached to this grid
+    if(_infiniteScrollState[gridId]?.observer){
+        _infiniteScrollState[gridId].observer.disconnect();
+    }
+    const grid = document.getElementById(gridId);
+    grid.innerHTML = '';
+
+    const state = { items: allItems, loaded: 0, batchSize: 5, nextBatchSize: 10, observer: null };
+    _infiniteScrollState[gridId] = state;
+
+    document.getElementById(emptyId)?.classList.toggle('hidden', allItems.length > 0);
+    if(countId) document.getElementById(countId).textContent = formatCountLabel(allItems.length);
+
+    function appendBatch(){
+        const size = state.loaded === 0 ? state.batchSize : state.nextBatchSize;
+        const next = state.items.slice(state.loaded, state.loaded + size);
+        next.forEach(card => {
+            const clone = card.cloneNode(true);
+            clone.classList.remove('w-[300px]', 'md:w-[340px]', 'flex-shrink-0');
+            clone.classList.add('w-full');
+            grid.appendChild(clone);
+        });
+        state.loaded += next.length;
+
+        // Re-attach sentinel + observer if there's more to load
+        document.getElementById(gridId + 'Sentinel')?.remove();
+        if(state.loaded < state.items.length){
+            const sentinel = document.createElement('div');
+            sentinel.id = gridId + 'Sentinel';
+            sentinel.className = 'col-span-full flex items-center justify-center py-6';
+            sentinel.innerHTML = '<div class="spinner"></div>';
+            grid.parentElement.appendChild(sentinel);
+
+            state.observer = new IntersectionObserver((entries)=>{
+                if(entries[0].isIntersecting){
+                    state.observer.disconnect();
+                    setTimeout(appendBatch, 250); // simulate fetch latency for the next page
+                }
+            }, { rootMargin: '200px' });
+            state.observer.observe(sentinel);
+        }
+    }
+    appendBatch();
+}
+
+function selectCategory(name, slug){
     closeCategoryPanel();
-    // Placeholder: hook this up to actual filtering logic once category data exists.
-    console.log('Selected category:', name);
+    const allCards = document.querySelectorAll('#defaultSections a[data-category]');
+    const matches = Array.from(allCards).filter(c => c.dataset.category === slug);
+
+    document.getElementById('defaultSections').classList.add('hidden');
+    document.getElementById('typeFilteredSections').classList.add('hidden');
+    document.getElementById('sortFilteredSection').classList.add('hidden');
+    document.getElementById('filteredResultsSection').classList.remove('hidden');
+    document.getElementById('filteredResultsTitle').textContent = name;
+    document.getElementById('filteredResultsCount').textContent = '';
+    document.getElementById('filteredResultsEmpty').classList.add('hidden');
+    showInlineLoading('filteredResultsGrid');
+    window.scrollTo({top: 0, behavior: 'smooth'});
+
+    setTimeout(()=>{
+        renderGridInfinite('filteredResultsGrid', 'filteredResultsCount', 'filteredResultsEmpty', matches,
+            n => n + (n === 1 ? ' result' : ' results'));
+    }, 200);
+}
+function clearCategoryFilter(){
+    document.getElementById('filteredResultsSection').classList.add('hidden');
+    document.getElementById('defaultSections').classList.remove('hidden');
+    resetSortTabs();
+}
+let currentTypeScope = 'all';
+
+// --- CLIENT-SIDE CACHE (placeholder for future API calls) ---
+// Structure: { key: { data, timestamp } }
+// When wiring to a real API, replace the setTimeout body in each filter function
+// with an actual fetch() call, and store/retrieve results through this cache.
+const _resultCache = {};
+const CACHE_TTL_MS = 2 * 60 * 1000; // 2 minutes — tune this once real data is live
+
+function getCached(key){
+    const entry = _resultCache[key];
+    if(!entry) return null;
+    const isStale = (Date.now() - entry.timestamp) > CACHE_TTL_MS;
+    return isStale ? null : entry.data;
+}
+function setCached(key, data){
+    _resultCache[key] = { data, timestamp: Date.now() };
+}
+
+function filterByType(type, label){
+    currentTypeScope = type;
+    const allCards = document.querySelectorAll('#defaultSections a[data-type]');
+    const matches = Array.from(allCards).filter(c => c.dataset.type === type);
+
+    document.getElementById('defaultSections').classList.add('hidden');
+    document.getElementById('filteredResultsSection').classList.add('hidden');
+    document.getElementById('sortFilteredSection').classList.add('hidden');
+    document.getElementById('typeFilteredSections').classList.remove('hidden');
+    document.getElementById('typeFilteredEmpty').classList.add('hidden');
+    resetSortTabs();
+    window.scrollTo({top: 0, behavior: 'smooth'});
+
+    const cacheKey = 'type:' + type;
+    const cached = getCached(cacheKey);
+    if(cached){
+        // Already fetched before in this session — render instantly, no spinner.
+        renderTypeRows(matches);
+        return;
+    }
+
+    showTypeSectionsLoading();
+
+    setTimeout(()=>{
+        renderTypeRows(matches);
+        setCached(cacheKey, { count: matches.length });
+    }, 200);
+}
+function showTypeSectionsLoading(){
+    const container = document.getElementById('typeFilteredSections');
+    container.querySelectorAll('.dynamic-type-section').forEach(el => el.remove());
+    const loadingSection = document.createElement('div');
+    loadingSection.className = 'dynamic-type-section inline-loading';
+    loadingSection.innerHTML = '<div class="spinner"></div>';
+    container.insertBefore(loadingSection, document.getElementById('typeFilteredEmpty'));
+}
+function renderTypeRows(matches){
+    const container = document.getElementById('typeFilteredSections');
+    // Clear previously rendered dynamic sections (keep the empty-state <p>)
+    container.querySelectorAll('.dynamic-type-section').forEach(el => el.remove());
+
+    // Group cards by their real category tag — section titles come straight from the data,
+    // so new categories added later show up automatically without any code changes.
+    const byCategory = {};
+    matches.forEach(card => {
+        const cat = card.dataset.category || 'other';
+        if(!byCategory[cat]) byCategory[cat] = [];
+        byCategory[cat].push(card);
+    });
+
+    const emptyState = document.getElementById('typeFilteredEmpty');
+    Object.keys(byCategory).forEach(cat => {
+        const items = byCategory[cat];
+        const section = document.createElement('section');
+        section.className = 'dynamic-type-section';
+
+        const header = document.createElement('div');
+        header.className = 'flex items-center justify-between mb-3 md:mb-4';
+        const title = document.createElement('h2');
+        title.className = 'text-lg md:text-xl font-bold text-white capitalize';
+        title.textContent = cat;
+        header.appendChild(title);
+        section.appendChild(header);
+
+        const row = document.createElement('div');
+        row.className = 'flex gap-3 md:gap-4 overflow-x-auto hide-scrollbar pb-2 -mx-4 px-4 md:mx-0 md:px-0';
+
+        for(let i = 0; i < items.length; i += 3){
+            const chunk = items.slice(i, i + 3);
+            const groupDiv = document.createElement('div');
+            groupDiv.className = 'flex flex-col gap-2 flex-shrink-0 w-[300px] md:w-[340px]';
+            chunk.forEach(card => {
+                const clone = card.cloneNode(true);
+                clone.classList.remove('flex-shrink-0', 'w-[300px]', 'md:w-[340px]');
+                groupDiv.appendChild(clone);
+            });
+            row.appendChild(groupDiv);
+        }
+        section.appendChild(row);
+        container.insertBefore(section, emptyState);
+    });
+
+    emptyState.classList.toggle('hidden', matches.length > 0);
+}
+function clearTypeFilter(){
+    currentTypeScope = 'all';
+    document.getElementById('typeFilteredSections').classList.add('hidden');
+    document.getElementById('sortFilteredSection').classList.add('hidden');
+    document.getElementById('defaultSections').classList.remove('hidden');
+    resetSortTabs();
+}
+function resetSortTabs(){
+    document.querySelectorAll('.sort-tab').forEach(btn=>{
+        if(btn.dataset.sort === 'foryou'){
+            btn.classList.add('text-white','font-semibold','border-white');
+            btn.classList.remove('text-zinc-500','font-medium','border-transparent');
+        } else {
+            btn.classList.remove('text-white','font-semibold','border-white');
+            btn.classList.add('text-zinc-500','font-medium','border-transparent');
+        }
+    });
+}
+function applySortFilter(sortType){
+    document.querySelectorAll('.sort-tab').forEach(btn=>{
+        const active = btn.dataset.sort === sortType;
+        btn.classList.toggle('text-white', active);
+        btn.classList.toggle('font-semibold', active);
+        btn.classList.toggle('border-white', active);
+        btn.classList.toggle('text-zinc-500', !active);
+        btn.classList.toggle('font-medium', !active);
+        btn.classList.toggle('border-transparent', !active);
+    });
+
+    if(sortType === 'foryou'){
+        document.getElementById('sortFilteredSection').classList.add('hidden');
+        if(currentTypeScope === 'all'){
+            document.getElementById('defaultSections').classList.remove('hidden');
+        } else {
+            document.getElementById('typeFilteredSections').classList.remove('hidden');
+        }
+        return;
+    }
+
+    let pool = Array.from(document.querySelectorAll('#defaultSections a[data-type]'));
+    if(currentTypeScope !== 'all'){
+        pool = pool.filter(c => c.dataset.type === currentTypeScope);
+    }
+
+    const getRating = c => parseFloat(c.querySelector('.text-yellow-400')?.textContent.replace('★','').trim() || 0);
+    const getSizeMB = c => {
+        const sizeText = c.querySelector('.font-mono')?.textContent.trim() || '0 MB';
+        const [num, unit] = sizeText.split(' ');
+        return unit === 'GB' ? parseFloat(num) * 1024 : parseFloat(num);
+    };
+
+    let sorted;
+    if(sortType === 'rating'){
+        sorted = pool.slice().sort((a,b) => getRating(b) - getRating(a));
+    } else if(sortType === 'downloads'){
+        // No real download-count field yet — approximate using size as a stand-in signal.
+        sorted = pool.slice().sort((a,b) => getSizeMB(b) - getSizeMB(a));
+    } else if(sortType === 'trending' || sortType === 'new'){
+        sorted = pool.slice();
+    } else {
+        sorted = pool.slice();
+    }
+
+    document.getElementById('defaultSections').classList.add('hidden');
+    document.getElementById('filteredResultsSection').classList.add('hidden');
+    document.getElementById('typeFilteredSections').classList.add('hidden');
+    document.getElementById('sortFilteredSection').classList.remove('hidden');
+
+    const titles = {downloads:'Top Downloads', rating:'Top Rated', trending:'Trending', new:'New'};
+    document.getElementById('sortFilteredTitle').textContent = titles[sortType] || sortType;
+    document.getElementById('sortFilteredCount').textContent = '';
+    document.getElementById('sortFilteredEmpty').classList.add('hidden');
+    showInlineLoading('sortFilteredGrid');
+    window.scrollTo({top: 0, behavior: 'smooth'});
+
+    setTimeout(()=>{
+        renderGridInfinite('sortFilteredGrid', 'sortFilteredCount', 'sortFilteredEmpty', sorted,
+            n => n + (n === 1 ? ' result' : ' results'));
+    }, 200);
+}
+let _searchDebounce;
+function liveSearch(query){
+    clearTimeout(_searchDebounce);
+    const q = query.trim();
+
+    // Keep both search boxes (mobile/desktop) in sync
+    const mobileInput = document.getElementById('searchInputMobile');
+    const desktopInput = document.getElementById('searchInputDesktop');
+    if(mobileInput && mobileInput.value !== query) mobileInput.value = query;
+    if(desktopInput && desktopInput.value !== query) desktopInput.value = query;
+
+    if(q.length === 0){
+        clearSearch();
+        return;
+    }
+
+    _searchDebounce = setTimeout(()=>{
+        const allCards = document.querySelectorAll('#defaultSections a[data-type]');
+        const qLower = q.toLowerCase();
+        const matches = Array.from(allCards).filter(card => {
+            const title = card.querySelector('h3')?.textContent.toLowerCase() || '';
+            const subtitle = card.querySelector('p')?.textContent.toLowerCase() || '';
+            return title.includes(qLower) || subtitle.includes(qLower);
+        });
+
+        document.getElementById('defaultSections').classList.add('hidden');
+        document.getElementById('typeFilteredSections').classList.add('hidden');
+        document.getElementById('sortFilteredSection').classList.add('hidden');
+        document.getElementById('filteredResultsSection').classList.add('hidden');
+        document.getElementById('searchResultsSection').classList.remove('hidden');
+        document.getElementById('searchResultsCount').textContent = '';
+        document.getElementById('searchResultsEmpty').classList.add('hidden');
+        showInlineLoading('searchResultsGrid');
+
+        // Simulates a network round-trip — replace with a real fetch() once the API is live.
+        setTimeout(()=>{
+            renderSearchResults(matches);
+        }, 220);
+    }, 150);
+}
+function renderSearchResults(matches){
+    renderGridInfinite('searchResultsGrid', 'searchResultsCount', 'searchResultsEmpty', matches,
+        n => n + (n === 1 ? ' result' : ' results'));
+}
+function clearSearch(){
+    clearTimeout(_searchDebounce);
+    document.getElementById('searchResultsSection').classList.add('hidden');
+    const mobileInput = document.getElementById('searchInputMobile');
+    const desktopInput = document.getElementById('searchInputDesktop');
+    if(mobileInput) mobileInput.value = '';
+    if(desktopInput) desktopInput.value = '';
+
+    if(currentTypeScope === 'all'){
+        document.getElementById('defaultSections').classList.remove('hidden');
+    } else {
+        document.getElementById('typeFilteredSections').classList.remove('hidden');
+    }
 }
 function filterCategoryTags(query){
     const q = query.trim().toLowerCase();
